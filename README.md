@@ -5,6 +5,6 @@ Contains code to calculate diffraction for perfect crystals using dynamical diff
 
 Project still under development, but usable. 
 
-The Ms Thesis related to this project is https://github.com/edocappelli/crystalpy/blob/master/doc/tesi-finale.pdf
+The Ms Thesis related to this project is https://github.com/oasys-kit/crystalpy/blob/master/doc/tesi-finale.pdf
 
-A graphical interface is available under Oasys:  https://github.com/edocappelli/oasys-crystalpy
+A graphical interface is available under Oasys:  https://github.com/oasys-kit/OASYS-CRYSTALPY
