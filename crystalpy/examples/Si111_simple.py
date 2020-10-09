@@ -75,7 +75,7 @@ def calculate_simple_diffraction():
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup,photon)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon)
 
         # store results
         deviations[ia] = deviation

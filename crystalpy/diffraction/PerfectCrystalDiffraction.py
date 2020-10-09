@@ -122,7 +122,7 @@ class CalculationStrategyMath(CalculationStrategy):
 
 
 class PerfectCrystalDiffraction(object):
-    isDebug = True
+    isDebug = False
 
     def __init__(self, geometry_type, bragg_normal, surface_normal, bragg_angle, psi_0, psi_H, psi_H_bar, thickness, d_spacing):
         """
