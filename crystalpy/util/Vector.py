@@ -89,6 +89,7 @@ class Vector(object):
         components = self.components() * factor
         return Vector.initializeFromComponents(components)
 
+    # TODO rename correct spelling: substract
     def subtractVector(self, subtrahend):
         """
         Subtract a vector from this instance.

@@ -38,20 +38,20 @@ class Diffraction(object):
         self.setOnProgress(None)
         self.setOnCalculationEnd(None)
 
-    def _calculatePsiFromStructureFactor(self, unit_cell_volume, photon_in, structure_factor):
-        """
-        Calculates the Psi as defined in Zachariasen [3-95].
-        :param unit_cell_volume: Volume of the unit cell.
-        :param photon_in: Incoming photon.
-        :param structure_factor: Structure factor.
-        :return: Psi as defined in Zachariasen [3-95].
-        """
-        codata = scipy.constants.codata.physical_constants
-        classical_electron_radius = codata["classical electron radius"][0]
-
-        psi = (-classical_electron_radius * photon_in.wavelength() ** 2 / (pi * unit_cell_volume)) * structure_factor
-
-        return psi
+    # def _calculatePsiFromStructureFactor(self, unit_cell_volume, photon_in, structure_factor):
+    #     """
+    #     Calculates the Psi as defined in Zachariasen [3-95].
+    #     :param unit_cell_volume: Volume of the unit cell.
+    #     :param photon_in: Incoming photon.
+    #     :param structure_factor: Structure factor.
+    #     :return: Psi as defined in Zachariasen [3-95].
+    #     """
+    #     codata = scipy.constants.codata.physical_constants
+    #     classical_electron_radius = codata["classical electron radius"][0]
+    #
+    #     psi = (-classical_electron_radius * photon_in.wavelength() ** 2 / (pi * unit_cell_volume)) * structure_factor
+    #
+    #     return psi
 
     @staticmethod
     def log(string):
@@ -183,19 +183,18 @@ class Diffraction(object):
         # Calculate the surface normal n.
         normal_surface = diffraction_setup.normalSurface()
 
-        # Calculate the incoming photon direction (parallel to k_0).
-        photon_direction = diffraction_setup.incomingPhotonDirection(energy, 0.0)
-
-        # Create photon k_0.
-        photon_in = Photon(energy, photon_direction)
-
-        # Retrieve unitcell volume from xraylib.
-        unitcell_volume = diffraction_setup.unitcellVolume() * 10 ** -30
+        # # Calculate the incoming photon direction (parallel to k_0).
+        # photon_direction = diffraction_setup.incomingPhotonDirection(energy, 0.0)
+        # # Create photon k_0.
+        # photon_in = Photon(energy, photon_direction)
+        #
+        # # Retrieve unitcell volume from xraylib.
+        # unitcell_volume = diffraction_setup.unitcellVolume() * 10 ** -30
 
         # Calculate psis as defined in Zachariasen [3-95]
-        psi_0     = self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_0)
-        psi_H     = self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H)
-        psi_H_bar = self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H_bar)
+        psi_0     = diffraction_setup.psi0(energy)     #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_0)
+        psi_H     = diffraction_setup.psiH(energy)     #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H)
+        psi_H_bar = diffraction_setup.psiH_bar(energy) #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H_bar)
 
         # Create PerfectCrystalDiffraction instance.
         perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup.geometryType(),
@@ -325,12 +324,12 @@ class Diffraction(object):
         normal_surface = diffraction_setup.normalSurface()
 
         # Retrieve unitcell volume from xraylib.
-        unitcell_volume = diffraction_setup.unitcellVolume() * 10 ** -30
+        # unitcell_volume = diffraction_setup.unitcellVolume() * 10 ** -30
 
         # Calculate psis as defined in Zachariasen [3-95]
-        psi_0 = self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_0)
-        psi_H = self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H)
-        psi_H_bar = self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H_bar)
+        psi_0     = diffraction_setup.psi0(energy)     # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_0)
+        psi_H     = diffraction_setup.psiH(energy)     # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H)
+        psi_H_bar = diffraction_setup.psiH_bar(energy) # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H_bar)
 
         # Create PerfectCrystalDiffraction instance.
         perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup.geometryType(),

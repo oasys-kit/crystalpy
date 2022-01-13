@@ -1,10 +1,13 @@
 """
 Represents a diffraction setup implementation using xraylib
-Except for energy, all units are in SI.
-"""
+photon energy in eV
+dSpacing returns A
+units are in SI.
 
+"""
 import xraylib
 from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
+# from crystalpy.util.vector import Vector
 
 class DiffractionSetup(DiffractionSetupAbstract):
 
@@ -37,7 +40,7 @@ class DiffractionSetup(DiffractionSetupAbstract):
 
     def angleBragg(self, energy):
         """
-        Returns the Bragg angle for a given energy.
+        Returns the Bragg angle in rad for a given energy.
         :param energy: Energy to calculate the Bragg angle for.
         :return: Bragg angle.
         """
@@ -99,7 +102,7 @@ class DiffractionSetup(DiffractionSetupAbstract):
 
     def dSpacing(self):
         """
-        Returns the lattice spacing d.
+        Returns the lattice spacing d in A.
         :return: Lattice spacing.
         """
 
@@ -113,7 +116,7 @@ class DiffractionSetup(DiffractionSetupAbstract):
 
     def unitcellVolume(self):
         """
-        Returns the unit cell volume.
+        Returns the unit cell volume in A**3.
 
         :return: Unit cell volume
         """
@@ -122,11 +125,50 @@ class DiffractionSetup(DiffractionSetupAbstract):
 
         return unit_cell_volume
 
+
 if __name__ == "__main__":
     from crystalpy.diffraction.GeometryType import BraggDiffraction
+    import numpy
+
     a = DiffractionSetup(geometry_type=BraggDiffraction, crystal_name="Si", thickness=1e-5,
                  miller_h=1, miller_k=1, miller_l=1,
                  asymmetry_angle=0.0,
                  azimuthal_angle=0.0,)
 
-    print(a.angleBragg(8000.0))
+    energy = 8000.0
+    print("Photon energy: %g deg " % (energy))
+    print("d_spacing: %g A " % (a.dSpacing()))
+    print("unitCellVolumw: %g A**3 " % (a.unitcellVolume()))
+    print("F0 ", a.F0(energy))
+    print("FH ", a.FH(energy))
+    print("FH_BAR ", a.FH_bar(energy))
+
+    print("PSI0 ", a.psi0(energy))
+    print("PSIH ", a.psiH(energy))
+    print("PSIH_bar ", a.psiH_bar(energy))
+
+    print("V0: ", a.vectorK0direction(energy).components())
+    print("Bh direction: ", a.vectorHdirection().components())
+    print("Bh: ", a.vectorH().components())
+    print("K0: ", a.vectorK0(energy).components())
+    print("Kh: ", a.vectorKh(energy).components())
+    print("Vh: ", a.vectorKhdirection(energy).components())
+
+
+    from crystalpy.util.Photon import Photon
+    print("Difference to ThetaB uncorrected: ",
+          a.deviationOfIncomingPhoton(Photon(energy_in_ev=energy, direction_vector=a.vectorK0(energy))))
+
+
+    print("Asymmerey factor b: ", a.asymmetry_factor(energy))
+    print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
+    print("Bragg angle corrected: %g deg " %  (a.angleBraggCorrected(energy) * 180 / numpy.pi))
+
+
+ #     VIN_BRAGG_UNCORR (Uncorrected): (  0.00000000,    0.968979,   -0.247145)
+ #     VIN_BRAGG          (Corrected): (  0.00000000,    0.968971,   -0.247176)
+ #     VIN_BRAGG_ENERGY              : (  0.00000000,    0.968971,   -0.247176)
+ # Reflected directions matching Bragg angle:
+ #    VOUT_BRAGG_UNCORR (Uncorrected): (  0.00000000,    0.968979,    0.247145)
+ #    VOUT_BRAGG          (Corrected): (  0.00000000,    0.968971,    0.247176)
+ #    VOUT_BRAGG_ENERGY              : (  0.00000000,    0.968971,    0.247176)
