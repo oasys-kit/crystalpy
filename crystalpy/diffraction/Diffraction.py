@@ -72,6 +72,17 @@ class Diffraction(object):
         self.log("fH: (%f , %f)" % (F_H.real, F_H.imag))
         self.log("fHbar: (%f , %f)" % (F_H_bar.real, F_H_bar.imag))
 
+    def logStructureFactorsPsi(self, Psi_0, Psi_H, Psi_H_bar):
+        """
+        Logs the structure factors.
+        :param Psi_0: Structure factor Psi_0.
+        :param Psi_H: Structure factor Psi_H.
+        :param Psi_H_bar: Structure factor Psi_H_bar.
+        """
+        self.log("Psi0:    (%f , %f)" % (Psi_0.real,     Psi_0.imag))
+        self.log("PsiH:    (%f , %f)" % (Psi_H.real,     Psi_H.imag))
+        self.log("PsiHbar: (%f , %f)" % (Psi_H_bar.real, Psi_H_bar.imag))
+
     def setOnCalculationStart(self, on_calculation_start):
         """
         Sets handler for calculation start. The handler is called when the calculation starts.
@@ -137,13 +148,17 @@ class Diffraction(object):
         :param F_H: Structure factor F_H.
         :param F_H_bar: Structure factor F_H_bar.
         """
-        # Check if the given geometry is a valid Bragg/Laue geometry.
-        if diffraction_setup.geometryType() == BraggDiffraction() or diffraction_setup.geometryType() == BraggTransmission():
-            if diffraction_setup.asymmetryAngle() >= bragg_angle:
-                raise ReflectionImpossibleException()
-        elif diffraction_setup.geometryType() == LaueDiffraction() or diffraction_setup.geometryType() == LaueTransmission():
-            if diffraction_setup.asymmetryAngle() <= bragg_angle:
-                raise TransmissionImpossibleException()
+
+        self._checkSetupDiffraction(diffraction_setup, bragg_angle)
+        self._checkSetupStructureFactor(self, F_0, F_H, F_H_bar)
+
+    def _checkSetupStructureFactor(self, F_0, F_H, F_H_bar):
+        """
+        Checks if the structure factor has reasonable values
+        :param F_0: Structure factor F_0.
+        :param F_H: Structure factor F_H.
+        :param F_H_bar: Structure factor F_H_bar.
+        """
 
         # Check structure factor F_0.
         if abs(F_0.real) < 1e-7 or isnan(F_0.real):
@@ -157,22 +172,47 @@ class Diffraction(object):
         if abs(F_H_bar.real) < 1e-7 or isnan(F_H_bar.real) or abs(F_H_bar.imag) < 1e-7 or isnan(F_H_bar.imag):
             raise StructureFactorFHbarIsZeroException()
 
+    def _checkSetupDiffraction(self, diffraction_setup, bragg_angle):
+        """
+        Checks if a given diffraction setup is possible, i.e. if a given Diffraction/Transmission for the given asymmetry
+        and Miller indices is possible. Raises an exception if impossible.
+        :param diffraction_setup: Diffraction setup.
+        :param bragg_angle: Bragg angle.
+        """
+        # Check if the given geometry is a valid Bragg/Laue geometry.
+        if diffraction_setup.geometryType() == BraggDiffraction() or diffraction_setup.geometryType() == BraggTransmission():
+            if diffraction_setup.asymmetryAngle() >= bragg_angle:
+                raise ReflectionImpossibleException()
+        elif diffraction_setup.geometryType() == LaueDiffraction() or diffraction_setup.geometryType() == LaueTransmission():
+            if diffraction_setup.asymmetryAngle() <= bragg_angle:
+                raise TransmissionImpossibleException()
+
+
     def _perfectCrystalForEnergy(self, diffraction_setup, energy):
 
         # Retrieve bragg angle.
         angle_bragg = diffraction_setup.angleBragg(energy)
 
         # Get structure factors for all relevant lattice vectors 0,H,H_bar.
-        F_0 = diffraction_setup.F0(energy)
-        F_H = diffraction_setup.FH(energy)
-        F_H_bar = diffraction_setup.FH_bar(energy)
+        if False: # this is "commented" by srio to speed it up!
+            F_0 = diffraction_setup.F0(energy)
+            F_H = diffraction_setup.FH(energy)
+            F_H_bar = diffraction_setup.FH_bar(energy)
 
-        # Check if given Bragg/Laue geometry and given miller indices are possible.
-        self._checkSetup(diffraction_setup, angle_bragg, F_0, F_H, F_H_bar)
+            # Check if given Bragg/Laue geometry and given miller indices are possible.
+            self._checkSetup(diffraction_setup, angle_bragg, F_0, F_H, F_H_bar)
 
-        # Log the structure factors.
-        if self.isDebug:
-            self.logStructureFactors(F_0, F_H, F_H_bar)
+            # Log the structure factors.
+            if self.isDebug:
+                self.logStructureFactors(F_0, F_H, F_H_bar)
+        else:
+            # Check if given Bragg/Laue geometry and given miller indices are possible.
+            self._checkSetupDiffraction(diffraction_setup, angle_bragg)
+
+            # Log the structure factors.
+            if self.isDebug:
+                self.logStructureFactorsPsi(F_0, F_H, F_H_bar)
+
 
         # Retrieve lattice spacing d.
         d_spacing = diffraction_setup.dSpacing() * 1e-10
@@ -192,10 +232,12 @@ class Diffraction(object):
         # unitcell_volume = diffraction_setup.unitcellVolume() * 10 ** -30
 
         # Calculate psis as defined in Zachariasen [3-95]
-        psi_0     = diffraction_setup.psi0(energy)     #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_0)
-        psi_H     = diffraction_setup.psiH(energy)     #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H)
-        psi_H_bar = diffraction_setup.psiH_bar(energy) #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H_bar)
+        # lumped together by srio
+        # psi_0     = diffraction_setup.psi0(energy)     #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_0)
+        # psi_H     = diffraction_setup.psiH(energy)     #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H)
+        # psi_H_bar = diffraction_setup.psiH_bar(energy) #self._calculatePsiFromStructureFactor(unitcell_volume, photon_in, F_H_bar)
 
+        psi_0, psi_H, psi_H_bar = diffraction_setup.psiAll(energy)
         # Create PerfectCrystalDiffraction instance.
         perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup.geometryType(),
                                                     bragg_normal=normal_bragg,
@@ -302,17 +344,24 @@ class Diffraction(object):
         # Retrieve bragg angle.
         angle_bragg = diffraction_setup.angleBragg(energy)
 
-        # Get structure factors for all relevant lattice vectors 0,H,H_bar.
-        F_0 = diffraction_setup.F0(energy)
-        F_H = diffraction_setup.FH(energy)
-        F_H_bar = diffraction_setup.FH_bar(energy)
+        if False: # this is "commented" by srio to speed it up!
+            F_0 = diffraction_setup.F0(energy)
+            F_H = diffraction_setup.FH(energy)
+            F_H_bar = diffraction_setup.FH_bar(energy)
 
-        # Check if given Bragg/Laue geometry and given miller indices are possible.
-        self._checkSetup(diffraction_setup, angle_bragg, F_0, F_H, F_H_bar)
+            # Check if given Bragg/Laue geometry and given miller indices are possible.
+            self._checkSetup(diffraction_setup, angle_bragg, F_0, F_H, F_H_bar)
 
-        # Log the structure factors.
-        if self.isDebug:
-            self.logStructureFactors(F_0, F_H, F_H_bar)
+            # Log the structure factors.
+            if self.isDebug:
+                self.logStructureFactors(F_0, F_H, F_H_bar)
+        else:
+            # Check if given Bragg/Laue geometry and given miller indices are possible.
+            self._checkSetupDiffraction(diffraction_setup, angle_bragg)
+
+            # Log the structure factors.
+            if self.isDebug:
+                self.logStructureFactorsPsi(F_0, F_H, F_H_bar)
 
         # Retrieve lattice spacing d.
         d_spacing = diffraction_setup.dSpacing() * 1e-10
@@ -327,9 +376,12 @@ class Diffraction(object):
         # unitcell_volume = diffraction_setup.unitcellVolume() * 10 ** -30
 
         # Calculate psis as defined in Zachariasen [3-95]
-        psi_0     = diffraction_setup.psi0(energy)     # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_0)
-        psi_H     = diffraction_setup.psiH(energy)     # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H)
-        psi_H_bar = diffraction_setup.psiH_bar(energy) # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H_bar)
+
+        # lumped together by srio
+        # psi_0     = diffraction_setup.psi0(energy)     # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_0)
+        # psi_H     = diffraction_setup.psiH(energy)     # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H)
+        # psi_H_bar = diffraction_setup.psiH_bar(energy) # self._calculatePsiFromStructureFactor(unitcell_volume, polarized_photon, F_H_bar)
+        psi_0, psi_H, psi_H_bar = diffraction_setup.psiAll(energy)
 
         # Create PerfectCrystalDiffraction instance.
         perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup.geometryType(),

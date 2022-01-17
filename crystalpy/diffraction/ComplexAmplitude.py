@@ -59,3 +59,16 @@ class ComplexAmplitude(object):
         division = ComplexAmplitude(self.complexAmplitude() /
                                     divisor.complexAmplitude())
         return division
+
+    # adding two objects
+    def __add__(self, o):
+        return ComplexAmplitude(self.complexAmplitude() + o.complexAmplitude())
+
+    def __sub__(self, o):
+        return ComplexAmplitude(self.complexAmplitude() - o.complexAmplitude())
+
+    def __mul__(self, o):
+        return ComplexAmplitude(self.complexAmplitude() * o.complexAmplitude())
+
+    def __pow__(self, o):
+        return ComplexAmplitude(self.complexAmplitude() ** o)

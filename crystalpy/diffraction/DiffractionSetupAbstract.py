@@ -182,6 +182,15 @@ class DiffractionSetupAbstract(object):
         wavelength = codata.h * codata.c / codata.e / energy
         return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH_bar(energy)
 
+    def psiAll(self, energy1):
+        energy = numpy.array(energy1)
+        classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
+        wavelength = codata.h * codata.c / codata.e / energy
+        factor = (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI()))
+        Fall = self.Fall(energy)
+        return  factor*Fall[0], factor*Fall[1], factor*Fall[2]
+
+
     # TODO: START DELETE SECTION..............
     #
     # vectors (old interface... todo:  delete)
