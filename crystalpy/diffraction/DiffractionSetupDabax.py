@@ -111,7 +111,7 @@ class DiffractionSetupDabax(DiffractionSetupAbstract):
         #
         # return F_H_bar
 
-    def Fall(self, energy):
+    def Fall(self, energy, rel_angle=[0,1,1]):
 
         energy_in_kev = energy / 1000.0
 
@@ -120,7 +120,7 @@ class DiffractionSetupDabax(DiffractionSetupAbstract):
                                                   self.millerH(),
                                                   self.millerK(),
                                                   self.millerL(),
-                                                  self._debyeWaller, 1.0)
+                                                  self._debyeWaller, rel_angle)
         return Fall
 
 

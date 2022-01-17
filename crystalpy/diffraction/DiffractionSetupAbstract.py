@@ -167,27 +167,27 @@ class DiffractionSetupAbstract(object):
     #
     # structure factors
     #
-    def psi0(self, energy):
+    def psi0(self, energy, rel_angle=0.0):
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
-        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.F0(energy)
+        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.F0(energy, rel_angle=rel_angle)
 
-    def psiH(self, energy):
+    def psiH(self, energy, rel_angle=1.0):
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
-        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH(energy)
+        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH(energy, rel_angle=rel_angle)
 
-    def psiH_bar(self, energy):
+    def psiH_bar(self, energy, rel_angle=1.0):
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
-        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH_bar(energy)
+        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH_bar(energy, rel_angle=rel_angle)
 
-    def psiAll(self, energy1):
+    def psiAll(self, energy1, rel_angle=[0.0,1.0,1.0]):
         energy = numpy.array(energy1)
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
         factor = (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI()))
-        Fall = self.Fall(energy)
+        Fall = self.Fall(energy, rel_angle=rel_angle)
         return  factor*Fall[0], factor*Fall[1], factor*Fall[2]
 
 

@@ -55,7 +55,7 @@ class DiffractionSetup(DiffractionSetupAbstract):
                                           self.millerL())
         return angle_bragg
 
-    def F0(self, energy):
+    def F0(self, energy, rel_angle=0.0):
         """
         Calculate F0 from Zachariasen.
         :param energy: photon energy in eV.
@@ -65,10 +65,10 @@ class DiffractionSetup(DiffractionSetupAbstract):
         F_0 = xraylib.Crystal_F_H_StructureFactor(self._crystal,
                                                   energy_in_kev,
                                                   0, 0, 0,
-                                                  self._debyeWaller, 1.0)
+                                                  self._debyeWaller, rel_angle=0.0)
         return F_0
 
-    def FH(self, energy):
+    def FH(self, energy, rel_angle=1.0):
         """
         Calculate FH from Zachariasen.
         :param energy: photon energy in eV.
@@ -80,10 +80,10 @@ class DiffractionSetup(DiffractionSetupAbstract):
                                                   self.millerH(),
                                                   self.millerK(),
                                                   self.millerL(),
-                                                  self._debyeWaller, 1.0)
+                                                  self._debyeWaller, rel_angle)
         return F_H
 
-    def FH_bar(self, energy):
+    def FH_bar(self, energy, rel_angle=1.0):
         """
         Calculate FH_bar from Zachariasen.
         :param energy: photon energy in eV.
@@ -95,12 +95,14 @@ class DiffractionSetup(DiffractionSetupAbstract):
                                                       -self.millerH(),
                                                       -self.millerK(),
                                                       -self.millerL(),
-                                                      self._debyeWaller, 1.0)
+                                                      self._debyeWaller, rel_angle)
 
         return F_H_bar
 
-    def Fall(self, energy):
-        return self.F0(energy), self.FH(energy), self.FH_bar(energy)
+    def Fall(self, energy, rel_angle=[0.0,1.0,1.0]):
+        return self.F0(energy, rel_angle=rel_angle[0]),\
+               self.FH(energy, rel_angle=rel_angle[1]), \
+               self.FH_bar(energy, rel_angle=rel_angle[2])
 
     def dSpacing(self):
         """
