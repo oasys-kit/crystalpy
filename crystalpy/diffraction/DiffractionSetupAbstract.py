@@ -167,10 +167,10 @@ class DiffractionSetupAbstract(object):
     #
     # structure factors
     #
-    def psi0(self, energy, rel_angle=0.0):
+    def psi0(self, energy):
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
-        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.F0(energy, rel_angle=rel_angle)
+        return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.F0(energy)
 
     def psiH(self, energy, rel_angle=1.0):
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
@@ -182,7 +182,7 @@ class DiffractionSetupAbstract(object):
         wavelength = codata.h * codata.c / codata.e / energy
         return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH_bar(energy, rel_angle=rel_angle)
 
-    def psiAll(self, energy1, rel_angle=[0.0,1.0,1.0]):
+    def psiAll(self, energy1, rel_angle=1.0):
         energy = numpy.array(energy1)
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy

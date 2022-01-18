@@ -66,52 +66,27 @@ class DiffractionSetupDabax(DiffractionSetupAbstract):
         :return: F0
         """
         return self.Fall(energy)[0]
-        #
-        # energy_in_kev = energy / 1000.0
-        #
-        # F_0 = self.dx.Crystal_F_H_StructureFactor(self._crystal,
-        #                                           energy_in_kev,
-        #                                           0, 0, 0,
-        #                                           self._debyeWaller, 1.0)
-        # return F_0
 
-    def FH(self, energy):
+
+    def FH(self, energy, rel_angle=1.0):
         """
         Calculate FH from Zachariasen.
         :param energy: photon energy in eV.
         :return: FH
         """
-        return self.Fall(energy)[1]
-        # energy_in_kev = energy / 1000.0
-        #
-        # F_H = self.dx.Crystal_F_H_StructureFactor(self._crystal,
-        #                                           energy_in_kev,
-        #                                           self.millerH(),
-        #                                           self.millerK(),
-        #                                           self.millerL(),
-        #                                           self._debyeWaller, 1.0)
-        # return F_H
+        return self.Fall(energy, rel_angle=rel_angle)[1]
 
-    def FH_bar(self, energy):
+
+    def FH_bar(self, energy, rel_angle=1.0):
         """
         Calculate FH_bar from Zachariasen.
         :param energy: photon energy in eV.
         :return: FH_bar
         """
-        return self.Fall(energy)[2]
+        return self.Fall(energy, rel_angle=rel_angle)[2]
 
-        # energy_in_kev = energy / 1000.0
 
-        # F_H_bar = self.dx.Crystal_F_H_StructureFactor(self._crystal,
-        #                                               energy_in_kev,
-        #                                               -self.millerH(),
-        #                                               -self.millerK(),
-        #                                               -self.millerL(),
-        #                                               self._debyeWaller, 1.0)
-        #
-        # return F_H_bar
-
-    def Fall(self, energy, rel_angle=[0,1,1]):
+    def Fall(self, energy, rel_angle=1.0):
 
         energy_in_kev = energy / 1000.0
 
@@ -171,19 +146,19 @@ if __name__ == "__main__":
                  dabax=dx)
 
     energy = 8000.0
-    # print("Photon energy: %g deg " % (energy))
-    # print("d_spacing: %g A " % (a.dSpacing()))
-    # print("unitCellVolumw: %g A**3 " % (a.unitcellVolume()))
-    # print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
-    # print("Asymmerey factor b: ", a.asymmetry_factor(energy))
+    print("Photon energy: %g deg " % (energy))
+    print("d_spacing: %g A " % (a.dSpacing()))
+    print("unitCellVolumw: %g A**3 " % (a.unitcellVolume()))
+    print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
+    print("Asymmerey factor b: ", a.asymmetry_factor(energy))
 
     print("F0 ", a.F0(energy))
-    # print("FH ", a.FH(energy))
-    # print("FH_BAR ", a.FH_bar(energy))
-    #
-    # print("PSI0 ", a.psi0(energy))
-    # print("PSIH ", a.psiH(energy))
-    # print("PSIH_bar ", a.psiH_bar(energy))
+    print("FH ", a.FH(energy))
+    print("FH_BAR ", a.FH_bar(energy))
+
+    print("PSI0 ", a.psi0(energy))
+    print("PSIH ", a.psiH(energy))
+    print("PSIH_bar ", a.psiH_bar(energy))
     #
     print("V0: ", a.vectorK0direction(energy).components())
     print("Bh direction: ", a.vectorHdirection().components())

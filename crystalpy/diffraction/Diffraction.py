@@ -191,7 +191,7 @@ class Diffraction(object):
     def _perfectCrystalForEnergy(self, diffraction_setup, energy):
 
         # Retrieve bragg angle.
-        angle_bragg = diffraction_setup.angleBragg(energy)
+        angle_bragg = diffraction_setup.bragg_angle(energy)
 
         # Get structure factors for all relevant lattice vectors 0,H,H_bar.
         if False: # this is "commented" by srio to speed it up!
@@ -215,7 +215,7 @@ class Diffraction(object):
 
 
         # Retrieve lattice spacing d.
-        d_spacing = diffraction_setup.dSpacing() * 1e-10
+        d_spacing = diffraction_setup.d_spacing() * 1e-10
 
         # Calculate the Bragg normal B_H.
         normal_bragg = diffraction_setup.normalBragg()
