@@ -450,7 +450,7 @@ class DiffractionSetupAbstract(object):
     # ! asymmetry b factor vectorial value (Zachariasen, [3.115])
     # """
 
-    def asymmetry_factor(self, energy, vector_k_in=None):
+    def asymmetryFactor(self, energy, vector_k_in=None):
         if vector_k_in is None:
             vector_k_in = self.vectorK0(energy)
 
@@ -469,9 +469,37 @@ class DiffractionSetupAbstract(object):
         :return: Bragg angle corrected.
         """
         # equation 3.145a in Zachariasen's book
-        numerator = (1 - self.asymmetry_factor(energy)) * self.psi0(energy).real
-        denominator = 2 * self.asymmetry_factor(energy) * numpy.sin(2 * self.angleBragg(energy))
+        numerator = (1 - self.asymmetryFactor(energy)) * self.psi0(energy).real
+        denominator = 2 * self.asymmetryFactor(energy) * numpy.sin(2 * self.angleBragg(energy))
         return self.angleBragg(energy) + numerator / denominator
+
+    #
+    # Darwin width
+    #
+
+    def darwinHalfwidthS(self, energy):
+        return self.darwinHalfwidth(energy)[0]
+
+    def darwinHalfwidthP(self, energy):
+        return self.darwinHalfwidth(energy)[1]
+
+    def darwinHalfwidth(self, energy):
+        if isinstance(energy, int): energy = float(energy)
+
+        codata_e2_mc2 = codata.hbar * codata.alpha / codata.m_e / codata.c * 1e2 # in cm
+        wavelength = codata.c * codata.h / codata.e / energy
+
+        RN = 1.0 / (self.unitcellVolumeSI() * 1e6 ) * codata_e2_mc2
+        R_LAM0 = wavelength * 1e2
+        F_0, FH, FH_BAR = self.Fall(energy)
+        print(">>>", F_0, FH, FH_BAR, R_LAM0)
+        STRUCT = numpy.sqrt( FH * FH_BAR)
+        TEMPER = 1.0 # self.get_preprocessor_dictionary()["temper"]
+        GRAZE = self.angleBragg(energy)
+        SSVAR	= RN*(R_LAM0**2)*STRUCT*TEMPER/numpy.pi/numpy.sin(2.0*GRAZE)
+        SPVAR = SSVAR * numpy.abs(numpy.cos(2.0 * GRAZE))
+        return SSVAR.real, SPVAR.real
+
     #
     # operators
     #
