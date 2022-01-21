@@ -492,7 +492,6 @@ class DiffractionSetupAbstract(object):
         RN = 1.0 / (self.unitcellVolumeSI() * 1e6 ) * codata_e2_mc2
         R_LAM0 = wavelength * 1e2
         F_0, FH, FH_BAR = self.Fall(energy)
-        print(">>>", F_0, FH, FH_BAR, R_LAM0)
         STRUCT = numpy.sqrt( FH * FH_BAR)
         TEMPER = 1.0 # self.get_preprocessor_dictionary()["temper"]
         GRAZE = self.angleBragg(energy)
