@@ -5,8 +5,9 @@ dSpacing returns A
 units are in SI.
 
 """
-from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
+import numpy
 
+from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
 from xoppylib.crystals.bragg_preprocessor_file_io import bragg_preprocessor_file_v2_read
 from xoppylib.crystals.tools import crystal_fh
 # from xoppylib.xoppy_xraylib_util import crystal_fh
