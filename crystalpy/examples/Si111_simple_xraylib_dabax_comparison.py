@@ -42,12 +42,6 @@ def calculate_simple_diffraction_angular_scan():
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0)                              # radians                            # int
 
-    import socket
-    if socket.getfqdn().find("esrf") >= 0:
-        dx = DabaxXraylib(dabax_repository="http://ftp.esrf.fr/pub/scisoft/DabaxFiles/")
-    else:
-        dx = DabaxXraylib()
-
     diffraction_setup_dabax = DiffractionSetupDabax(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2,                             # meters
@@ -56,7 +50,7 @@ def calculate_simple_diffraction_angular_scan():
                                                miller_l               = 1,                                # int
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0,
-                                               dabax=dx)                              # radians
+                                               dabax=DabaxXraylib())                              # radians
 
 
     energy                 = 8000.0                           # eV
@@ -132,11 +126,6 @@ def calculate_simple_diffraction_angular_scan_accelerated():
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0)                              # radians                            # int
 
-    import socket
-    if socket.getfqdn().find("esrf") >= 0:
-        dx = DabaxXraylib(dabax_repository="http://ftp.esrf.fr/pub/scisoft/DabaxFiles/")
-    else:
-        dx = DabaxXraylib()
 
     diffraction_setup_dabax = DiffractionSetupDabax(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
@@ -146,7 +135,7 @@ def calculate_simple_diffraction_angular_scan_accelerated():
                                                miller_l               = 1,                                # int
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0,
-                                               dabax=dx)                              # radians
+                                               dabax=DabaxXraylib())                              # radians
 
 
     energy                 = 8000.0                           # eV

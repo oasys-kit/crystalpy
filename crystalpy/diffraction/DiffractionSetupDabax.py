@@ -128,12 +128,7 @@ class DiffractionSetupDabax(DiffractionSetupAbstract):
 
 
 if __name__ == "__main__":
-    # redefine the default server at ESRF because default server name is different outside and inside ESRF
-    import socket
-    if socket.getfqdn().find("esrf") >= 0:
-        dx = DabaxXraylib(dabax_repository = "http://ftp.esrf.fr/pub/scisoft/DabaxFiles/")
-    else:
-        dx = DabaxXraylib()
+
 
 
     from crystalpy.diffraction.GeometryType import BraggDiffraction
@@ -143,14 +138,14 @@ if __name__ == "__main__":
                  miller_h=1, miller_k=1, miller_l=1,
                  asymmetry_angle=0.0,
                  azimuthal_angle=0.0,
-                 dabax=dx)
+                 dabax=DabaxXraylib())
 
     energy = 8000.0
     print("Photon energy: %g deg " % (energy))
     print("d_spacing: %g A " % (a.dSpacing()))
     print("unitCellVolumw: %g A**3 " % (a.unitcellVolume()))
     print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
-    print("Asymmerey factor b: ", a.asymmetry_factor(energy))
+    print("Asymmerey factor b: ", a.asymmetryFactor(energy))
 
     print("F0 ", a.F0(energy))
     print("FH ", a.FH(energy))
@@ -173,7 +168,7 @@ if __name__ == "__main__":
           a.deviationOfIncomingPhoton(Photon(energy_in_ev=energy, direction_vector=a.vectorK0(energy))))
     #
     #
-    print("Asymmerey factor b: ", a.asymmetry_factor(energy))
+    print("Asymmerey factor b: ", a.asymmetryFactor(energy))
     print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
     # print("Bragg angle corrected: %g deg " %  (a.angleBraggCorrected(energy) * 180 / numpy.pi))
 
