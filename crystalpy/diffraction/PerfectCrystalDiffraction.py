@@ -4,7 +4,7 @@ for perfect crystals.
 Except for energy all units are in SI. Energy is in eV.
 """
 
-from numpy import pi, cos, sqrt
+from numpy import pi, cos, sin, sqrt, abs
 
 from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
 from crystalpy.util.Photon import Photon
@@ -502,7 +502,23 @@ class PerfectCrystalDiffraction(object):
         return self._calculateComplexAmplitude(photon_in, zac_q, zac_z, gamma_0,
                                                effective_psi_h_bar)
 
-    def calculateDiffraction(self, photon_in):
+    def calculateDiffraction(self,
+                             photon_in,
+                             method=1, # 0=Zachariasen, 1=Guigay
+                             ):
+        """
+        Calculate diffraction for incoming photon.
+        :param photon_in: Incoming photon.
+        :return: Complex amplitude of the diffraction.
+        """
+
+        if method == 0:
+            return self.calculateDiffractionZachariasen(photon_in)
+        else:
+            return self.calculateDiffractionGuigay(photon_in)
+
+
+    def calculateDiffractionZachariasen(self, photon_in):
         """
         Calculate diffraction for incoming photon.
         :param photon_in: Incoming photon.
@@ -530,6 +546,91 @@ class PerfectCrystalDiffraction(object):
         # Calculate complex amplitude for S and P polarization.
         result["S"] = self._calculatePolarizationS(photon_in, zac_b, zac_z, gamma_0)
         result["P"] = self._calculatePolarizationP(photon_in, zac_b, zac_z, gamma_0)
+
+        # Note division by |b| in intensity (thus sqrt(|b|) in amplitude)
+        # for power balance (see Zachariasen pag. 122)
+        #
+        # This factor only applies to diffracted beam, not to transmitted beams
+        # (see private communication M. Rio (ESRF) and J. Sutter (DLS))
+        if (self.geometryType() == BraggDiffraction() or
+                self.geometryType() == LaueDiffraction()):
+            result["S"].rescale(1.0 / sqrt(abs(zac_b)))
+            result["P"].rescale(1.0 / sqrt(abs(zac_b)))
+
+        # If debugging output is turned on.
+        if self.isDebug:
+            self._logMembers(zac_b, zac_alpha, photon_in, photon_out, result)
+
+        # Returns the complex amplitudes.
+        return result
+
+    def calculateDiffractionGuigay(self, photon_in):
+        """
+        Calculate diffraction for incoming photon.
+        :param photon_in: Incoming photon.
+        :return: Complex amplitude of the diffraction.
+        """
+        # Initialize return variable.
+        result = {"S": None,
+                  "P": None}
+
+        # Calculate photon out.
+        photon_out = self._calculatePhotonOut(photon_in)
+
+        # Calculate crystal field refraction index difference.
+        zac_alpha = self._calculateZacAlpha(photon_in)
+
+        # Calculate asymmetry ratio.
+        zac_b = self._calculateZacB(photon_in, photon_out)
+
+        # Calculate z as defined in Zachariasen [3-123].
+        zac_z = self._calculateZacZ(zac_b, zac_alpha)
+
+        # Calculate projection cosine.
+        gamma_0 = self._calculateGamma(photon_in)
+
+        w = zac_b * (zac_alpha / 2) + self.Psi0() * (zac_b - 1) / 2
+
+
+        # gamma0   = self.surface_normal().scalarProduct(photon_in.wavevector())
+        # gammaH = self.surface_normal().scalarProduct(photon_out.wavevector())
+
+        s = self.thickness() / gamma_0
+
+        if self.geometryType() == BraggDiffraction():
+            raise NotImplementedError
+        elif self.geometryType() == LaueDiffraction():
+            # sigma polarization
+            SQ = sqrt(zac_b * self.PsiH() * self.PsiHBar() + w ** 2)
+            complex_amplitude_s = 1j * zac_b * self.PsiH() / SQ * sin(s * pi / photon_in.wavelength() * SQ)
+
+            # pi polarization
+            effective_psi_h = self.PsiH() * cos(2 * self.braggAngle())
+            effective_psi_h_bar = self.PsiHBar() * cos(2 * self.braggAngle())
+            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            complex_amplitude_p = 1j * zac_b * effective_psi_h / SQ * sin(s * pi / photon_in.wavelength() * SQ)
+        elif self.geometryType() == BraggTransmission():
+            raise NotImplementedError
+        elif self.geometryType() == LaueTransmission():
+            raise NotImplementedError
+        else:
+            raise Exception
+
+
+        # # sigma polarization
+        # SQ = sqrt(zac_b * self.PsiH() * self.PsiHBar() + w**2)
+        # complex_amplitude_s = 1j * zac_b * self.PsiH() / SQ * sin(s * pi / photon_in.wavelength() * SQ)
+        #
+        # # pi polarization
+        # effective_psi_h = self.PsiH() * cos(2 * self.braggAngle())
+        # effective_psi_h_bar = self.PsiHBar() * cos(2 * self.braggAngle())
+        # SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+        # complex_amplitude_p = 1j * zac_b * effective_psi_h / SQ * sin(s * pi / photon_in.wavelength() * SQ)
+
+
+        # # Calculate complex amplitude for S and P polarization.
+        result["S"] = ComplexAmplitude(complex(complex_amplitude_s))
+        result["P"] = ComplexAmplitude(complex(complex_amplitude_p))
 
         # Note division by |b| in intensity (thus sqrt(|b|) in amplitude)
         # for power balance (see Zachariasen pag. 122)
