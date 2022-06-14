@@ -504,7 +504,7 @@ class PerfectCrystalDiffraction(object):
 
     def calculateDiffraction(self,
                              photon_in,
-                             method=1, # 0=Zachariasen, 1=Guigay
+                             method=0, # 0=Zachariasen, 1=Guigay
                              ):
         """
         Calculate diffraction for incoming photon.
