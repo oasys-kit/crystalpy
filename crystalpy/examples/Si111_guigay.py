@@ -12,7 +12,7 @@ import numpy
 
 
 
-from crystalpy.diffraction.GeometryType import LaueDiffraction
+from crystalpy.diffraction.GeometryType import LaueDiffraction, LaueTransmission, BraggDiffraction, BraggTransmission
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
 from crystalpy.diffraction.Diffraction import Diffraction
 
@@ -26,16 +26,16 @@ from crystalpy.util.Photon import Photon
 
 
 #
-def calculate_simple_diffraction():
+def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1):
 
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    asymmetry_angle = numpy.radians(65)
 
-    diffraction_setup = DiffractionSetup(geometry_type          = LaueDiffraction(),  # GeometryType object
+
+    diffraction_setup = DiffractionSetup(geometry_type=geometry_type,  # GeometryType object
                                          crystal_name="Si",  # string
-                                         thickness=10e-6,  # meters
+                                         thickness=thickness,  # meters
                                          miller_h=1,  # int
                                          miller_k=1,  # int
                                          miller_l=1,  # int
@@ -78,7 +78,7 @@ def calculate_simple_diffraction():
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=method)
 
         # store results
         deviations[ia] = deviation
@@ -101,5 +101,8 @@ def calculate_simple_diffraction():
 if __name__ == "__main__":
 
 
-    calculate_simple_diffraction()
+    # calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
+    calculate_simple_diffraction(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
+    # calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=1e-6, method=1)
+    # calculate_simple_diffraction(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=100e6, method=1)
 
