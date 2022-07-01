@@ -87,10 +87,20 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
 
     # plot results
     import matplotlib.pylab as plt
+    if geometry_type == LaueDiffraction():
+        title = "Reflectance"
+    elif geometry_type == LaueTransmission():
+            title = "Transmittance"
+    elif geometry_type == BraggDiffraction():
+        title = "Reflectance"
+    elif geometry_type == BraggTransmission():
+            title = "Transmittance"
+
     plt.plot(1e6*deviations,intensityS)
     plt.plot(1e6*deviations,intensityP)
-    plt.xlabel("deviation angle [urad]")
-    plt.ylabel("Reflectivity")
+    plt.xlabel(r'$\theta$-$\theta_B$ [$\mu$rad]')
+    plt.ylabel(title)
+    plt.title(r'Si 111; E = %g eV; $\alpha$=%g deg; $t_c$=%g $\mu$m' % (energy,numpy.rad2deg(asymmetry_angle),thickness*1e6) )
     plt.legend(["Sigma-polarization","Pi-polarization"])
     plt.show()
 
@@ -99,10 +109,8 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
 # main
 #
 if __name__ == "__main__":
-
-
-    # calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
+    calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
     calculate_simple_diffraction(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
-    # calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=1e-6, method=1)
-    # calculate_simple_diffraction(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=100e6, method=1)
+    calculate_simple_diffraction(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=0.001, method=1)
+    calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=10e-6, method=1)
 
