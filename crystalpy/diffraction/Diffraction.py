@@ -191,7 +191,7 @@ class Diffraction(object):
     def _perfectCrystalForEnergy(self, diffraction_setup, energy):
 
         # Retrieve bragg angle.
-        angle_bragg = diffraction_setup.bragg_angle(energy)
+        angle_bragg = diffraction_setup.angleBragg(energy)
 
         # Get structure factors for all relevant lattice vectors 0,H,H_bar.
         if False: # this is "commented" by srio to speed it up!
@@ -215,7 +215,7 @@ class Diffraction(object):
 
 
         # Retrieve lattice spacing d.
-        d_spacing = diffraction_setup.d_spacing() * 1e-10
+        d_spacing = diffraction_setup.dSpacing() * 1e-10
 
         # Calculate the Bragg normal B_H.
         normal_bragg = diffraction_setup.normalBragg()
@@ -474,23 +474,23 @@ class Diffraction(object):
         return outgoing_bunch
 
     # calculate complex reflectivity and transmitivity
-    def calculateDiffractedComplexAmplitudes(self, diffraction_setup, incoming_photon):
+    def calculateDiffractedComplexAmplitudes(self, diffraction_setup, incoming_photon, method=0):
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = self._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
 
         # Calculate diffraction for current incoming photon.
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, method=method)
 
         return complex_amplitudes
 
     # using ComplexAmplitudePhoton
-    def calculateDiffractedComplexAmplitudePhoton(self, diffraction_setup,photon):
+    def calculateDiffractedComplexAmplitudePhoton(self, diffraction_setup,photon, method=0):
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = self._perfectCrystalForPhoton(diffraction_setup, photon)
 
-        coeffs = self.calculateDiffractedComplexAmplitudes(diffraction_setup,photon)
+        coeffs = self.calculateDiffractedComplexAmplitudes(diffraction_setup,photon, method=method)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(photon)
