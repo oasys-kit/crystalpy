@@ -114,6 +114,6 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
 if __name__ == "__main__":
     calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6,  method=1)
     calculate_simple_diffraction(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
-    calculate_simple_diffraction(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=0.001,  method=1)
+    calculate_simple_diffraction(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=10e-6,  method=1)
     calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=10e-6, method=1)
 

@@ -584,7 +584,7 @@ class PerfectCrystalDiffraction(object):
         # Returns the complex amplitudes.
         return result
 
-    def calculateDiffractionGuigay(self, photon_in, debug=0):
+    def calculateDiffractionGuigay(self, photon_in, debug=0, s_ratio=None):
         """
         Calculate diffraction for incoming photon.
         :param photon_in: Incoming photon.
@@ -630,27 +630,39 @@ class PerfectCrystalDiffraction(object):
         omega = numpy.pi / photon_in.wavelength() * w
 
         if self.geometryType() == BraggDiffraction():
+            if s_ratio is None:
+                s = 0.0
+            else:
+                s = T * s_ratio
             # sigma polarization
             effective_psi_h = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
             SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             uh = effective_psi_h * pi / photon_in.wavelength()
+            u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_s = -1j * guigay_b * uh * numpy.sin(a * T) / \
-                                (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
+            complex_amplitude_s = 1j * guigay_b * uh * numpy.sin(a * s - a * T) / \
+                                (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T)) * \
+                                numpy.exp(1j * s * (omega + u0))
 
             # pi polarization
             effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
             SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             uh = effective_psi_h * pi / photon_in.wavelength()
+            u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_p = -1j * guigay_b * uh * numpy.sin(a * T) / \
-                                (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
+            complex_amplitude_p = 1j * guigay_b * uh * numpy.sin( a * s - a * T) / \
+                                (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T)) * \
+                                numpy.exp(1j * s * (omega + u0))
 
         elif self.geometryType() == BraggTransmission():
+            if s_ratio is None:
+                s = T
+            else:
+                s = T * s_ratio
             # sigma polarization
             effective_psi_h = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
@@ -658,8 +670,9 @@ class PerfectCrystalDiffraction(object):
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_s = a / (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
-            complex_amplitude_s *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
+            complex_amplitude_s = (a * numpy.cos(a * s - a * T) - 1j * omega * numpy.sin(a * s - a* T))\
+                                  / (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
+            complex_amplitude_s *= numpy.exp(1j * s * (omega + u0))
 
             # pi polarization
             effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
@@ -668,11 +681,17 @@ class PerfectCrystalDiffraction(object):
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_p = a / (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
-            complex_amplitude_p *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
+            complex_amplitude_p = (a * numpy.cos(a * s - a * T) - 1j * omega * numpy.sin(a * s - a* T))\
+                                  / (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
+            complex_amplitude_p *= numpy.exp(1j * s * (omega + u0))
 
 
         elif self.geometryType() == LaueDiffraction():
+            if s_ratio is None:
+                s = T
+            else:
+                s = T * s_ratio
+                raise NotImplementedError()
             # sigma polarization
             effective_psi_h     = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
@@ -682,7 +701,7 @@ class PerfectCrystalDiffraction(object):
             a = pi / photon_in.wavelength() * SQ
 
             complex_amplitude_s = 1j * guigay_b * uh * sin(a * T) / a
-            complex_amplitude_s *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
+            complex_amplitude_s *= numpy.exp(1j * s * (omega + u0))
 
             # pi polarization
             effective_psi_h     = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
@@ -693,9 +712,14 @@ class PerfectCrystalDiffraction(object):
             a = pi / photon_in.wavelength() * SQ
 
             complex_amplitude_p = 1j * guigay_b * uh * sin(a * T) / a
-            complex_amplitude_p *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
+            complex_amplitude_p *= numpy.exp(1j * s * (omega + u0))
 
         elif self.geometryType() == LaueTransmission():
+            if s_ratio is None:
+                s = T
+            else:
+                s = T * s_ratio
+                raise NotImplementedError()
             # sigma polarization
             effective_psi_h = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
@@ -704,7 +728,7 @@ class PerfectCrystalDiffraction(object):
             u0 = effective_psi_0 * pi / photon_in.wavelength()
 
             complex_amplitude_s = cos(a * T) - 1j * omega * sin(a * T) / a
-            complex_amplitude_s *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
+            complex_amplitude_s *= numpy.exp(1j * s * (omega + u0))
 
             # pi polarization
             effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
@@ -715,7 +739,7 @@ class PerfectCrystalDiffraction(object):
 
             # pi polarization
             complex_amplitude_p = cos(a * T) - 1j * omega * sin(a * T) / a
-            complex_amplitude_p *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
+            complex_amplitude_p *= numpy.exp(1j * s * (omega + u0))
         else:
             raise Exception
 
