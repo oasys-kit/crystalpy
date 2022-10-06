@@ -70,6 +70,9 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
     for ia in range(angle_deviation_points):
         deviation = angle_deviation_min + ia * angle_step
         angle = deviation  + bragg_angle + asymmetry_angle
+        # print("\n>>>")
+        # print("deviation: ", deviation)
+        # print("Alpha approx: ", -2 * deviation * numpy.sin(2 * bragg_angle))
 
         # calculate the components of the unitary vector of the incident photon scan
         # Note that diffraction plane is YZ
@@ -109,8 +112,8 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
 # main
 #
 if __name__ == "__main__":
-    calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
+    calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6,  method=1)
     calculate_simple_diffraction(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1)
-    calculate_simple_diffraction(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=0.001, method=1)
+    calculate_simple_diffraction(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=0.001,  method=1)
     calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=10e-6, method=1)
 

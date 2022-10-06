@@ -333,6 +333,7 @@ class PerfectCrystalDiffraction(object):
         # Return outgoing photon.
         return photon_out
 
+
     def _calculateZacAlpha(self, photon_in):
         """
         Calculates alpha ("refraction index difference between waves in the crystal") as defined in Zachariasen [3-114b].
@@ -347,6 +348,9 @@ class PerfectCrystalDiffraction(object):
 
         # Calculate alpha.
         zac_alpha = (wavenumber ** -2) * (self.braggNormal().norm() ** 2 + 2 * k_0_times_B_h)
+        # we defined theta = theta_b + deviation (for symmetric Bragg), therefore the
+        # approximated value of zac_alpha (compare eqs 3.116)  = 2 (theta_b-theta) sin(2 theta_b) =
+        # = 2 (-deviation) * sin(2 theta_b)
 
         # Return alpha.
         return zac_alpha
@@ -358,11 +362,24 @@ class PerfectCrystalDiffraction(object):
         :param photon_out: Outgoing photon.
         :return: Asymmetry ratio b.
         """
+        # TODO: revise this algorithm, it is not exactly as in Zachariasen [3-115]
         numerator   = self.surface_normal().scalarProduct(photon_in.wavevector())
         denominator = self.surface_normal().scalarProduct(photon_out.wavevector())
         zac_b = numerator / denominator
 
         return zac_b
+
+    def _calculateGuigayB(self, photon_in, photon_out):
+        """
+        Calculates asymmetry ratio b as defined in Guigay.
+        :param photon_in: Incoming photon.
+        :param photon_out: Outgoing photon.
+        :return: Asymmetry ratio b.
+        Note that this b value is not standard, as it changes when b changes
+        """
+        numerator   = self.surface_normal().scalarProduct(photon_in.wavevector())
+        denominator = self.surface_normal().scalarProduct(photon_out.wavevector())
+        return numerator / denominator
 
     def _calculateZacQ(self, zac_b, effective_psi_h, effective_psi_h_bar):
         """
@@ -567,7 +584,7 @@ class PerfectCrystalDiffraction(object):
         # Returns the complex amplitudes.
         return result
 
-    def calculateDiffractionGuigay(self, photon_in):
+    def calculateDiffractionGuigay(self, photon_in, debug=0):
         """
         Calculate diffraction for incoming photon.
         :param photon_in: Incoming photon.
@@ -581,89 +598,63 @@ class PerfectCrystalDiffraction(object):
         photon_out = self._calculatePhotonOut(photon_in)
 
         # Calculate crystal field refraction index difference.
-        zac_alpha = self._calculateZacAlpha(photon_in)
+        # Note that Guigay's definition of alpha has the opposite sign as in Zachariasen!
+        zac_guigay = - self._calculateZacAlpha(photon_in)
+        if debug: print("zac_guigay: ", zac_guigay)
 
-        # Calculate asymmetry ratio.
-        zac_b = self._calculateZacB(photon_in, photon_out)
+        # Calculate asymmetry ratio. Note that this is not a constant!
+        if debug:
+            zac_b = self._calculateZacB(photon_in, photon_out)
+            print("zac_b: ", zac_b)
 
-        # Calculate z as defined in Zachariasen [3-123].
-        zac_z = self._calculateZacZ(zac_b, zac_alpha)
+        h = 2 * photon_in.wavevector().norm() * numpy.sin(self._bragg_angle)
+        H = (self.braggNormal().getNormalizedVector()).scalarMultiplication(h)
+        if debug: print("H: ",H.components())
 
-        # Calculate projection cosine.
+        KH = photon_in.wavevector().addVector(H)
+        photon_outG = Photon(energy_in_ev=photon_in.energy(), direction_vector=KH)
+        if debug:
+            guigay_b = self._calculateGuigayB(photon_in, photon_outG)
+            print("guigay_b: ", guigay_b)
+
         gamma_0 = self._calculateGamma(photon_in)
+        gamma_H = self._calculateGamma(photon_outG)
+        guigay_b = gamma_0 / gamma_H
+        if debug: print("guigay_b: ", guigay_b)
+
 
         T = self.thickness() / gamma_0
 
         effective_psi_0 = numpy.conjugate(self.Psi0())  # I(Psi0) > 0 (for absorption!!)
-        w = zac_b * (zac_alpha / 2) + effective_psi_0 * (zac_b - 1) / 2
+        w = guigay_b * (zac_guigay / 2) + effective_psi_0 * (guigay_b - 1) / 2
         omega = numpy.pi / photon_in.wavelength() * w
 
         if self.geometryType() == BraggDiffraction():
-
-            # effective_psi_0 = numpy.conjugate(self.Psi0())  # I(Psi0) > 0 (for absorption!!)
-            # effective_psi_h = numpy.conjugate(self.PsiH())
-            # effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-            #
-            # zac_b = abs(zac_b)
-            # u0 = effective_psi_0 * pi / photon_in.wavelength() # sqrt(zac_b) ????????????????????????????
-            # w = zac_b * zac_alpha / 2 + effective_psi_0 * (1 + zac_b) / 2
-            # omega = w * pi / photon_in.wavelength()
-            #
-            # uh = effective_psi_h * pi / photon_in.wavelength()
-            # a = pi / photon_in.wavelength() * sqrt(zac_b * effective_psi_h * effective_psi_h_bar - w ** 2)
-            # print(">>>omega, a:", omega, a, zac_b * effective_psi_h * effective_psi_h_bar - w ** 2)
-            # complex_amplitude_s = 1j * zac_b * uh * tanh(a * T) / (a - 1j * omega * tanh(a * T))
-            #
-            # effective_psi_h     = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
-            # effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-            # uh = effective_psi_h * pi / photon_in.wavelength()
-            # a = pi / photon_in.wavelength() * sqrt(zac_b * effective_psi_h * effective_psi_h_bar - w ** 2)
-            # complex_amplitude_p = 1j * abs(zac_b) * uh * tanh(a * T) / (a - 1j * omega * tanh(a * T))
-
             # sigma polarization
             effective_psi_h = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             uh = effective_psi_h * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_s = -1j * zac_b * uh * numpy.sin(a * T) / \
+            complex_amplitude_s = -1j * guigay_b * uh * numpy.sin(a * T) / \
                                 (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
 
             # pi polarization
             effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             uh = effective_psi_h * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_p = -1j * zac_b * uh * numpy.sin(a * T) / \
+            complex_amplitude_p = -1j * guigay_b * uh * numpy.sin(a * T) / \
                                 (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T))
 
         elif self.geometryType() == BraggTransmission():
-
-            # effective_psi_0     = numpy.conjugate(self.Psi0()) # I(Psi0) > 0 (for absorption!!)
-            # effective_psi_h     = numpy.conjugate(self.PsiH())
-            # effective_psi_h_bar = numpy.conjugate(self.PsiHBar() )
-            # zac_b = abs(zac_b)
-            # u0 = effective_psi_0 * pi / photon_in.wavelength() # sqrt(zac_b) ????????????????????????????
-            # T = self.thickness() / gamma_0
-            # w = zac_b * zac_alpha / 2 + effective_psi_0 * (1 + zac_b) / 2
-            # omega = w * pi / photon_in.wavelength()
-            #
-            # a = pi / photon_in.wavelength() * sqrt(zac_b * effective_psi_h * effective_psi_h_bar - w ** 2)
-            # complex_amplitude_s = a * exp(1j * T * (u0 - omega)) / (a * cosh(a * T) - 1j * omega * sinh(a * T))
-            #
-            # effective_psi_0     = numpy.conjugate(self.Psi0())
-            # effective_psi_h     = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
-            # effective_psi_h_bar = numpy.conjugate(self.PsiHBar() ) * cos(2 * self.braggAngle())
-            # a = pi / photon_in.wavelength() * sqrt(zac_b * effective_psi_h * effective_psi_h_bar - w ** 2)
-            # complex_amplitude_p = a * exp(1j * T * (u0 - omega)) / (a * cosh(a * T) - 1j * omega * sinh(a * T))
-
             # sigma polarization
             effective_psi_h = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
@@ -673,7 +664,7 @@ class PerfectCrystalDiffraction(object):
             # pi polarization
             effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
@@ -685,65 +676,46 @@ class PerfectCrystalDiffraction(object):
             # sigma polarization
             effective_psi_h     = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             uh = effective_psi_h * pi / photon_in.wavelength()
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_s = 1j * zac_b * uh * sin(a * T) / a
+            complex_amplitude_s = 1j * guigay_b * uh * sin(a * T) / a
             complex_amplitude_s *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
-
-            # xi1 = zac_b * uh / (a - omega)
-            # xi2 = zac_b * uh / (-a - omega)
-            # complex_amplitude_s = xi1 * xi2 / (xi2 - xi1) * 2j * numpy.sin(a * T)
-            # complex_amplitude_s *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
 
             # pi polarization
             effective_psi_h     = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             uh = effective_psi_h * pi / photon_in.wavelength()
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_p = 1j * zac_b * uh * sin(a * T) / a
+            complex_amplitude_p = 1j * guigay_b * uh * sin(a * T) / a
             complex_amplitude_p *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
-            # xi1 = zac_b * uh / (a - omega)
-            # xi2 = zac_b * uh / (-a - omega)
-            # complex_amplitude_p = xi1 * xi2 / (xi2 - xi1) * 2j * numpy.sin(a * T)
-            # complex_amplitude_p *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
 
         elif self.geometryType() == LaueTransmission():
             # sigma polarization
             effective_psi_h = numpy.conjugate(self.PsiH())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             a = pi / photon_in.wavelength() * SQ
             u0 = effective_psi_0 * pi / photon_in.wavelength()
 
             complex_amplitude_s = cos(a * T) - 1j * omega * sin(a * T) / a
             complex_amplitude_s *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
 
-            # xi1 = zac_b * uh / (a - omega)
-            # xi2 = zac_b * uh / (-a - omega)
-            # complex_amplitude_s = (xi2 * numpy.exp(1j * a * T) - xi1 * numpy.exp(-1j * a * T)) / (xi2 - xi1)
-            # complex_amplitude_s *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
-
             # pi polarization
             effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
             effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-            SQ = sqrt(zac_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
             a = pi / photon_in.wavelength() * SQ
             u0 = effective_psi_0 * pi / photon_in.wavelength()
 
             # pi polarization
             complex_amplitude_p = cos(a * T) - 1j * omega * sin(a * T) / a
             complex_amplitude_p *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
-
-            # xi1 = zac_b * uh / (a - omega)
-            # xi2 = zac_b * uh / (-a - omega)
-            # complex_amplitude_p = (xi2 * numpy.exp(1j * a * T) - xi1 * numpy.exp(-1j * a * T)) / (xi2 - xi1)
-            # complex_amplitude_p *= exp(1j * T * u0 + 1j * T * pi / photon_in.wavelength() * w)
         else:
             raise Exception
 
@@ -761,12 +733,12 @@ class PerfectCrystalDiffraction(object):
 
         if (self.geometryType() == BraggDiffraction() or
                 self.geometryType() == LaueDiffraction()):
-            result["S"].rescale(1.0 / sqrt(abs(zac_b)))
-            result["P"].rescale(1.0 / sqrt(abs(zac_b)))
+            result["S"].rescale(1.0 / sqrt(abs(guigay_b)))
+            result["P"].rescale(1.0 / sqrt(abs(guigay_b)))
 
         # If debugging output is turned on.
         if self.isDebug:
-            self._logMembers(zac_b, zac_alpha, photon_in, photon_out, result)
+            self._logMembers(guigay_b, zac_alpha, photon_in, photon_out, result)
 
         # Returns the complex amplitudes.
         return result
@@ -774,7 +746,7 @@ class PerfectCrystalDiffraction(object):
     def _logMembers(self, zac_b, zac_alpha, photon_in, photon_out, result):
         """
         Debug logs the member variables and other relevant partial results.
-        :param zac_b: Asymmetry ratio b as defined in Zachariasen [3-115].
+        :param zac_b: Asymmetry ratio b
         :param zac_alpha: Diffraction index difference of crystal fields.
         :param photon_in: Incoming photon.
         :param result: Resulting complex amplitudes of the diffraction/transmission.
