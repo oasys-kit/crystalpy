@@ -12,7 +12,7 @@ from setuptools import setup
 
 
 setup(name='crystalpy',
-      version='0.0.8',
+      version='0.0.9',
       description='Python crystal polarization calcution',
       author='Edoardo Cappelli, Mark Glass, Manuel Sanchez del Rio',
       author_email='srio@esrf.eu',

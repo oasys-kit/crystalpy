@@ -397,7 +397,7 @@ class Diffraction(object):
 
         return perfect_crystal
 
-    def calculateDiffractedPolarizedPhoton(self, diffraction_setup, incoming_polarized_photon, inclination_angle):
+    def calculateDiffractedPolarizedPhoton(self, diffraction_setup, incoming_polarized_photon, inclination_angle, method=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
@@ -410,7 +410,7 @@ class Diffraction(object):
         perfect_crystal = self._perfectCrystalForPhoton(diffraction_setup, incoming_polarized_photon)
 
         # Calculate diffraction for current incoming photon.
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_polarized_photon)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_polarized_photon, method=method)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(incoming_polarized_photon)
@@ -440,7 +440,7 @@ class Diffraction(object):
         return outgoing_polarized_photon
 
 
-    def calculateDiffractedPolarizedPhotonBunch(self, diffraction_setup, incoming_bunch, inclination_angle):
+    def calculateDiffractedPolarizedPhotonBunch(self, diffraction_setup, incoming_bunch, inclination_angle, method=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
@@ -464,7 +464,8 @@ class Diffraction(object):
             # Raise OnProgress event if progressed by 10 percent.
             self._onProgressEveryTenPercent(index, len(incoming_bunch))
 
-            outgoing_polarized_photon = self.calculateDiffractedPolarizedPhoton(diffraction_setup, polarized_photon, inclination_angle)
+            outgoing_polarized_photon = self.calculateDiffractedPolarizedPhoton(diffraction_setup, polarized_photon,
+                                                                                inclination_angle, method=method)
             # Add result of current deviation.
             outgoing_bunch.addPhoton(outgoing_polarized_photon)
 
