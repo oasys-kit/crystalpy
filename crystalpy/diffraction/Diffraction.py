@@ -251,7 +251,7 @@ class Diffraction(object):
 
         return perfect_crystal
 
-    def _calculateDiffractionForEnergy(self, diffraction_setup, energy, result):
+    def _calculateDiffractionForEnergy(self, diffraction_setup, energy, result, method=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
@@ -276,7 +276,7 @@ class Diffraction(object):
             photon_in = Photon(energy, photon_direction)
 
             # Calculate diffraction for current incoming photon.
-            result_deviation = perfect_crystal.calculateDiffraction(photon_in)
+            result_deviation = perfect_crystal.calculateDiffraction(photon_in, method=method)
 
             # Calculate polarization difference between pi and sigma polarization.
             polarization_difference = result_deviation["P"] / result_deviation["S"]
@@ -294,10 +294,11 @@ class Diffraction(object):
         # Return diffraction results.
         return result
 
-    def calculateDiffraction(self, diffraction_setup):
+    def calculateDiffraction(self, diffraction_setup, method=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
+        :method: 0=Zachariasen, 1=Guigay
         :return: DiffractionResult representing this setup.
         """
 
@@ -308,7 +309,7 @@ class Diffraction(object):
         result = DiffractionResult(diffraction_setup, 0.0)
 
         for energy in diffraction_setup.energies():
-            self._calculateDiffractionForEnergy(diffraction_setup, energy, result)
+            self._calculateDiffractionForEnergy(diffraction_setup, energy, result, method=method)
 
         # Return diffraction results.
         return result
