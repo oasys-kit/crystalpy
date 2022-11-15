@@ -115,10 +115,11 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
     if plot_phase:
         plt.plot(1e6*deviations,phaseS)
         plt.plot(1e6*deviations,phaseP)
+        plt.plot(1e6 * deviations, phaseS - phaseP)
         plt.xlabel(r'$\theta$-$\theta_B$ [$\mu$rad]')
         plt.ylabel("Phase "+title)
         plt.title(r'Si 111; E = %g eV; $\alpha$=%g deg; $t_c$=%g $\mu$m' % (energy,numpy.rad2deg(asymmetry_angle),thickness*1e6) )
-        plt.legend(["Sigma-polarization","Pi-polarization"])
+        plt.legend(["Sigma-polarization","Pi-polarization", "Sigma-Pi"])
         plt.show()
 
 
