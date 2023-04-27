@@ -412,6 +412,13 @@ class DiffractionSetupAbstract(object):
         """
         return deepcopy(self)
 
+    def duplicate(self):
+        """
+        Returns a copy of this instance.
+        :return: A copy of this instance.
+        """
+        return deepcopy(self)
+
     def toDictionary(self):
         """
         Returns this setup in InfoDictionary form.

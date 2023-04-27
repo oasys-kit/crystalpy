@@ -164,7 +164,7 @@ if __name__ == "__main__":
           a.deviationOfIncomingPhoton(Photon(energy_in_ev=energy, direction_vector=a.vectorK0(energy))))
 
 
-    print("Asymmerey factor b: ", a.asymmetry_factor(energy))
+    # print("Asymmerey factor b: ", a.asymmetry_factor(energy))
     print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
     print("Bragg angle corrected: %g deg " %  (a.angleBraggCorrected(energy) * 180 / numpy.pi))
 

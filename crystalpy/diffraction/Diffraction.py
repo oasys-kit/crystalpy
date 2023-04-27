@@ -492,7 +492,7 @@ class Diffraction(object):
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = self._perfectCrystalForPhoton(diffraction_setup, photon)
 
-        coeffs = self.calculateDiffractedComplexAmplitudes(diffraction_setup,photon, method=method)
+        coeffs = self.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=method)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(photon)

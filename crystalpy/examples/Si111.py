@@ -32,7 +32,7 @@ from crystalpy.util.Vector import Vector
 
 
 from crystalpy.util.Photon import Photon
-from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitidePhoton
+from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
 from crystalpy.util.PolarizedPhoton import PolarizedPhoton
 
 from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBunch
@@ -40,7 +40,7 @@ from crystalpy.util.PolarizedPhotonBunch import PolarizedPhotonBunch
 
 
 
-def calculate_standard_interface():
+def calculate_standard_interface(do_plot=0):
 
     # Create a diffraction setup.
 
@@ -84,6 +84,8 @@ def calculate_standard_interface():
     # Create a MullerResult object.
     print("\nCalculating the Stokes vector...")
     mueller_result = mueller_diffraction.calculate_stokes()
+
+    if do_plot: make_plots(mueller_result)
 
     return mueller_result
 
@@ -186,11 +188,11 @@ def calculate_with_complex_amplitude_photon(method=0):
             # angle = deviation  + bragg_angle
             # yy = numpy.cos(angle)
             # zz = - numpy.abs(numpy.sin(angle))
-            # photon = ComplexAmplitidePhoton(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
+            # photon = ComplexAmplitudePhoton(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
             # minus sign in angle is to perform cw rotation when deviation increses
             Vin = K0unitary.rotateAroundAxis(Vector(1,0,0),-deviation)
-            photon = ComplexAmplitidePhoton(energy_in_ev=energy,direction_vector=Vin)
+            photon = ComplexAmplitudePhoton(energy_in_ev=energy,direction_vector=Vin)
 
             photon_out = diffraction.calculateDiffractedComplexAmplitudePhoton(diffraction_setup,photon)
             bunch_out.addPhoton(photon_out)
@@ -204,11 +206,11 @@ def calculate_with_complex_amplitude_photon(method=0):
             # angle = deviation + bragg_angle
             # yy = numpy.cos(angle)
             # zz = - numpy.abs(numpy.sin(angle))
-            # photon = ComplexAmplitidePhoton(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
+            # photon = ComplexAmplitudePhoton(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
             # minus sign in angle is to perform cw rotation when deviation increses
             Vin = K0unitary.rotateAroundAxis(Vector(1,0,0),-deviation)
-            photon = ComplexAmplitidePhoton(energy_in_ev=energy,direction_vector=Vin)
+            photon = ComplexAmplitudePhoton(energy_in_ev=energy,direction_vector=Vin)
 
             bunch_in.addPhoton( photon )
             ZZ[ia] = angle_deviation_min + ia * angle_step
@@ -329,7 +331,7 @@ def calculate_with_polarized_photon(method=0):
 # main
 #
 if __name__ == "__main__":
-    make_plots( calculate_standard_interface() )
+    calculate_standard_interface(do_plot=1)
 
     calculate_with_complex_amplitude_photon(method=0)
     calculate_with_complex_amplitude_photon(method=1)

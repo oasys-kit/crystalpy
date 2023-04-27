@@ -26,14 +26,15 @@ def calculate_bragg_dcm(energy_setup=8000.0,energies=numpy.linspace(7990,8010,20
     scan = numpy.zeros_like(energies)
     r = numpy.zeros_like(energies)
 
+    bragg_angle = diffraction_setup_r.angleBragg(energy_setup)
+    print("Bragg angle for E=%f eV is %f deg" % (energy_setup, bragg_angle * 180.0 / numpy.pi))
 
     for i in range(energies.size):
         #
         # gets Bragg angle needed to create deviation's scan
         #
         energy = energies[i]
-        bragg_angle = diffraction_setup_r.angleBragg(energy_setup)
-        print("Bragg angle for E=%f eV is %f deg" % (energy, bragg_angle * 180.0 / numpy.pi))
+
         # Create a Diffraction object (the calculator)
 
         deviation = 0.0 # angle_deviation_min + ia * angle_step
@@ -69,14 +70,15 @@ def calculate_laue_monochromator(energy_setup=8000.0,energies=numpy.linspace(799
     scan = numpy.zeros_like(energies)
     r = numpy.zeros_like(energies)
 
+    bragg_angle = diffraction_setup_r.angleBragg(energy_setup)
+    print("Bragg angle for E=%f eV is %f deg" % (energy_setup, bragg_angle * 180.0 / numpy.pi))
 
     for i in range(energies.size):
         #
         # gets Bragg angle needed to create deviation's scan
         #
         energy = energies[i]
-        bragg_angle = diffraction_setup_r.angleBragg(energy_setup)
-        print("Bragg angle for E=%f eV is %f deg" % (energy, bragg_angle * 180.0 / numpy.pi))
+
         # Create a Diffraction object (the calculator)
 
         deviation = 0.0  # angle_deviation_min + ia * angle_step
@@ -100,8 +102,10 @@ if __name__ == "__main__":
 
     from srxraylib.plot.gol import plot
 
-    # scan,r = calculate_bragg_dcm()
-    # plot(scan,r, title="Bragg")
+    if True:
+        scan,r = calculate_bragg_dcm()
+        plot(scan,r, title="Bragg")
 
-    scan,r = calculate_laue_monochromator()
-    plot(scan,r, title="Laue")
+    if True:
+        scan,r = calculate_laue_monochromator()
+        plot(scan,r, title="Laue")

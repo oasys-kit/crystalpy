@@ -8,7 +8,7 @@ from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
 import numpy
 
 # TODO create tests
-class ComplexAmplitidePhoton(Photon):
+class ComplexAmplitudePhoton(Photon):
 
     def __init__(self, energy_in_ev,direction_vector, Esigma=None,Epi=None):
         """
@@ -76,7 +76,7 @@ class ComplexAmplitidePhoton(Photon):
         return self._Epi.phase()
 
     def duplicate(self):
-        return ComplexAmplitidePhoton(self._energy_in_ev,
+        return ComplexAmplitudePhoton(self._energy_in_ev,
                                self._unit_direction_vector.duplicate(),
                                self._Esigma.complexAmplitude(),
                                self._Epi.complexAmplitude())

@@ -9,19 +9,20 @@
 #
 #
 import numpy
+from xoppylib.crystals.tools import bragg_calc2, run_diff_pat
+from xoppylib.crystals.create_bragg_preprocessor_file_v1 import create_bragg_preprocessor_file_v1
+import xraylib
+from dabax.dabax_xraylib import DabaxXraylib
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction, BraggTransmission, LaueDiffraction, LaueTransmission
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.DiffractionSetupShadowPreprocessor import DiffractionSetupShadowPreprocessor
+from crystalpy.diffraction.DiffractionSetupShadowPreprocessorV1 import DiffractionSetupShadowPreprocessorV1
 from crystalpy.diffraction.Diffraction import Diffraction
 from crystalpy.util.Vector import Vector
 from crystalpy.util.Photon import Photon
 
-from shadow4.physical_models.bragg.create_bragg_preprocessor_file_v1 import create_bragg_preprocessor_file_v1
+from srxraylib.plot.gol import plot
 
-from orangecontrib.xoppy.util.xoppy_util import locations
-from orangecontrib.xoppy.util.xoppy_xraylib_util import bragg_calc
-import os
 
 def plot_crystal_sketch(v0,vH,H):
 
@@ -135,8 +136,6 @@ def plot_crystal_sketch_components(v0_h,v0_v,vH_h ,vH_v ,H_h ,H_v):
 
     plt.show()
 
-
-
 #
 def calculate_with_crystalpy(bragg_or_laue=0,  #
                             diffracted_or_transmitted=0, #
@@ -192,7 +191,7 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
                                         E_MIN=5000.0, E_MAX=15000.0, E_STEP=100.0,
                                         SHADOW_FILE="bragg_xop.dat")
 
-        diffraction_setup = DiffractionSetupShadowPreprocessor(geometry_type          = geometry_type,
+        diffraction_setup = DiffractionSetupShadowPreprocessorV1(geometry_type          = geometry_type,
                                                        crystal_name           = crystal_name,
                                                        thickness              = thickness,
                                                        miller_h               = miller_h,
@@ -211,7 +210,7 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
     #
     bragg_angle = diffraction_setup.angleBragg(energy)
 
-    # print("Bragg angle for E=%f eV is %f deg"%(energy,bragg_angle*180.0/numpy.pi))
+    print("Bragg angle for E=%f eV is %f deg"%(energy,bragg_angle*180.0/numpy.pi))
 
 
     # Create a Diffraction object (the calculator)
@@ -222,10 +221,16 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
     intensityS = numpy.zeros(angle_deviation_points)
     intensityP = numpy.zeros(angle_deviation_points)
 
+    # k_0_unitary = diffraction_setup.incomingPhotonDirection(energy, 0.0)
+    # photon_0 = Photon(energy_in_ev=energy,direction_vector=k_0_unitary)
+    # k_H_unitary = diffraction_setup._
+    # print(">>>>>>>>>>>>>>>>>>>>>>>>k_0: ",k_0_unitary._components )
+
+    # plot_crystal_sketch(k_0_unitary,k_0_unitary,)
+
 
     for ia in range(angle_deviation_points):
         deviation = angle_deviation_min + ia * angle_step
-
 
         # angle = deviation  + bragg_angle + asymmetry_angle
         # # calculate the components of the unitary vector of the incident photon scan
@@ -244,6 +249,7 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
 
         # perform the calculation
         coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup,photon)
+
         # store results
         deviations[ia] = deviation
         intensityS[ia] = coeffs['S'].intensity()
@@ -330,74 +336,41 @@ def calculate_with_xoppy(bragg_or_laue=0,  #
 
     print("Using crystal descriptor: ",descriptor)
 
-    bragg_dictionary = bragg_calc(descriptor=descriptor,
-                                            hh=MILLER_INDEX_H,kk=MILLER_INDEX_K,ll=MILLER_INDEX_L,
-                                            temper=float(TEMPER),
-                                            emin=emin,emax=emax,estep=5.0,fileout="xcrystal.bra")
-
-    with open("xoppy.inp", "wt") as f:
-        f.write("xcrystal.bra\n")
-        f.write("%d\n"%MOSAIC)
-        f.write("%d\n"%GEOMETRY)
-
-        if MOSAIC == 1:
-            f.write("%g\n"%MOSAIC_FWHM)
-            f.write("%g\n"%THICKNESS)
-        else:
-            f.write("%g\n"%THICKNESS)
-            f.write("%g\n"%ASYMMETRY_ANGLE)
-
-        scan_flag = 1 + SCAN
-
-        f.write("%d\n"%scan_flag)
-
-        f.write("%19.9f\n"%ENERGY)
-
-        if scan_flag <= 3:
-            f.write("%d\n"%UNIT)
-
-        f.write("%g\n"%SCANFROM)
-        f.write("%g\n"%SCANTO)
-        f.write("%d\n"%SCANPOINTS)
-
-        if MOSAIC > 1: # bent
-            f.write("%g\n"%RSAG)
-            f.write("%g\n"%RMER)
-            f.write("0\n")
-
-            if ( (descriptor == "Si") or (descriptor == "Si2") or (descriptor == "Si_NIST") or (descriptor == "Ge") or descriptor == "Diamond"):
-                pass
-            else:  # not Si,Ge,Diamond
-                if ((ANISOTROPY == 1) or (ANISOTROPY == 2)):
-                    raise Exception("Anisotropy data not available for this crystal. Either use isotropic or use external compliance file. Please change and run again'")
-
-            f.write("%d\n"%ANISOTROPY)
-
-            if ANISOTROPY == 0:
-                f.write("%g\n"%POISSON)
-            elif ANISOTROPY == 1:
-                f.write("%d\n"%CRYSTAL_MATERIAL)
-                f.write("%g\n"%ASYMMETRY_ANGLE)
-                f.write("%d\n"%MILLER_INDEX_H)
-                f.write("%d\n"%MILLER_INDEX_K)
-                f.write("%d\n"%MILLER_INDEX_L)
-            elif ANISOTROPY == 2:
-                f.write("%d\n"%CRYSTAL_MATERIAL)
-                f.write("%g\n"%ASYMMETRY_ANGLE)
-                # TODO: check syntax for CUT: Cut syntax is: valong_X valong_Y valong_Z ; vnorm_X vnorm_Y vnorm_Z ; vperp_x vperp_Y vperp_Z
-                f.write("%s\n"%CUT.split(";")[0])
-                f.write("%s\n"%CUT.split(";")[1])
-                f.write("%s\n"%CUT.split(";")[2])
-            elif ANISOTROPY == 3:
-                f.write("%s\n"%FILECOMPLIANCE)
 
 
+    bragg_dictionary = bragg_calc2(
+                        descriptor=descriptor,
+                        hh=MILLER_INDEX_H, kk=MILLER_INDEX_K, ll=MILLER_INDEX_L,
+                        temper=float(TEMPER),
+                        emin=emin, emax=emax, estep=5.0, fileout="xcrystal.bra",
+                        ANISO_SEL=0,
+                        do_not_prototype = 0,  # 0=use site groups (recommended), 1=use all individual sites
+                        verbose = False,
+                        material_constants_library = xraylib,
+                        )
 
-    command = os.path.join(locations.home_bin(), 'diff_pat') + " < xoppy.inp"
-    print("Running command '%s' in directory: %s "%(command, locations.home_bin_run()))
-    print("\n--------------------------------------------------------\n")
-    os.system(command)
-    print("\n--------------------------------------------------------\n")
+    run_diff_pat(
+        bragg_dictionary,
+        preprocessor_file="xcrystal.bra",
+        descriptor=descriptor,
+        MOSAIC=MOSAIC,
+        GEOMETRY=GEOMETRY,
+        SCAN=SCAN,
+        UNIT=UNIT,
+        SCANFROM=SCANFROM,
+        SCANTO=SCANTO,
+        SCANPOINTS=SCANPOINTS,
+        ENERGY=ENERGY,
+        ASYMMETRY_ANGLE=ASYMMETRY_ANGLE,
+        THICKNESS=THICKNESS,
+        MOSAIC_FWHM=MOSAIC_FWHM,
+        RSAG=RSAG,
+        RMER=RMER,
+        ANISOTROPY=ANISOTROPY,
+        POISSON=POISSON,
+        CUT=CUT,
+        FILECOMPLIANCE=FILECOMPLIANCE,
+    )
 
     #show calculated parameters in standard output
     txt_info = open("diff_pat.par").read()
