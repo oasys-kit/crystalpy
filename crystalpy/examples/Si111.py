@@ -24,7 +24,7 @@ from srxraylib.plot.gol import plot
 from crystalpy.diffraction.GeometryType import BraggDiffraction
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
 from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
-from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
 
 from crystalpy.polarization.MuellerDiffraction import MuellerDiffraction
 from crystalpy.util.StokesVector import StokesVector
@@ -40,7 +40,7 @@ from crystalpy.util.PolarizedPhotonBunch import PolarizedPhotonBunch
 
 
 
-def calculate_standard_interface(do_plot=0):
+def calculate_standard_interface(do_plot=0, calculation_method=0):
 
     # Create a diffraction setup.
 
@@ -71,7 +71,7 @@ def calculate_standard_interface(do_plot=0):
 
     # Create a DiffractionResult object holding the results of the diffraction calculations.
     print("\nCalculating the diffraction results...")
-    diffraction_result = diffraction.calculateDiffraction(diffraction_setup)
+    diffraction_result = diffraction.calculateDiffraction(diffraction_setup, method=calculation_method)
 
     #
     # Now the Mueller/Stokes calculation from the diffraction results
@@ -133,7 +133,7 @@ def make_plots(mueller_result):
 #
 #
 #
-def calculate_with_complex_amplitude_photon(method=0):
+def calculate_with_complex_amplitude_photon(method=0, calculation_method=0):
 
     # Create a diffraction setup.
 
@@ -194,7 +194,9 @@ def calculate_with_complex_amplitude_photon(method=0):
             Vin = K0unitary.rotateAroundAxis(Vector(1,0,0),-deviation)
             photon = ComplexAmplitudePhoton(energy_in_ev=energy,direction_vector=Vin)
 
-            photon_out = diffraction.calculateDiffractedComplexAmplitudePhoton(diffraction_setup,photon)
+            photon_out = diffraction.calculateDiffractedComplexAmplitudePhoton(diffraction_setup,
+                                                                               photon,
+                                                                               method=calculation_method)
             bunch_out.addPhoton(photon_out)
             ZZ[ia] = deviation
 
@@ -215,7 +217,9 @@ def calculate_with_complex_amplitude_photon(method=0):
             bunch_in.addPhoton( photon )
             ZZ[ia] = angle_deviation_min + ia * angle_step
 
-        bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,bunch_in)
+        bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
+                                                                               bunch_in,
+                                                                               method=calculation_method)
 
     bunch_out_dict = bunch_out.toDictionary()
     print(bunch_out_dict.keys())
@@ -226,7 +230,7 @@ def calculate_with_complex_amplitude_photon(method=0):
 #
 #
 #
-def calculate_with_polarized_photon(method=0):
+def calculate_with_polarized_photon(method=0, calculation_method=0):
 
     # Create a diffraction setup.
 
@@ -294,7 +298,8 @@ def calculate_with_polarized_photon(method=0):
 
             photon_out = diffraction.calculateDiffractedPolarizedPhoton(diffraction_setup,
                                                                         incoming_polarized_photon=photon,
-                                                                        inclination_angle=0.0)
+                                                                        inclination_angle=0.0,
+                                                                        method=calculation_method)
             bunch_out.addPhoton( photon_out )
             ZZ[ia] = angle_deviation_min + ia * angle_step
 
@@ -318,7 +323,7 @@ def calculate_with_polarized_photon(method=0):
             bunch_in.addPhoton( photon )
             ZZ[ia] = angle_deviation_min + ia * angle_step
 
-        bunch_out = diffraction.calculateDiffractedPolarizedPhotonBunch(diffraction_setup,bunch_in,0.0)
+        bunch_out = diffraction.calculateDiffractedPolarizedPhotonBunch(diffraction_setup,bunch_in,0.0, method=calculation_method)
 
 
     bunch_out_dict = bunch_out.toDictionary()
@@ -331,10 +336,12 @@ def calculate_with_polarized_photon(method=0):
 # main
 #
 if __name__ == "__main__":
-    calculate_standard_interface(do_plot=1)
+    calculation_method = 1 # 0=Zachariasen, 1=Guigay
 
-    calculate_with_complex_amplitude_photon(method=0)
-    calculate_with_complex_amplitude_photon(method=1)
+    calculate_standard_interface(do_plot=1, calculation_method=calculation_method)
 
-    calculate_with_polarized_photon(method=0)
-    calculate_with_polarized_photon(method=1)
+    calculate_with_complex_amplitude_photon(method=0, calculation_method=calculation_method)
+    calculate_with_complex_amplitude_photon(method=1, calculation_method=calculation_method)
+
+    calculate_with_polarized_photon(method=0, calculation_method=calculation_method)
+    calculate_with_polarized_photon(method=1, calculation_method=calculation_method)

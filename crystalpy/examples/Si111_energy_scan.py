@@ -2,7 +2,7 @@ import numpy
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.diffraction.Diffraction import Diffraction  as Diffraction
 
 import scipy.constants as codata
 
@@ -10,7 +10,7 @@ from crystalpy.util.Vector import Vector
 
 from crystalpy.util.Photon import Photon
 
-def calculate_bragg_dcm(energy_setup=8000.0,energies=numpy.linspace(7990,8010,200)):
+def calculate_bragg_dcm(energy_setup=8000.0,energies=numpy.linspace(7990,8010,200),calculation_method=0):
 
     diffraction_setup_r = DiffractionSetup(geometry_type=BraggDiffraction(),  # GeometryType object
                                            crystal_name="Si",  # string
@@ -47,14 +47,14 @@ def calculate_bragg_dcm(energy_setup=8000.0,energies=numpy.linspace(7990,8010,20
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
+        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, method=calculation_method)
 
         scan[i] = energy
         r[i] = numpy.abs( coeffs_r['S'].complexAmplitude() )**4
 
     return scan,r
 
-def calculate_laue_monochromator(energy_setup=8000.0,energies=numpy.linspace(7990,8010,200)):
+def calculate_laue_monochromator(energy_setup=8000.0,energies=numpy.linspace(7990,8010,200), calculation_method=0):
 
     diffraction_setup_r = DiffractionSetup(geometry_type=LaueDiffraction(),  # GeometryType object
                                            crystal_name="Si",  # string
@@ -91,7 +91,7 @@ def calculate_laue_monochromator(energy_setup=8000.0,energies=numpy.linspace(799
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
+        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, method=calculation_method)
 
         scan[i] = energy
         r[i] = numpy.abs( coeffs_r['S'].complexAmplitude() )**4
@@ -102,10 +102,12 @@ if __name__ == "__main__":
 
     from srxraylib.plot.gol import plot
 
+    calculation_method = 0 # 0=Zachariasen, 1=Guigay
+
     if True:
-        scan,r = calculate_bragg_dcm()
+        scan,r = calculate_bragg_dcm(calculation_method=calculation_method)
         plot(scan,r, title="Bragg")
 
     if True:
-        scan,r = calculate_laue_monochromator()
+        scan,r = calculate_laue_monochromator(calculation_method=calculation_method)
         plot(scan,r, title="Laue")

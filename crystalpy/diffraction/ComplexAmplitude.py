@@ -1,8 +1,7 @@
 """
 Represents a complex amplitude of a diffracted or transmissioned wave.
 """
-import math
-
+import numpy
 
 class ComplexAmplitude(object):
 
@@ -39,7 +38,7 @@ class ComplexAmplitude(object):
         Return the intensity corresponding to the complex amplitude.
         :return: Intensity corresponding to the complex amplitude.
         """
-        return abs(self._complex_amplitude) ** 2
+        return numpy.abs(self._complex_amplitude) ** 2
 
     def phase(self):
         """
@@ -48,7 +47,8 @@ class ComplexAmplitude(object):
         """
         PP = self._complex_amplitude.real
         QQ = self._complex_amplitude.imag
-        return math.atan2(QQ, PP)  # result between -pi and pi.
+        return numpy.arctan2(QQ, PP)  # result between -pi and pi.
+
 
     def __truediv__(self, divisor):
         """

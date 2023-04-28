@@ -5,7 +5,7 @@ import numpy
 
 from crystalpy.diffraction.GeometryType import LaueDiffraction, LaueTransmission, BraggDiffraction, BraggTransmission
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
 
 
 from crystalpy.util.Vector import Vector

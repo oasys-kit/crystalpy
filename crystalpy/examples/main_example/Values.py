@@ -84,6 +84,7 @@ class Values(object):
         Use the default diffraction parameters.
         """
         # diffraction part
+        self.calculation_method = 0 # 0=Zachariasen, 1=Guigay
         self.geometry_type = GeometryType.BraggDiffraction()
         self.crystal_name = "Si"
         self.thickness = 0.01  # centimetres
@@ -111,6 +112,9 @@ class Values(object):
         Set values for the diffraction parameters.
         """
         while True:
+
+            self.calculation_method = int(input("\nCalculation method\n [0] Zachariasen \n [1] Guigay\n"
+                                           "\n\nChoose one type: "))
 
             self.geometry_type = int(input("\nBragg diffraction [0]\nBragg transmission [1]\n"
                                            "Laue diffraction [2]\nLaue transmission [3]\n\nChoose one type: "))

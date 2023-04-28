@@ -15,7 +15,7 @@ import numpy
 from crystalpy.diffraction.GeometryType import BraggDiffraction
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
 from crystalpy.diffraction.DiffractionSetupDabax import DiffractionSetupDabax
-from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
 
 
 from crystalpy.util.Vector import Vector
@@ -28,7 +28,7 @@ from dabax.dabax_xraylib import DabaxXraylib
 import time
 
 
-def calculate_simple_diffraction_angular_scan_accelerated():
+def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
 
     # Create a diffraction setup.
 
@@ -81,7 +81,7 @@ def calculate_simple_diffraction_angular_scan_accelerated():
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon, method=calculation_method)
 
         # store results
         deviations[ia] = deviation
@@ -120,7 +120,7 @@ def calculate_simple_diffraction_angular_scan_accelerated():
                                                     thickness=diffraction_setup_dabax.thickness(),
                                                     d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10)
 
-        complex_amplitudes = perfect_crystal.calculateDiffraction(photon)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(photon, method=calculation_method)
 
         deviations[ia] = deviation
         intensityS_dabax[ia] = complex_amplitudes['S'].intensity()  # 0.0 # coeffs_dabax['S'].intensity()
@@ -144,5 +144,7 @@ def calculate_simple_diffraction_angular_scan_accelerated():
 #
 if __name__ == "__main__":
 
-    calculate_simple_diffraction_angular_scan_accelerated()
+    calculation_method = 1 # 0=Zachariasen, 1=Guigay
+
+    calculate_simple_diffraction_angular_scan_accelerated(calculation_method=calculation_method)
 

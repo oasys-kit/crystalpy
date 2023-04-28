@@ -14,7 +14,7 @@ import numpy
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
 
 
 from crystalpy.util.Vector import Vector
@@ -26,7 +26,7 @@ from crystalpy.util.Photon import Photon
 
 
 #
-def calculate_simple_diffraction():
+def calculate_simple_diffraction(calculation_method=0):
 
     # Create a diffraction setup.
 
@@ -75,7 +75,7 @@ def calculate_simple_diffraction():
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=calculation_method)
 
         # store results
         deviations[ia] = deviation
@@ -97,6 +97,6 @@ def calculate_simple_diffraction():
 #
 if __name__ == "__main__":
 
-
-    calculate_simple_diffraction()
+    calculation_method = 0 # 0=Zachariasen, 1=Guigay
+    calculate_simple_diffraction(calculation_method=calculation_method)
 

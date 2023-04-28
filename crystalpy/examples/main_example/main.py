@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
-from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
 from crystalpy.polarization.MuellerDiffraction import MuellerDiffraction
 
 from crystalpy.examples.main_example.Values import Values
@@ -298,7 +298,7 @@ if __name__ == "__main__":
 
     # Create a DiffractionResult object holding the results of the diffraction calculations.
     print("\nCalculating the diffraction results...")
-    diffraction_result = diffraction.calculateDiffraction(diffraction_setup)
+    diffraction_result = diffraction.calculateDiffraction(diffraction_setup, method=int(values.calculation_method))
 
     # Create a PlotData1D object.
     print("\nCreating the diffraction profile plots...")

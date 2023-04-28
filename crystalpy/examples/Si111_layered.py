@@ -14,7 +14,7 @@ import numpy
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction, BraggTransmission
 from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
 
 import scipy.constants as codata
 
@@ -27,7 +27,7 @@ from crystalpy.util.Photon import Photon
 
 
 #
-def calculate_simple_diffraction():
+def calculate_simple_diffraction(calculation_method=0):
 
     # Create a diffraction setup.
 
@@ -117,10 +117,10 @@ def calculate_simple_diffraction():
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
-        coeffs_t = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_t, photon)
-        coeffs_r_half = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r_half, photon)
-        coeffs_t_half = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_t_half, photon)
+        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, method=calculation_method)
+        coeffs_t = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_t, photon, method=calculation_method)
+        coeffs_r_half = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r_half, photon, method=calculation_method)
+        coeffs_t_half = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_t_half, photon, method=calculation_method)
 
 
         # coeffs_rr = \
@@ -230,6 +230,6 @@ def calculate_simple_diffraction():
 #
 if __name__ == "__main__":
 
-
-    calculate_simple_diffraction()
+    calculation_method = 1 # 0=Zachariasen, 1=Guigay
+    calculate_simple_diffraction(calculation_method=calculation_method)
 

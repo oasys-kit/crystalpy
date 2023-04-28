@@ -13,14 +13,16 @@ from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction
 
 # Use mpmath if possible. Otherwise use native cmath.
 try:
+    # raise ImportError
     import mpmath
     use_mpmath = True
 
 except ImportError:
-    import cmath
+    # import cmath
+    import numpy as cmath
     use_mpmath = False
     print("mpmath module for arbitrary-precision floating-point arithmetic could not be found!\n "
-          "Use cmath instead. This could lead to overflow errors.\n")
+          "Using numpy instead. This could lead to overflow errors for Zachariasen calculations.\n")
 
 
 class CalculationStrategy(object):
@@ -42,6 +44,23 @@ class CalculationStrategy(object):
         :return: Exponential.
         """
         raise Exception("Must override this method.")
+
+    def sin(self, power):
+        """
+        Sin to the power.
+        :param power: The power to raise to.
+        :return: Sin.
+        """
+        raise Exception("Must override this method.")
+
+    def cos(self, power):
+        """
+        Cos to the power.
+        :param power: The power to raise to.
+        :return: Cos.
+        """
+        raise Exception("Must override this method.")
+
 
     def toComplex(self, variable):
         """
@@ -80,6 +99,22 @@ class CalculationStrategyMPMath(CalculationStrategy):
         """
         return mpmath.exp(power)
 
+    def sin(self, power):
+        """
+        Sin to the power.
+        :param power: The power to raise to.
+        :return: Sin.
+        """
+        return mpmath.sin(power)
+
+    def cos(self, power):
+        """
+        Cos to the power.
+        :param power: The power to raise to.
+        :return: Cos.
+        """
+        return mpmath.cos(power)
+
     def toComplex(self, variable):
         """
         Converts calculation variable to native python complex.
@@ -112,6 +147,23 @@ class CalculationStrategyMath(CalculationStrategy):
         except:
             ans = float("Inf")
         return ans
+
+    def sin(self, power):
+        """
+        Sin to the power.
+        :param power: The power to raise to.
+        :return: Sin.
+        """
+        return cmath.sin(power)
+
+    def cos(self, power):
+        """
+        Cos to the power.
+        :param power: The power to raise to.
+        :return: Cos.
+        """
+        return cmath.cos(power)
+
 
     def toComplex(self, variable):
         """
@@ -416,6 +468,22 @@ class PerfectCrystalDiffraction(object):
         """
         return self._calculation_strategy.exponentiate(self._createVariable(power))
 
+    def _sin(self, power):
+        """
+        Sin to the power using active calculation strategy. (plain python or arbitrary precision)
+        :param power: Calculation variable.
+        :return: Sin.
+        """
+        return self._calculation_strategy.sin(self._createVariable(power))
+
+    def _cos(self, power):
+        """
+        Cos to the power using active calculation strategy. (plain python or arbitrary precision)
+        :param power: Calculation variable.
+        :return: Cos.
+        """
+        return self._calculation_strategy.cos(self._createVariable(power))
+
     def _toComplex(self, variable):
         """
         Converts calculation variable to complex. Delegates to active calculation strategy.
@@ -642,9 +710,9 @@ class PerfectCrystalDiffraction(object):
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_s = 1j * guigay_b * uh * numpy.sin(a * s - a * T) / \
-                                (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T)) * \
-                                numpy.exp(1j * s * (omega + u0))
+            complex_amplitude_s = 1j * guigay_b * uh * self._sin(a * s - a * T) / \
+                                (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
+                                self._exponentiate(1j * s * (omega + u0))
 
             # pi polarization
             effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
@@ -654,9 +722,9 @@ class PerfectCrystalDiffraction(object):
             u0 = effective_psi_0 * pi / photon_in.wavelength()
             a = pi / photon_in.wavelength() * SQ
 
-            complex_amplitude_p = 1j * guigay_b * uh * numpy.sin( a * s - a * T) / \
-                                (a * numpy.cos(a * T) + 1j * omega * numpy.sin(a * T)) * \
-                                numpy.exp(1j * s * (omega + u0))
+            complex_amplitude_p = 1j * guigay_b * uh * self._sin( a * s - a * T) / \
+                                (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
+                                self._exponentiate(1j * s * (omega + u0))
 
         elif self.geometryType() == BraggTransmission():
             if s_ratio is None:
