@@ -75,6 +75,12 @@ class ComplexAmplitudePhoton(Photon):
     def getPhaseP(self):
         return self._Epi.phase()
 
+    def getComplexAmplitudeS(self):
+        return self._Esigma
+
+    def getComplexAmplitudeP(self):
+        return self._Epi
+
     def duplicate(self):
         return ComplexAmplitudePhoton(self._energy_in_ev,
                                self._unit_direction_vector.duplicate(),

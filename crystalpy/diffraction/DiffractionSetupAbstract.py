@@ -248,15 +248,17 @@ class DiffractionSetupAbstract(object):
         parallel_surface = Vector(0, 1, 0)
         return parallel_surface
 
-    def getK0(self, energy): # todo: remove as it returns direction, not K
-        return self.incomingPhotonDirection(energy,0.0)
+    def getK0(self, energy):
+        E_in_Joule = energy * codata.e # elementary_charge
+        wavelength = (codata.c * codata.h / E_in_Joule) # Wavelength in meter
+        return self.incomingPhotonDirection(energy,0.0).scalarMultiplication(2 * numpy.pi / wavelength)
 
     # useful for scans...
-    def incomingPhotonDirection(self, energy, deviation):
+    def incomingPhotonDirection(self, energy, deviation, use_corrected_bragg_angle=0):
         """
         Calculates the direction of the incoming photon. Parallel to k_0.
         :param energy: Energy to calculate the Bragg angle for.
-        :param deviation: Deviation from the Bragg angle.
+        :param deviation: Deviation from the uncorrected Bragg angle.
         :return: Direction of the incoming photon.
         """
         # Edoardo: I use the geometrical convention from
@@ -275,13 +277,23 @@ class DiffractionSetupAbstract(object):
         minusBH = minusBH.getNormalizedVector()
         axis = self.parallelSurface().crossProduct(self.normalSurface())  # should be Vector(1, 0, 0)
         # TODO check why deviation has minus
-        photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi/2)-self.angleBragg(energy)-deviation)
+        if use_corrected_bragg_angle == 0:
+            photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi / 2) - self.angleBragg(energy) - deviation)
+        elif use_corrected_bragg_angle == 1:
+            photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi/2) - self.angleBraggCorrected(energy) - deviation)
+        elif use_corrected_bragg_angle == 2:
+            photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi/2) - deviation)
+
+
 
         # print("PHOTON DIRECTION ",photon_direction_old.components(),photon_direction.components())
         # Let's now rotate this vector of an angle phi around the z axis (following the ISO standard 80000-2:2009).
         # photon_direction = photon_direction.rotateAroundAxis(Vector(0, 0, 1), self.azimuthalAngle() )
 
         return photon_direction
+
+
+
     # TODO: END DELETE SECTION..............
 
     #

@@ -33,6 +33,8 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
         intensityP = np.zeros_like(intensityS)
         phaseS     = np.zeros_like(intensityS)
         phaseP     = np.zeros_like(intensityS)
+        complexAmplitudeS = np.zeros_like(intensityS, dtype=complex)
+        complexAmplitudeP = np.zeros_like(intensityS, dtype=complex)
 
 
         for i,polarized_photon in enumerate(self):
@@ -40,11 +42,17 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
             intensityP[i] = polarized_photon.getIntensityP()
             phaseS    [i] = polarized_photon.getPhaseS()
             phaseP    [i] = polarized_photon.getPhaseP()
+            complexAmplitudeS[i] = polarized_photon.getComplexAmplitudeS().complexAmplitude()
+            complexAmplitudeP[i] = polarized_photon.getComplexAmplitudeP().complexAmplitude()
+
 
         array_dict["intensityS"] = intensityS
         array_dict["intensityP"] = intensityP
+        array_dict["intensity"] = intensityS + intensityP
         array_dict["phaseS"] = phaseS
         array_dict["phaseP"] = phaseP
+        array_dict["complexAmplitudeS"] = complexAmplitudeS
+        array_dict["complexAmplitudeP"] = complexAmplitudeP
 
 
         return array_dict
