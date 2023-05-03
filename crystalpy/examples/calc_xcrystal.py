@@ -1,5 +1,15 @@
 import numpy
 
+# used in get_diffraction_setup
+from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueTransmission, LaueDiffraction, BraggTransmission
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
+from crystalpy.diffraction.DiffractionSetupDabax import DiffractionSetupDabax
+
+# use in calc_xcrystal*
+from crystalpy.diffraction.Diffraction import Diffraction
+from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
+from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBunch
+
 def get_diffraction_setup(
         material_constants_library_flag=0,
         crystal_name="Si",
@@ -14,12 +24,6 @@ def get_diffraction_setup(
     # Create a diffraction setup.
     print("\nCreating a diffraction setup...")
 
-
-    from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueTransmission, LaueDiffraction, BraggTransmission
-    from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-    from crystalpy.diffraction.DiffractionSetupDabax import DiffractionSetupDabax
-
-
     if geometry_type_index == 0:
         geometry_type = BraggDiffraction()
     elif geometry_type_index == 1:
@@ -30,7 +34,7 @@ def get_diffraction_setup(
         geometry_type = LaueTransmission()
 
     if material_constants_library_flag == 0:
-        diffraction_setup = DiffractionSetup(geometry_type                = geometry_type,      # GeometryType object
+        diffraction_setup = DiffractionSetupXraylib(geometry_type                = geometry_type,      # GeometryType object
                                                    crystal_name           = crystal_name,       # string
                                                    thickness              = thickness,          # meters
                                                    miller_h               = miller_h,           # int
@@ -103,9 +107,6 @@ def calc_xcrystal_angular_scan(
     print("Bragg angle corrected for E=%f eV is %f deg" % (energy, numpy.degrees(bragg_angle_corrected)))
 
     # Create a Diffraction object.
-    from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
-    from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
-    from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBunch
     diffraction = Diffraction()
 
     deviations = numpy.linspace(angle_deviation_min, angle_deviation_max, angle_deviation_points)
@@ -195,9 +196,6 @@ def calc_xcrystal_alphazachariasen_scan(
 
 
     # Create a Diffraction object.
-    from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
-    from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
-    from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBunch
     diffraction = Diffraction()
 
     deviations = numpy.linspace(angle_deviation_min, angle_deviation_max, angle_deviation_points)
@@ -282,10 +280,6 @@ def calc_xcrystal_energy_scan(
         print("Using theta as the Bragg angle for mean E=%f eV, which is %f deg"%(energy_mean, numpy.degrees(theta)))
 
     # Create a Diffraction object.
-    from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
-    from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
-    from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBunch
-
     diffraction = Diffraction()
 
     energies = numpy.linspace(energy_min, energy_max, energy_points)
@@ -387,10 +381,6 @@ def calc_xcrystal_double_scan(
     bragg_angle_corrected = diffraction_setup.angleBraggCorrected(energy_mean)
     print("Bragg angle corrected for E=%f eV is %f deg" % (energy_mean, numpy.degrees(bragg_angle_corrected)))
 
-    from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
-    from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
-    from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBunch
-
     # Create a Diffraction object.
     diffraction = Diffraction()
 
@@ -451,7 +441,7 @@ if __name__ == "__main__":
     from srxraylib.plot.gol import set_qt
     set_qt()
 
-    if False:
+    if True:
         calc_xcrystal_angular_scan(material_constants_library_flag=0, do_plot=True)
 
         calc_xcrystal_angular_scan(material_constants_library_flag=0, geometry_type_index=1, thickness=10e-6, asymmetry_angle=numpy.radians(90), do_plot=True)
@@ -460,7 +450,7 @@ if __name__ == "__main__":
 
     calc_xcrystal_alphazachariasen_scan(do_plot=1)
 
-    if False:
+    if True:
         calc_xcrystal_double_scan(        material_constants_library_flag=0,
             crystal_name="Si",
             thickness=1e-2,

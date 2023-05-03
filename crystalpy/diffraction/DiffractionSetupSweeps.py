@@ -7,13 +7,13 @@ Units are in SI except for photon energy in eV. Angles in radians.
 """
 import numpy
 
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
 
 from crystalpy.util.Photon import Photon
 from crystalpy.util.PhotonBunch import PhotonBunch
 
 
-class DiffractionSetupSweeps(DiffractionSetup):
+class DiffractionSetupSweeps(DiffractionSetupXraylib):
 
     def __init__(self,
                  geometry_type, crystal_name, thickness,
@@ -53,7 +53,7 @@ class DiffractionSetupSweeps(DiffractionSetup):
                                  angle_deviation_points)
 
         # Create an "info setup" solely for the determination of deviation angles.
-        info_setup = DiffractionSetup(geometry_type=geometry_type,
+        info_setup = DiffractionSetupXraylib(geometry_type=geometry_type,
                                       crystal_name=crystal_name,
                                       thickness=thickness,
                                       miller_h=miller_h,
@@ -65,7 +65,7 @@ class DiffractionSetupSweeps(DiffractionSetup):
 
 
         # Call base constructor.
-        DiffractionSetup.__init__(self,
+        DiffractionSetupXraylib.__init__(self,
                                   geometry_type=geometry_type,
                                   crystal_name=crystal_name,
                                   thickness=thickness,
@@ -103,7 +103,7 @@ class DiffractionSetupSweeps(DiffractionSetup):
         Returns this setup in InfoDictionary form.
         :return: InfoDictionary form of this setup.
         """
-        info_dict = DiffractionSetup.toDictionary(self)
+        info_dict = super().toDictionary()
 
         info_dict["Minimum energy"] = str(self.energyMin())
         info_dict["Maximum energy"] = str(self.energyMax())

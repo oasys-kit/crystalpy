@@ -1,7 +1,7 @@
 import numpy
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
 from crystalpy.diffraction.Diffraction import Diffraction  as Diffraction
 
 import scipy.constants as codata
@@ -12,7 +12,7 @@ from crystalpy.util.Photon import Photon
 
 def calculate_bragg_dcm(energy_setup=8000.0,energies=numpy.linspace(7990,8010,200),calculation_method=0):
 
-    diffraction_setup_r = DiffractionSetup(geometry_type=BraggDiffraction(),  # GeometryType object
+    diffraction_setup_r = DiffractionSetupXraylib(geometry_type=BraggDiffraction(),  # GeometryType object
                                            crystal_name="Si",  # string
                                            thickness=100e-6,  # meters
                                            miller_h=1,  # int
@@ -56,7 +56,7 @@ def calculate_bragg_dcm(energy_setup=8000.0,energies=numpy.linspace(7990,8010,20
 
 def calculate_laue_monochromator(energy_setup=8000.0,energies=numpy.linspace(7990,8010,200), calculation_method=0):
 
-    diffraction_setup_r = DiffractionSetup(geometry_type=LaueDiffraction(),  # GeometryType object
+    diffraction_setup_r = DiffractionSetupXraylib(geometry_type=LaueDiffraction(),  # GeometryType object
                                            crystal_name="Si",  # string
                                            thickness=10e-6,  # meters
                                            miller_h=1,  # int

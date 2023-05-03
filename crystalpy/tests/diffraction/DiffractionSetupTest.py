@@ -157,7 +157,7 @@ class DiffractionSetupTest(unittest.TestCase):
     def testNormalBragg(self):
         diffraction = diffractionSetup()
 
-        bragg_normal = diffraction.normalBragg(return_normalized=True)
+        bragg_normal = diffraction.vectorH(return_normalized=True)
         # print("<><>",bragg_normal.components())
         # [ 0.          0.17364818  0.98480775]
 
@@ -168,7 +168,7 @@ class DiffractionSetupTest(unittest.TestCase):
     def testNormalSurface(self):
         diffraction = diffractionSetup()
 
-        surface_normal = diffraction.normalSurface()
+        surface_normal = diffraction.vectorNormalSurface()
         self.assertEqual(surface_normal,
                          Vector(0,0,1))
 

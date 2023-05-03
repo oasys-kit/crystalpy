@@ -13,8 +13,8 @@ import numpy
 
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
+from crystalpy.diffraction.Diffraction import Diffraction
 
 
 from crystalpy.util.Vector import Vector
@@ -31,7 +31,7 @@ def calculate_simple_diffraction(calculation_method=0):
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2,                             # meters
                                                miller_h               = 1,                                # int

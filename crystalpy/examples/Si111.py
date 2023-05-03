@@ -22,9 +22,9 @@ from srxraylib.plot.gol import plot
 
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
 from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
-from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
+from crystalpy.diffraction.Diffraction import Diffraction
 
 from crystalpy.polarization.MuellerDiffraction import MuellerDiffraction
 from crystalpy.util.StokesVector import StokesVector
@@ -138,7 +138,7 @@ def calculate_with_complex_amplitude_photon(method=0, calculation_method=0):
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2,                             # meters
                                                miller_h               = 1,                                # int
@@ -166,7 +166,7 @@ def calculate_with_complex_amplitude_photon(method=0, calculation_method=0):
     #
     # get wavevector with incident direction matching Bragg angle
     #
-    K0 = diffraction_setup.getK0(energy)
+    K0 = diffraction_setup.vectorK0(energy)
     K0unitary = K0.getNormalizedVector()
 
     print("K0",K0.components())
@@ -235,7 +235,7 @@ def calculate_with_polarized_photon(method=0, calculation_method=0):
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2
 
@@ -270,7 +270,7 @@ def calculate_with_polarized_photon(method=0, calculation_method=0):
     #
     # get wavevector with incident direction matching Bragg angle
     #
-    K0 = diffraction_setup.getK0(energy)
+    K0 = diffraction_setup.vectorK0(energy)
     K0unitary = K0.getNormalizedVector()
 
     print("K0",K0.components())

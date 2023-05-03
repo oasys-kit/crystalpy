@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
-from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
+from crystalpy.diffraction.Diffraction import Diffraction
 from crystalpy.polarization.MuellerDiffraction import MuellerDiffraction
 
 from crystalpy.examples.main_example.Values import Values

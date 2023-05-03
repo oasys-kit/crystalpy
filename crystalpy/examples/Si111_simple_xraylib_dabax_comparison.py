@@ -13,9 +13,9 @@ import numpy
 
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
 from crystalpy.diffraction.DiffractionSetupDabax import DiffractionSetupDabax
-from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
+from crystalpy.diffraction.Diffraction import Diffraction
 
 
 from crystalpy.util.Vector import Vector
@@ -117,7 +117,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2,                             # meters
                                                miller_h               = 1,                                # int
@@ -205,8 +205,8 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
 
         # Create PerfectCrystalDiffraction instance.
         perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup_dabax.geometryType(),
-                                                    bragg_normal=diffraction_setup_dabax.normalBragg(),
-                                                    surface_normal=diffraction_setup_dabax.normalSurface(),
+                                                    bragg_normal=diffraction_setup_dabax.vectorH(),
+                                                    surface_normal=diffraction_setup_dabax.vectorNormalSurface(),
                                                     bragg_angle=diffraction_setup_dabax.angleBragg(energy),
                                                     psi_0=psi_0,
                                                     psi_H=psi_H,
@@ -358,7 +358,7 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2,                             # meters
                                                miller_h               = 1,                                # int
@@ -462,8 +462,8 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
 
         # Create PerfectCrystalDiffraction instance.
         perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup_dabax.geometryType(),
-                                                    bragg_normal=diffraction_setup_dabax.normalBragg(),
-                                                    surface_normal=diffraction_setup_dabax.normalSurface(),
+                                                    bragg_normal=diffraction_setup_dabax.vectorH(),
+                                                    surface_normal=diffraction_setup_dabax.vectorNormalSurface(),
                                                     bragg_angle=diffraction_setup_dabax.angleBragg(energy),
                                                     psi_0=psi_0,
                                                     psi_H=psi_H,

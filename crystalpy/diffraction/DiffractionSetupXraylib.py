@@ -9,7 +9,7 @@ import xraylib
 from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
 # from crystalpy.util.vector import Vector
 
-class DiffractionSetup(DiffractionSetupAbstract):
+class DiffractionSetupXraylib(DiffractionSetupAbstract):
 
     def __init__(self,
                  geometry_type=None, crystal_name="", thickness=1e-6,
@@ -134,7 +134,7 @@ if __name__ == "__main__":
     from crystalpy.diffraction.GeometryType import BraggDiffraction
     import numpy
 
-    a = DiffractionSetup(geometry_type=BraggDiffraction, crystal_name="Si", thickness=1e-5,
+    a = DiffractionSetupXraylib(geometry_type=BraggDiffraction, crystal_name="Si", thickness=1e-5,
                  miller_h=1, miller_k=1, miller_l=1,
                  asymmetry_angle=0.0,
                  azimuthal_angle=0.0,)

@@ -14,8 +14,13 @@ from crystalpy.util.Vector import Vector
 
 class DiffractionSetupAbstract(object):
 
-    def __init__(self, geometry_type=None, crystal_name="", thickness=1e-6,
-                 miller_h=1, miller_k=1, miller_l=1,
+    def __init__(self,
+                 geometry_type=None,
+                 crystal_name="",
+                 thickness=1e-6,
+                 miller_h=1,
+                 miller_k=1,
+                 miller_l=1,
                  asymmetry_angle=0.0,
                  azimuthal_angle=0.0,
                  debye_waller=1.0):
@@ -191,68 +196,6 @@ class DiffractionSetupAbstract(object):
         return  factor*Fall[0], factor*Fall[1], factor*Fall[2]
 
 
-    # TODO: START DELETE SECTION..............
-    #
-    # vectors (old interface... todo:  delete)
-    #
-    def normalBragg(self,return_normalized=False):
-        """
-        Calculates the B_H vecor, normal on the reflection lattice plane, with modulus 2 pi / d_spacing .
-
-        normal to Bragg planes obtained by rotating vnor an angle equal to minuns asymmetry angle (-alphaXOP)
-        around X using rodrigues rotation (in the screw direction (cw) when looking in the axis direction),
-        and then an angle phi (azimuthal angle) around Z
-
-        :param return_normalized: if True the returned vector is normalized.
-        :return: B_H vector
-        """
-        # Edoardo: I use the geometrical convention from
-        # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
-
-
-        g_modulus = 2.0 * numpy.pi / (self.dSpacing() * 1e-10)
-        # Let's start from a vector parallel to the surface normal (z axis).
-        temp_normal_bragg = Vector(0, 0, 1).scalarMultiplication(g_modulus)
-
-        # Let's now rotate this vector of an angle alphaX around the y axis (according to the right-hand-rule).
-        alpha_x = self.asymmetryAngle()
-        axis = self.parallelSurface().crossProduct(self.normalSurface())  # should be Vector(1, 0, 0)
-        temp_normal_bragg = temp_normal_bragg.rotateAroundAxis(axis, -alpha_x)
-
-        # Let's now rotate this vector of an angle phi around the z axis (following the ISO standard 80000-2:2009).
-        phi = self.azimuthalAngle()
-        normal_bragg = temp_normal_bragg.rotateAroundAxis(Vector(0, 0, 1), phi)
-
-        if return_normalized:
-            return normal_bragg.getNormalizedVector()
-        else:
-            return normal_bragg
-
-    def normalSurface(self):
-        """
-        Returns the normal to the surface. (0,0,1) by definition.
-        :return: Vector instance with Surface normal Vnor.
-        """
-        # Edoardo: I use the geometrical convention from
-        # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
-        normal_surface = Vector(0, 0, 1)
-        return normal_surface
-
-    def parallelSurface(self):
-        """
-        Returns the direction parallel to the crystal surface. (0,1,0) by definition.
-        :return: Vector instance with Surface normal Vtan.
-        """
-        # Edoardo: I use the geometrical convention from
-        # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
-        parallel_surface = Vector(0, 1, 0)
-        return parallel_surface
-
-    def getK0(self, energy):
-        E_in_Joule = energy * codata.e # elementary_charge
-        wavelength = (codata.c * codata.h / E_in_Joule) # Wavelength in meter
-        return self.incomingPhotonDirection(energy,0.0).scalarMultiplication(2 * numpy.pi / wavelength)
-
     # useful for scans...
     def incomingPhotonDirection(self, energy, deviation, angle_center_flag=2):
         """
@@ -274,9 +217,9 @@ class DiffractionSetupAbstract(object):
 
 
         # Let's now rotate -BH of an angle (90-BraggAngle) around the x axis
-        minusBH = self.normalBragg().scalarMultiplication(-1.0)
+        minusBH = self.vectorH().scalarMultiplication(-1.0)
         minusBH = minusBH.getNormalizedVector()
-        axis = self.parallelSurface().crossProduct(self.normalSurface())  # should be Vector(1, 0, 0)
+        axis = self.vectorParallelSurface().crossProduct(self.vectorNormalSurface())  # should be Vector(1, 0, 0)
         # TODO check why deviation has minus
         if angle_center_flag == 0:
             photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi / 2) - deviation)
@@ -372,7 +315,7 @@ class DiffractionSetupAbstract(object):
         return self.vectorK0direction(energy).scalarMultiplication(2*numpy.pi/wavelength)
 
     def vectorLattice(self):
-        return self.normalBragg().scalarMultiplication(2 * numpy.pi /self.dSpacingSI())
+        return self.vectorH().scalarMultiplication(2 * numpy.pi /self.dSpacingSI())
 
     def vectorKh(self, energy):
         """
@@ -457,7 +400,7 @@ class DiffractionSetupAbstract(object):
         :return: Deviation from Bragg angle.
         """
         # this holds for every incoming photon-surface normal plane.
-        total_angle = photon_in.unitDirectionVector().angle(self.normalBragg())
+        total_angle = photon_in.unitDirectionVector().angle(self.vectorH())
 
         energy = photon_in.energy()
         angle_bragg = self.angleBragg(energy)

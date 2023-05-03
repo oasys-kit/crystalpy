@@ -225,7 +225,7 @@ if __name__ == "__main__":
                  azimuthal_angle=0.0,
                  preprocessor_file="bragg.dat")
 
-    b = DiffractionSetup(geometry_type=BraggDiffraction,
+    b = DiffractionSetupXraylib(geometry_type=BraggDiffraction,
                  crystal_name="Si", thickness=1e-5,
                  miller_h=1, miller_k=1, miller_l=1,
                  asymmetry_angle=0.0,

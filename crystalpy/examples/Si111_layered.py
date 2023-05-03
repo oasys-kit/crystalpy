@@ -13,8 +13,8 @@ import numpy
 
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction, BraggTransmission
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
+from crystalpy.diffraction.Diffraction import Diffraction
 
 import scipy.constants as codata
 
@@ -34,7 +34,7 @@ def calculate_simple_diffraction(calculation_method=0):
     thickness = 2e-6
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup_r = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup_r = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = thickness,                             # meters
                                                miller_h               = 1,                                # int
@@ -43,7 +43,7 @@ def calculate_simple_diffraction(calculation_method=0):
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,            # radians
                                                azimuthal_angle        = 0.0)                              # radians                            # int
 
-    diffraction_setup_t = DiffractionSetup(geometry_type          = BraggTransmission(),  # GeometryType object
+    diffraction_setup_t = DiffractionSetupXraylib(geometry_type          = BraggTransmission(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = thickness,                             # meters
                                                miller_h               = 1,                                # int
@@ -52,7 +52,7 @@ def calculate_simple_diffraction(calculation_method=0):
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,            # radians
                                                azimuthal_angle        = 0.0)                              # radians
 
-    diffraction_setup_r_half = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup_r_half = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = thickness/2,                             # meters
                                                miller_h               = 1,                                # int
@@ -61,7 +61,7 @@ def calculate_simple_diffraction(calculation_method=0):
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,            # radians
                                                azimuthal_angle        = 0.0)                              # radians                            # int
 
-    diffraction_setup_t_half = DiffractionSetup(geometry_type          = BraggTransmission(),  # GeometryType object
+    diffraction_setup_t_half = DiffractionSetupXraylib(geometry_type          = BraggTransmission(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = thickness/2,                             # meters
                                                miller_h               = 1,                                # int
