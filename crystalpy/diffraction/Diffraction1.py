@@ -284,21 +284,18 @@ class Diffraction1(object):
         if not isinstance(incoming_bunch, ComplexAmplitudePhotonBunch):
             raise Exception("The incoming photon bunch must be a ComplexAmplitudePhotonBunch object!")
 
-        # Raise calculation start.
-        # self._onCalculationStart()
-
         for index, polarized_photon in enumerate(incoming_bunch):
 
             # Raise OnProgress event if progressed by 10 percent.
             # self._onProgressEveryTenPercent(index, len(incoming_bunch))
 
-            outgoing_complex_amplitude_photon = cls.calculateDiffractedComplexAmplitudePhoton(diffraction_setup,
-                                                                        polarized_photon, method=method)
+            outgoing_complex_amplitude_photon = cls.calculateDiffractedComplexAmplitudePhoton(
+                                                                        diffraction_setup,
+                                                                        polarized_photon,
+                                                                        method=method,
+                                                                        )
             # Add result of current deviation.
             outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
-
-        # Raise calculation end.
-        # self._onCalculationEnd()
 
         # Return diffraction results.
         return outgoing_bunch

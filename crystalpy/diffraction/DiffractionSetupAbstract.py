@@ -254,7 +254,7 @@ class DiffractionSetupAbstract(object):
         return self.incomingPhotonDirection(energy,0.0).scalarMultiplication(2 * numpy.pi / wavelength)
 
     # useful for scans...
-    def incomingPhotonDirection(self, energy, deviation, use_corrected_bragg_angle=0):
+    def incomingPhotonDirection(self, energy, deviation, angle_center_flag=2):
         """
         Calculates the direction of the incoming photon. Parallel to k_0.
         :param energy: Energy to calculate the Bragg angle for.
@@ -270,6 +270,7 @@ class DiffractionSetupAbstract(object):
         # angle = numpy.pi / 2.0 - (self.angleBragg(energy) + self.asymmetryAngle() + deviation)
         # # the photon comes from left to right in the yz plane.
         # photon_direction_old = Vector(0,numpy.sin(angle),-numpy.cos(angle))
+        # angle_center_flag = 0,  # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
 
 
         # Let's now rotate -BH of an angle (90-BraggAngle) around the x axis
@@ -277,12 +278,12 @@ class DiffractionSetupAbstract(object):
         minusBH = minusBH.getNormalizedVector()
         axis = self.parallelSurface().crossProduct(self.normalSurface())  # should be Vector(1, 0, 0)
         # TODO check why deviation has minus
-        if use_corrected_bragg_angle == 0:
-            photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi / 2) - self.angleBragg(energy) - deviation)
-        elif use_corrected_bragg_angle == 1:
+        if angle_center_flag == 0:
+            photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi / 2) - deviation)
+        elif angle_center_flag == 1:
             photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi/2) - self.angleBraggCorrected(energy) - deviation)
-        elif use_corrected_bragg_angle == 2:
-            photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi/2) - deviation)
+        elif angle_center_flag == 2:
+            photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi / 2) - self.angleBragg(energy) - deviation)
 
 
 
