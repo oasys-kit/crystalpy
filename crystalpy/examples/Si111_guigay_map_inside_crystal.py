@@ -94,13 +94,15 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(), as
 
     if geometry_type == LaueDiffraction():
         title = "Reflectance"
+        iii = 0
     elif geometry_type == LaueTransmission():
         title = "Transmittance"
+        iii = 0
     elif geometry_type == BraggDiffraction():
-        title = r"$|D_H|^2$; t=%f $\mu$m" % (thickness*1e6)
+        title = r"$|D_H|^2$; t=%d $\mu$m" % (thickness*1e6)
         iii = -1
     elif geometry_type == BraggTransmission():
-        title = r"$|D_0|^2$; t=%f $\mu$m" % (thickness*1e6)
+        title = r"$|D_0|^2$; t=%d $\mu$m" % (thickness*1e6)
         iii = 0
 
     plot_image(intensityS, deviations*1e6, s_ratios, xtitle=r"$\theta-\theta_B$ [$\mu$m]", ytitle="-s/T", title=title, aspect='auto', show=0)
@@ -111,6 +113,8 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(), as
 #
 if __name__ == "__main__":
 
-    calculate_diffraction_map_inside_crystal(geometry_type=BraggDiffraction(), asymmetry_angle=numpy.radians(0), thickness=10e-6)
-    calculate_diffraction_map_inside_crystal(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=10e-6)
+    calculate_diffraction_map_inside_crystal(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians(0), thickness=50e-6)
+    calculate_diffraction_map_inside_crystal(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=50e-6)
     #TODO: Laue case
+    calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),  asymmetry_angle=numpy.radians(90), thickness=50e-6)
+    calculate_diffraction_map_inside_crystal(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(90), thickness=50e-6)
