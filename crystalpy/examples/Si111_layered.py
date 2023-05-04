@@ -13,7 +13,7 @@ import numpy
 
 
 
-from crystalpy.diffraction.GeometryType import BraggDiffraction, BraggTransmission
+from crystalpy.diffraction.GeometryType import BraggDiffraction, BraggTransmission, LaueDiffraction, LaueTransmission
 from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
 from crystalpy.diffraction.Diffraction import Diffraction
 
@@ -35,7 +35,7 @@ def calculate_simple_diffraction(calculation_method=0):
     thickness = 2e-6
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup_r = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup_r = DiffractionSetupXraylib(geometry_type       = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = thickness,                             # meters
                                                miller_h               = 1,                                # int
@@ -44,7 +44,7 @@ def calculate_simple_diffraction(calculation_method=0):
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,            # radians
                                                azimuthal_angle        = 0.0)                              # radians                            # int
 
-    diffraction_setup_r_half = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup_r_half = DiffractionSetupXraylib(geometry_type  = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = thickness/2,                             # meters
                                                miller_h               = 1,                                # int
@@ -79,6 +79,7 @@ def calculate_simple_diffraction(calculation_method=0):
     complex_amplitude_half = numpy.zeros(angle_deviation_points)
     complex_amplitude = numpy.zeros(angle_deviation_points)
     complex_amplitude_bis = numpy.zeros(angle_deviation_points)
+    complex_amplitude_ter = numpy.zeros(angle_deviation_points)
 
 
     for ia in range(angle_deviation_points):
@@ -122,6 +123,21 @@ def calculate_simple_diffraction(calculation_method=0):
         # store complex amplitude of reflectivity
         complex_amplitude_bis[ia] = S21
 
+        #
+        # using scattering matrix
+        #
+        t, t_bar, r, r_bar = coeffs_r_half['scattering_matrix_s']
+        # R1 = - m21_bis / m22_bis  # = - (m21 * m11 + m22 * m21) / (m21 * m12 + m22**2)  OK!!
+
+        # this other method from the infinite series does not work....
+        R2 = r * (1 + t * t_bar / (1 - r * r_bar))
+        # or similarly:
+        numerator = m12/m22 * (m11 - m12*m21/m22)
+        denominator = 1 + m21 / m22**2
+        R2 = - m21/m22 * (1 + numerator/denominator)
+
+        complex_amplitude_ter[ia] = R2
+
         deviations[ia] = deviation
 
     # plot results
@@ -130,7 +146,8 @@ def calculate_simple_diffraction(calculation_method=0):
     plot(1e6 * deviations, numpy.abs(complex_amplitude_half) ** 2,
          1e6 * deviations, numpy.abs(complex_amplitude) ** 2,
          1e6 * deviations, numpy.abs(complex_amplitude_bis) ** 2,
-         legend=['half','single','single by matrix multiplication']
+         1e6 * deviations, numpy.abs(complex_amplitude_ter) ** 2,
+         legend=['half','single','single by transfer matrix multiplication', 'single by series']
         )
 
 
