@@ -133,6 +133,7 @@ class Diffraction(object):
 
         return complex_amplitudes
 
+
     # using ComplexAmplitudePhoton
     @classmethod
     def calculateDiffractedComplexAmplitudePhoton(cls, diffraction_setup, photon, method=0):
@@ -193,6 +194,47 @@ class Diffraction(object):
         return perfect_crystal
 
     @classmethod
+    def _perfectCrystalForPhotonBunch(cls, diffraction_setup, incoming_bunch):
+
+        energies = incoming_bunch.energies()
+
+        print(">>>> energies: ", energies)
+
+        # Retrieve bragg angle.
+        angle_bragg = diffraction_setup.angleBragg(energies)
+
+        print(">>>>>angle_bragg: ", angle_bragg)
+
+        # Check if given Bragg/Laue geometry and given miller indices are possible.
+        cls._checkSetupDiffraction(diffraction_setup, angle_bragg[0])
+
+
+        # Retrieve lattice spacing d.
+        d_spacing = diffraction_setup.dSpacing() * 1e-10
+
+        # Calculate the Bragg normal B_H.
+        normal_bragg = diffraction_setup.vectorH()
+
+        # Calculate the surface normal n.
+        normal_surface = diffraction_setup.vectorNormalSurface()
+
+        psi_0, psi_H, psi_H_bar = diffraction_setup.psiAll(energies)
+
+        # Create PerfectCrystalDiffraction instance.
+        perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup.geometryType(),
+                                                    bragg_normal=normal_bragg,
+                                                    surface_normal=normal_surface,
+                                                    bragg_angle=angle_bragg,
+                                                    psi_0=psi_0,
+                                                    psi_H=psi_H,
+                                                    psi_H_bar=psi_H_bar,
+                                                    thickness=diffraction_setup.thickness(),
+                                                    d_spacing=d_spacing)
+
+        return perfect_crystal
+
+
+    @classmethod
     def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, method=0):
 
         # Get PerfectCrystal instance for the current photon.
@@ -202,6 +244,39 @@ class Diffraction(object):
         complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, method=method)
 
         return complex_amplitudes
+
+    # @classmethod
+    # def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch, method=0):
+    #     """
+    #     Calculates the diffraction/transmission given by the setup.
+    #     :param diffraction_setup: The diffraction setup.
+    #     :return: PhotonBunch object made up of diffracted/transmitted photons.
+    #     """
+    #     # Create PhotonBunch instance.
+    #     outgoing_bunch = ComplexAmplitudePhotonBunch([])
+    #
+    #     # Retrieve the photon bunch from the diffraction setup.
+    #     # incoming_bunch = diffraction_setup.incomingPhotons()
+    #
+    #     # Check that photon_bunch is indeed a PhotonBunch object.
+    #     if not isinstance(incoming_bunch, ComplexAmplitudePhotonBunch):
+    #         raise Exception("The incoming photon bunch must be a ComplexAmplitudePhotonBunch object!")
+    #
+    #     for index, complex_amplitude_photon in enumerate(incoming_bunch):
+    #
+    #         # Raise OnProgress event if progressed by 10 percent.
+    #         # self._onProgressEveryTenPercent(index, len(incoming_bunch))
+    #
+    #         outgoing_complex_amplitude_photon = cls.calculateDiffractedComplexAmplitudePhoton(
+    #                                                                     diffraction_setup,
+    #                                                                     complex_amplitude_photon,
+    #                                                                     method=method,
+    #                                                                     )
+    #         # Add result of current deviation.
+    #         outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
+    #
+    #     # Return diffraction results.
+    #     return outgoing_bunch
 
     @classmethod
     def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch, method=0):
@@ -220,21 +295,50 @@ class Diffraction(object):
         if not isinstance(incoming_bunch, ComplexAmplitudePhotonBunch):
             raise Exception("The incoming photon bunch must be a ComplexAmplitudePhotonBunch object!")
 
-        for index, polarized_photon in enumerate(incoming_bunch):
 
-            # Raise OnProgress event if progressed by 10 percent.
-            # self._onProgressEveryTenPercent(index, len(incoming_bunch))
+        method_new = 0
 
-            outgoing_complex_amplitude_photon = cls.calculateDiffractedComplexAmplitudePhoton(
-                                                                        diffraction_setup,
-                                                                        polarized_photon,
-                                                                        method=method,
-                                                                        )
-            # Add result of current deviation.
-            outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
+        if method_new:
+            perfect_crystal = cls._perfectCrystalForPhotonBunch(diffraction_setup, incoming_bunch)
+            # coeffs_list = perfect_crystal.calculateDiffraction(incoming_bunch, method=method)
+
+
+            for index, complex_amplitude_photon in enumerate(incoming_bunch):
+
+                # Get PerfectCrystal instance for the current photon.
+                perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, complex_amplitude_photon)
+                coeffs = perfect_crystal.calculateDiffraction(complex_amplitude_photon, method=method)
+
+                # this is redundant, recalculates perfect crystal
+                # coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, complex_amplitude_photon, method=method)
+
+                outgoing_complex_amplitude_photon = perfect_crystal._calculatePhotonOut(complex_amplitude_photon)
+                outgoing_complex_amplitude_photon.rescaleEsigma(coeffs["S"])
+                outgoing_complex_amplitude_photon.rescaleEpi(coeffs["P"])
+
+                # Add result of current deviation.
+                outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
+        else:
+            for index, complex_amplitude_photon in enumerate(incoming_bunch):
+
+                # Get PerfectCrystal instance for the current photon.
+                perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, complex_amplitude_photon)
+                coeffs = perfect_crystal.calculateDiffraction(complex_amplitude_photon, method=method)
+                # this is redundant, recalculates perfect crystal
+                # coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, complex_amplitude_photon, method=method)
+
+                # Calculate outgoing Photon.
+                outgoing_complex_amplitude_photon = perfect_crystal._calculatePhotonOut(complex_amplitude_photon)
+                # apply reflectivities
+                outgoing_complex_amplitude_photon.rescaleEsigma(coeffs["S"])
+                outgoing_complex_amplitude_photon.rescaleEpi(coeffs["P"])
+
+                # Add result of current deviation.
+                outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
 
         # Return diffraction results.
         return outgoing_bunch
+
 
     @classmethod
     def calculateDiffractedPolarizedPhoton(cls, diffraction_setup, incoming_polarized_photon, inclination_angle, method=0):

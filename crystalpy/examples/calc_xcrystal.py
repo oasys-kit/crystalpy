@@ -389,6 +389,7 @@ def calc_xcrystal_double_scan(
 
     bunch_in = ComplexAmplitudePhotonBunch()
     print("Creating bunch...")
+    t0 = time.time()
     for ie, energy in enumerate(energies):
         for ia, deviation in enumerate(deviations):
             photon = ComplexAmplitudePhoton(energy_in_ev=energy,
@@ -401,14 +402,15 @@ def calc_xcrystal_double_scan(
                                             Epi=1)
 
             bunch_in.addPhoton(photon)
-    print("Done.")
+    print("Done (%d ms)." % (1e3*(time.time() - t0)))
 
     print("Calculating diffraction...")
+    t0 = time.time()
     bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
                                                                            method=calculation_method)
 
-    print("Done.")
+    print("Done (%d ms)." % (1e3*(time.time() - t0)))
 
     bunch_out_dict = bunch_out.toDictionary()
 
@@ -440,6 +442,7 @@ def calc_xcrystal_double_scan(
 if __name__ == "__main__":
     from srxraylib.plot.gol import set_qt
     set_qt()
+    import time
 
     if True:
         calc_xcrystal_angular_scan(material_constants_library_flag=0, do_plot=True)
@@ -448,7 +451,7 @@ if __name__ == "__main__":
 
         calc_xcrystal_energy_scan(material_constants_library_flag=0, do_plot=True)
 
-    calc_xcrystal_alphazachariasen_scan(do_plot=1)
+        calc_xcrystal_alphazachariasen_scan(do_plot=1)
 
     if True:
         calc_xcrystal_double_scan(        material_constants_library_flag=0,
@@ -487,7 +490,7 @@ if __name__ == "__main__":
             geometry_type_index=0,
             do_plot=1,)
 
-    if False:
+    if True:
         calc_xcrystal_double_scan(        material_constants_library_flag=0,
             crystal_name="Si",
             thickness=1e-2,
@@ -497,10 +500,10 @@ if __name__ == "__main__":
             asymmetry_angle=0.0,
             energy_min=7990,
             energy_max=8010,
-            energy_points=200,
+            energy_points=50,
             angle_deviation_min=-100e-6,
             angle_deviation_max=100e-6,
-            angle_deviation_points=100,
+            angle_deviation_points=60,
             angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
             calculation_method=0,
             geometry_type_index=0,

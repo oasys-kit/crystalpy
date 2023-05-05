@@ -47,7 +47,8 @@ class ComplexAmplitude(object):
         """
         PP = self._complex_amplitude.real
         QQ = self._complex_amplitude.imag
-        return numpy.arctan2(QQ, PP)  # result between -pi and pi.
+        #todo: check this float...
+        return numpy.arctan2(float(QQ), float(PP))  # result between -pi and pi.
 
 
     def __truediv__(self, divisor):

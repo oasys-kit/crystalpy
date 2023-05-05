@@ -88,7 +88,12 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :param initial_value: Initial value of the variable.
         :return: mpmath variable.
         """
-        mpc = mpmath.mpc(complex(initial_value.real) + 1j * complex(initial_value.imag))
+
+        if initial_value.size == 1:
+            mpc = mpmath.mpc(complex(initial_value.real) + 1j * complex(initial_value.imag))
+        else:
+            mpc = mpmath.mpc(complex(1) + 1j * complex(0)) * initial_value
+
         return mpc
 
     def exponentiate(self, power):
@@ -134,7 +139,7 @@ class CalculationStrategyMath(CalculationStrategy):
         :param initial_value: Initial value of the variable.
         :return: mpmath variable.
         """
-        return complex(initial_value)
+        return initial_value + 0j # complex(initial_value)
 
     def exponentiate(self, power):
         """
@@ -298,8 +303,8 @@ class PerfectCrystalDiffraction(object):
     def _calculatePhotonOut(self, photon_in):
         """
         Solves the Laue equation to calculates the outgoing photon from the incoming photon and the Bragg normal.
-        :param photon_in: Incoming photon.
-        :return: Outgoing photon.
+        :param photon_in: Incoming photon or photon bunch.
+        :return: Outgoing photon or photon bunch
         """
         # # Retrieve k_0.
         # k_in = photon_in.wavevector()
@@ -364,8 +369,6 @@ class PerfectCrystalDiffraction(object):
             k_out = k_out_parallel.addVector(k_out_normal.scalarMultiplication(-1.0))
         else:
             raise Exception
-
-
 
 
         photon_out = photon_in.duplicate()
@@ -567,7 +570,8 @@ class PerfectCrystalDiffraction(object):
             self.logDebug("zac_x1: " + str(cv_zac_x1))
             self.logDebug("zac_x2: " + str(cv_zac_x2))
 
-        return ComplexAmplitude(complex(complex_amplitude))
+        # return ComplexAmplitude(complex(complex_amplitude))
+        return ComplexAmplitude(complex_amplitude)
 
     def _calculatePolarizationS(self, photon_in, zac_b, zac_z, gamma_0):
         """
@@ -670,6 +674,7 @@ class PerfectCrystalDiffraction(object):
         :return: Complex amplitude of the diffraction.
         """
         # Initialize return variable.
+
         result = {"S": None,
                   "P": None}
 
