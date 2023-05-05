@@ -141,15 +141,20 @@ if __name__ == "__main__":
                  dabax=DabaxXraylib())
 
     energy = 8000.0
+    energies = numpy.linspace(energy, energy + 100, 2)
     print("Photon energy: %g deg " % (energy))
     print("d_spacing: %g A " % (a.dSpacing()))
     print("unitCellVolumw: %g A**3 " % (a.unitcellVolume()))
-    print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
+    print("Bragg angle: %g deg " %  (numpy.degrees(a.angleBragg(energy))))
+    print("Bragg angle [array] [deg] ", numpy.degrees(a.angleBragg(energies)))
     print("Asymmerey factor b: ", a.asymmetryFactor(energy))
 
     print("F0 ", a.F0(energy))
+    print("F0 [array] ", a.F0(energies))
     print("FH ", a.FH(energy))
-    print("FH_BAR ", a.FH_bar(energy))
+    print("FH [array] ", a.FH(energies))
+    print("FH_bar ", a.FH_bar(energy))
+    print("FH_bar [array] ", a.FH_bar(energies))
 
     print("PSI0 ", a.psi0(energy))
     print("PSIH ", a.psiH(energy))

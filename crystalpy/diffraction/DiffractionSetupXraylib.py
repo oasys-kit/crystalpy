@@ -6,6 +6,7 @@ units are in SI.
 
 """
 import xraylib
+import numpy
 from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
 # from crystalpy.util.vector import Vector
 
@@ -38,22 +39,31 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         self._crystal = xraylib.Crystal_GetCrystal(self.crystalName())
 
 
-    # todo: allow energy be a vector (like in DiffractionSetupDabax) ???
     def angleBragg(self, energy):
         """
         Returns the Bragg angle in rad for a given energy.
         :param energy: Energy to calculate the Bragg angle for.
         :return: Bragg angle.
         """
-        energy_in_kev = energy / 1000.0
+        energy_in_kev = numpy.array(energy*1e-3)
 
         # Retrieve bragg angle from xraylib.
-        angle_bragg = xraylib.Bragg_angle(self._crystal,
-                                          energy_in_kev,
-                                          self.millerH(),
-                                          self.millerK(),
-                                          self.millerL())
-        return angle_bragg
+        if energy_in_kev.size == 1:
+            return xraylib.Bragg_angle(self._crystal,
+                                                 energy*1e-3,
+                                                 self.millerH(),
+                                                 self.millerK(),
+                                                 self.millerL())
+
+        else:
+            angle_bragg = numpy.zeros_like(energy_in_kev)
+            for i, energy in enumerate(energy_in_kev):
+                angle_bragg[i] = xraylib.Bragg_angle(self._crystal,
+                                                  energy,
+                                                  self.millerH(),
+                                                  self.millerK(),
+                                                  self.millerL())
+            return angle_bragg
 
     def F0(self, energy):
         """
@@ -61,12 +71,21 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         :param energy: photon energy in eV.
         :return: F0
         """
-        energy_in_kev = energy / 1000.0
-        F_0 = xraylib.Crystal_F_H_StructureFactor(self._crystal,
-                                                  energy_in_kev,
-                                                  0, 0, 0,
-                                                  self._debyeWaller, rel_angle=0.0)
-        return F_0
+        energy_in_kev = numpy.array(energy*1e-3)
+
+        if energy_in_kev.size == 1:
+            return xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                      energy*1e-3,
+                                                      0, 0, 0,
+                                                      self._debyeWaller, rel_angle=0.0)
+        else:
+            F_0 = numpy.zeros_like(energy_in_kev, dtype=complex)
+            for i, energy in enumerate(energy_in_kev):
+                F_0[i] = xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                           energy_in_kev[i],
+                                                           0, 0, 0,
+                                                           self._debyeWaller, rel_angle=0.0)
+            return F_0
 
     def FH(self, energy, rel_angle=1.0):
         """
@@ -74,14 +93,24 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         :param energy: photon energy in eV.
         :return: FH
         """
-        energy_in_kev = energy / 1000.0
-        F_H = xraylib.Crystal_F_H_StructureFactor(self._crystal,
-                                                  energy_in_kev,
-                                                  self.millerH(),
-                                                  self.millerK(),
-                                                  self.millerL(),
-                                                  self._debyeWaller, rel_angle)
-        return F_H
+        energy_in_kev = numpy.array(energy*1e-3)
+        if energy_in_kev.size == 1:
+            return xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                      energy*1e-3,
+                                                      self.millerH(),
+                                                      self.millerK(),
+                                                      self.millerL(),
+                                                      self._debyeWaller, rel_angle)
+        else:
+            F_H = numpy.zeros_like(energy_in_kev, dtype=complex)
+            for i in range(energy_in_kev.size):
+                F_H[i] = xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                          energy_in_kev[i],
+                                                          self.millerH(),
+                                                          self.millerK(),
+                                                          self.millerL(),
+                                                          self._debyeWaller, rel_angle)
+            return F_H
 
     def FH_bar(self, energy, rel_angle=1.0):
         """
@@ -89,13 +118,23 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         :param energy: photon energy in eV.
         :return: FH_bar
         """
-        energy_in_kev = energy / 1000.0
-        F_H_bar = xraylib.Crystal_F_H_StructureFactor(self._crystal,
-                                                      energy_in_kev,
-                                                      -self.millerH(),
-                                                      -self.millerK(),
-                                                      -self.millerL(),
-                                                      self._debyeWaller, rel_angle)
+        energy_in_kev = numpy.array(energy*1e-3)
+        if energy_in_kev.size == 1:
+            F_H_bar = xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                          energy*1e-3,
+                                                          -self.millerH(),
+                                                          -self.millerK(),
+                                                          -self.millerL(),
+                                                          self._debyeWaller, rel_angle)
+        else:
+            F_H_bar = numpy.zeros_like(energy_in_kev, dtype=complex)
+            for i in range(energy_in_kev.size):
+                F_H_bar[i] = xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                              energy_in_kev[i],
+                                                              -self.millerH(),
+                                                              -self.millerK(),
+                                                              -self.millerL(),
+                                                              self._debyeWaller, rel_angle)
 
         return F_H_bar
 
@@ -140,23 +179,33 @@ if __name__ == "__main__":
                  azimuthal_angle=0.0,)
 
     energy = 8000.0
+    energies = numpy.linspace(energy, energy+100, 2)
+    print(energy, energies)
+
     print("Photon energy: %g deg " % (energy))
     print("d_spacing: %g A " % (a.dSpacing()))
     print("unitCellVolumw: %g A**3 " % (a.unitcellVolume()))
     print("F0 ", a.F0(energy))
+    print("F0 [array] ", a.F0(energies))
     print("FH ", a.FH(energy))
-    print("FH_BAR ", a.FH_bar(energy))
+    print("FH [array] ", a.FH(energies))
+    print("FH_bar ", a.FH_bar(energy))
+    print("FH_bar [array] ", a.FH_bar(energies))
 
     print("PSI0 ", a.psi0(energy))
     print("PSIH ", a.psiH(energy))
     print("PSIH_bar ", a.psiH_bar(energy))
 
     print("V0: ", a.vectorK0direction(energy).components())
+    print("V0 [array]: ", a.vectorK0direction(energies).components())
+    print("V0: [array] ", a.vectorK0direction(energies))
+    # print("V0: [array] ", a.vectorK0direction(energies).components())
     print("Bh direction: ", a.vectorHdirection().components())
     print("Bh: ", a.vectorH().components())
     print("K0: ", a.vectorK0(energy).components())
     print("Kh: ", a.vectorKh(energy).components())
     print("Vh: ", a.vectorKhdirection(energy).components())
+    print("Vh [array]: ", a.vectorKhdirection(energies).components())
 
 
     from crystalpy.util.Photon import Photon
@@ -165,8 +214,10 @@ if __name__ == "__main__":
 
 
     # print("Asymmerey factor b: ", a.asymmetry_factor(energy))
-    print("Bragg angle: %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi))
-    print("Bragg angle corrected: %g deg " %  (a.angleBraggCorrected(energy) * 180 / numpy.pi))
+    print("Bragg angle: %g deg " %  (numpy.degrees(a.angleBragg(energy))))
+    print("Bragg angle [array] [deg] ", numpy.degrees(a.angleBragg(energies)))
+    print("Bragg angle corrected: %g deg " %  (numpy.degrees(a.angleBraggCorrected(energy))))
+    # print("Bragg angle corrected [array] [deg] ", numpy.degrees(a.angleBraggCorrected(energies)))
 
 
  #     VIN_BRAGG_UNCORR (Uncorrected): (  0.00000000,    0.968979,   -0.247145)

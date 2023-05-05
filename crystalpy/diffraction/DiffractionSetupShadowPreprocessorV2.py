@@ -110,7 +110,7 @@ class DiffractionSetupShadowPreprocessorV2(DiffractionSetupAbstract):
 if __name__ == "__main__":
 
     from crystalpy.diffraction.GeometryType import BraggDiffraction
-    from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
+    from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
     from xoppylib.crystals.create_bragg_preprocessor_file_v2 import create_bragg_preprocessor_file_v2
     import xraylib
     import numpy
@@ -139,6 +139,8 @@ if __name__ == "__main__":
                  azimuthal_angle=0.0)
 
     energy = 8000.0
+    energies = numpy.linspace(energy, energy + 100, 2)
+
     print("============ SHADOW / XRAYLIB  ==============")
     print("Photon energy: %g eV " % (energy))
     print("d_spacing: %g %g A " % (a.dSpacing(),b.dSpacing()))
@@ -148,9 +150,12 @@ if __name__ == "__main__":
     print("Asymmetry factor b: ", a.asymmetryFactor(energy),
                                 b.asymmetryFactor(energy))
 
-    print("F0 ", a.F0(energy), b.F0(energy))
-    print("FH ", a.FH(energy), b.FH(energy))
-    print("FH_BAR ", a.FH_bar(energy), b.FH_bar(energy))
+    print("F0 ", a.F0(energy))
+    print("F0 [array] ", a.F0(energies))
+    print("FH ", a.FH(energy))
+    print("FH [array] ", a.FH(energies))
+    print("FH_bar ", a.FH_bar(energy))
+    print("FH_bar [array] ", a.FH_bar(energies))
 
     print("PSI0 ", a.psi0(energy), b.psi0(energy))
     print("PSIH ", a.psiH(energy), b.psiH(energy))

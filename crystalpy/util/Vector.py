@@ -1,24 +1,27 @@
 """
-Represents a 3d vector.
+Represents a 3d vector. Accept arrays of vectors.
+
+vector.components() gives a numpy array with shape (3) or (3, npoints)
 """
-import numpy as np
+import numpy
 
 
 class Vector(object):
     def __init__(self, x, y, z):
         """
         Constructor.
-        :param x: x component.
-        :param y: y component.
-        :param z: z component.
+        :param x: x component. It can be an array.
+        :param y: y component. It can be an array of the same size of x.
+        :param z: z component. It can be an array of the same size of x.
         """
+
         self.setComponents(x, y, z)
 
     @staticmethod
     def initializeFromComponents(components):
         """
         Creates a vector from a list/array of at least three elements.
-        :param components: x,y,z components of the vector.
+        :param components: [x,y,z] components of the vector.
         :return: Vector having these x,y,z components.
         """
         return Vector(components[0],
@@ -35,7 +38,7 @@ class Vector(object):
         :param y: y component.
         :param z: z component.
         """
-        self._components = np.asarray([x, y, z])
+        self._components = numpy.asarray([x, y, z])
 
     def components(self):
         """
@@ -43,6 +46,36 @@ class Vector(object):
         :return:
         """
         return self._components
+
+    def componentsStack(self):
+        """
+        Returns the components stack of shape (3, npoints) of this vector.
+        :return:
+        """
+        if self.isArray():
+            return self.components()
+        else:
+            return self.components().reshape((-1,1))
+
+
+    def nStack(self):
+        s = numpy.array(self.components().shape)
+        if s.size == 1:
+            return 1
+        else:
+            return s[1]
+
+    def extractStackItem(self, i):
+        x = self.getX()
+        y = self.getY()
+        z = self.getZ()
+        return Vector.initializeFromComponents([x[i], y[i], z[i]])
+
+    def isArray(self):
+        if self.nStack() == 1:
+            return False
+        else:
+            return True
 
     def getX(self):
         return self.components()[0]
@@ -53,50 +86,35 @@ class Vector(object):
     def getZ(self):
         return self.components()[2]
 
-    def __eq__(self, candidate):
-        """
-        Determines if two vectors are equal.
-        :param candidate: Vector to compare to.
-        :return: True if both vectors are equal. Otherwise False.
-        """
-        return np.linalg.norm(self.components()
-                              -
-                              candidate.components()) < 1.e-7
-
-    def __ne__(self, candidate):
-        """
-        Determines if two vectors are not equal.
-        :param candidate: Vector to compare to.
-        :return: True if both vectors are not equal. Otherwise False.
-        """
-        return not (self == candidate)
-
     def addVector(self, summand):
         """
         Adds two vectors.
         :param summand: The vector to add to this instance.
         :return: The sum as a vector.
         """
-        components = self.components() + summand.components()
-        return Vector.initializeFromComponents(components)
 
-    def scalarMultiplication(self, factor):
+        wX = self.getX() + summand.getX()
+        wY = self.getY() + summand.getY()
+        wZ = self.getZ() + summand.getZ()
+        return Vector.initializeFromComponents([wX, wY, wZ])
+
+
+    def scalarMultiplication(self, k):
         """
         Scalar multiplies this vector.
-        :param factor: The scalar to multiply with.
+        :param k: The scalar to multiply with.
         :return: Scalar multiplied vector.
         """
-        components = self.components() * factor
-        return Vector.initializeFromComponents(components)
+        return Vector.initializeFromComponents([self.getX() * k, self.getY() * k, self.getZ() * k])
 
-    # TODO rename correct spelling: substract
-    def subtractVector(self, subtrahend):
+
+    def subtractVector(self, tosubstract):
         """
         Subtract a vector from this instance.
         :param subtrahend: Vector to subtract.
         :return: The difference of the two vectors.
         """
-        result = self.addVector(subtrahend.scalarMultiplication(-1.0))
+        result = self.addVector(tosubstract.scalarMultiplication(-1.0))
         return result
 
     def scalarProduct(self, factor):
@@ -105,8 +123,15 @@ class Vector(object):
         :param factor: The vector to calculate the scalar product with.
         :return: Scalar product of the two vectors.
         """
-        scalar_product = np.dot(self.components(), factor.components())
-        return scalar_product
+        # scalar_product = numpy.dot(self.components(), factor.components())
+        # scalar_product = numpy.sum( self.components() * factor.components(), axis=0)
+        # return scalar_product
+
+        wX = self.getX() * factor.getX()
+        wY = self.getY() * factor.getY()
+        wZ = self.getZ() * factor.getZ()
+        return wX + wY + wZ
+
 
     def crossProduct(self, factor):
         """
@@ -114,8 +139,19 @@ class Vector(object):
         :param factor: The vector to form the cross product with.
         :return: Cross product of the two vectors.
         """
-        components = np.cross(self.components(), factor.components())
-        return Vector.initializeFromComponents(components)
+        uX = self.getX()
+        uY = self.getY()
+        uZ = self.getZ()
+        vX = factor.getX()
+        vY = factor.getY()
+        vZ = factor.getZ()
+
+        wX = uY * vZ - uZ * vY
+        wY = uZ * vX - uX * vZ
+        wZ = uX * vY - uY * vX
+
+        return Vector.initializeFromComponents([wX, wY, wZ])
+
 
     def norm(self):
         """
@@ -143,13 +179,13 @@ class Vector(object):
         # http://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
         unit_rotation_axis = rotation_axis.getNormalizedVector()
 
-        rotated_vector = self.scalarMultiplication(np.cos(angle))
+        rotated_vector = self.scalarMultiplication(numpy.cos(angle))
 
         tmp_vector = unit_rotation_axis.crossProduct(self)
-        tmp_vector = tmp_vector.scalarMultiplication(np.sin(angle))
+        tmp_vector = tmp_vector.scalarMultiplication(numpy.sin(angle))
         rotated_vector = rotated_vector.addVector(tmp_vector)
 
-        scalar_factor = self.scalarProduct(unit_rotation_axis) * (1.0 - np.cos(angle))
+        scalar_factor = self.scalarProduct(unit_rotation_axis) * (1.0 - numpy.cos(angle))
         tmp_vector = unit_rotation_axis.scalarMultiplication(scalar_factor)
         rotated_vector = rotated_vector.addVector(tmp_vector)
 
@@ -181,8 +217,13 @@ class Vector(object):
         Returns one arbitrary vector perpendicular to this vector.
         :return: One arbitrary vector perpendicular to this vector.
         """
-        vector_y = Vector(0, 1, 0)
-        vector_z = Vector(0, 0, 1)
+        n = self.nStack()
+        if n == 1:
+            vector_y = Vector(0, 1, 0)
+            vector_z = Vector(0, 0, 1)
+        else:
+            vector_y = Vector.initializeFromComponents( [numpy.zeros(n), numpy.ones(n), numpy.zeros(n)])
+            vector_z = Vector.initializeFromComponents( [numpy.zeros(n), numpy.zeros(n), numpy.ones(n)])
 
         if self.getNormalizedVector() == vector_z:
             return vector_y
@@ -203,16 +244,8 @@ class Vector(object):
 
         # Determine angle between the two vectors.
         cos_angle = n1.scalarProduct(n2)
-        angle = np.arccos(cos_angle)
-        # Edoardo: numpy.arccos() always returns an angle in radians in [0, pi].
-
-        # Mark's version:
-        # By convention always return the smaller angle.
-        # while angle > 2.0 * np.pi:
-        #     angle -= 2.0 * np.pi
-
-        # if angle > np.pi:
-        #     angle = 2.0 * np.pi - angle
+        cos_angle= numpy.clip(cos_angle, -1, 1) # just in case...
+        angle = numpy.arccos(cos_angle)
 
         return angle
 
@@ -223,8 +256,7 @@ class Vector(object):
         :return:Vector with given angle to this vector.
         """
         vector_perpendicular = self.getOnePerpendicularVector()
-        vector_with_angle = self.rotateAroundAxis(vector_perpendicular,
-                                                  angle)
+        vector_with_angle = self.rotateAroundAxis(vector_perpendicular, angle)
 
         return vector_with_angle
 
@@ -238,3 +270,80 @@ class Vector(object):
         return "{Vx} {Vy} {Vz}".format(Vx=self.components()[0],
                                        Vy=self.components()[1],
                                        Vz=self.components()[2])
+
+
+    def __eq__(self, candidate):
+        """
+        Determines if two vectors are equal.
+        :param candidate: Vector to compare to.
+        :return: True if both vectors are equal. Otherwise False.
+        """
+        return numpy.linalg.norm(self.components()
+                              -
+                              candidate.components()) < 1.e-7
+
+    def __ne__(self, candidate):
+        """
+        Determines if two vectors are not equal.
+        :param candidate: Vector to compare to.
+        :return: True if both vectors are not equal. Otherwise False.
+        """
+        return not (self == candidate)
+
+    def __add__(self, o):
+        return self.addVector(o)
+        # return Vector.initializeFromComponents(self.components() + o.components())
+
+    def __sub__(self, o):
+        # return Vector.initializeFromComponents(self.components() - o.components())
+        return self.subtractVector(o)
+
+    def __mul__(self, o):
+        # return Vector.initializeFromComponents(self.components() * o)
+        return self.scalarMultiplication(o)
+
+
+if __name__ == "__main__":
+    vector = Vector(1, 2, 3)
+    print(vector.components())
+    print("dot: ", (vector.scalarProduct(vector)))
+    print("shape: ", vector.components().shape)
+    print("v x v =", vector.crossProduct(vector).components())
+    print("3 v : ", vector.scalarMultiplication(3).components(), (vector * 3).components())
+    print("angle: ", vector.angle(vector))
+
+    vector = Vector.initializeFromComponents(numpy.array([11, -2, 23]))
+
+
+    x1 = numpy.linspace(1, 2, 11)
+    y1 = numpy.linspace(2, 3, 11)
+    z1 = numpy.linspace(3, 4, 11)
+    vector = Vector(x1, y1, z1)
+    print("shape", vector.components().shape)
+    print("components: ", vector.components())
+
+    vector = Vector.initializeFromComponents( [x1, y1, z1] )
+    print("shape", vector.components().shape)
+    print("components: ", vector.components())
+    print("3 v : ", vector.scalarMultiplication(3).components(), (vector * 3).components())
+
+    print("components[0]: ", vector.components()[0])
+    print("dot: ", (vector.scalarProduct(vector)))
+
+    print("v+v: ", (vector.addVector(vector)).components())
+    print("v+v: ", ( vector + vector).components())
+
+    print("v/|v|: ", vector.getNormalizedVector().components())
+    print("v == v?: ", vector == vector * 2)
+    print("v == 2v?: ", vector == vector * 2)
+    print("v =", vector.toString(), vector.getX())
+
+    print("v points=", vector.nStack(), vector.isArray())
+
+    print("perp v", vector.getOnePerpendicularVector().components())
+
+    print("v x v =", vector.crossProduct(vector).components())
+    print("|v| =", vector.norm())
+
+
+    print("angle: ", vector.angle(vector))

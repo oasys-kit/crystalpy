@@ -3,6 +3,9 @@ This object contains a list of Photon objects, characterized by energy and direc
 
 """
 import numpy
+import scipy.constants as codata
+from crystalpy.util.Vector import Vector
+import copy
 
 class PhotonBunch(object):
     """
@@ -18,6 +21,57 @@ class PhotonBunch(object):
         else:
             self.polarized_photon_bunch = photons
         # self._set_dict()
+
+    def energies(self):
+        energies = numpy.zeros(len(self))
+        for i,photon in enumerate(self):
+            energies[i]      = photon.energy()  # Photon.energy()
+        return energies
+
+    def energy(self): # just in case
+        return self.energies()
+
+    def wavelength(self):
+        """
+        :return: The photon wavelength in meter.
+        """
+        E_in_Joule = self.energies() * codata.e # elementary_charge
+        # Wavelength in meter
+        wavelength = (codata.c * codata.h / E_in_Joule)
+        return wavelength
+
+    def wavenumber(self):
+        """
+        :return: Wavenumber in m^-1.
+        """
+        return (2.0 * numpy.pi) / self.wavelength()
+
+    def unitDirectionVector(self):
+        X = numpy.zeros(len(self))
+        Y = numpy.zeros(len(self))
+        Z = numpy.zeros(len(self))
+        for i,photon in enumerate(self):
+            cc = photon.unitDirectionVector().components()
+            X[i] = cc[0]
+            Y[i] = cc[1]
+            Z[i] = cc[2]
+        return Vector.initializeFromComponents([X, Y, Z])
+
+
+    def wavevector(self):
+        """
+        :return: Photon wavevector in m^-1.
+        """
+        return self.unitDirectionVector().scalarMultiplication(self.wavenumber())
+
+    def duplicate(self):
+        return copy.deepcopy(self)
+
+    def setUnitDirectionVector(self, vector):
+        for i,photon in enumerate(self):
+            photon._unit_direction_vector = vector.extractStackItem(i)
+            #
+            # self._unit_direction_vector = vector.getNormalizedVector()
 
     #
     # extend these methods when heritating from Photon
@@ -39,7 +93,7 @@ class PhotonBunch(object):
             directions[0, i] = photon.unitDirectionVector().components()[0]
             directions[1, i] = photon.unitDirectionVector().components()[1]
             directions[2, i] = photon.unitDirectionVector().components()[2]
-            i += 1
+            i += 1  # todo: very bizarre.... remove?
 
         array_dict["number of photons"] = i
         array_dict["energies"] = energies

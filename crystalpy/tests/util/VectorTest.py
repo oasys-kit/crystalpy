@@ -243,3 +243,44 @@ class VectorTest(unittest.TestCase):
         self.assertFalse( v1.components()[1] == v2.components()[1])
         self.assertFalse( v1.components()[2] == v2.components()[2])
 
+    def testArrays(self):
+        import numpy
+
+        x1 = numpy.linspace(1, 2, 11)
+        y1 = numpy.linspace(2, 3, 11)
+        z1 = numpy.linspace(3, 4, 11)
+
+        vector = Vector(x1, y1, z1)
+        self.assertTrue(vector.components().shape == (3, 11) )
+
+        vector1 = Vector.initializeFromComponents([x1, y1, z1])
+        self.assertTrue(vector == vector1)
+
+        vector1 = vector.scalarMultiplication(3)
+        numpy.testing.assert_array_equal(vector1.getX() , 3 * vector.getX())
+
+        r = vector.scalarProduct(vector)
+        self.assertTrue( r[0] == 14)
+
+        vector1 = vector.addVector(vector)
+        numpy.testing.assert_array_equal(vector1.getX() , 2 * vector.getX())
+
+        vector1 = vector + vector
+        numpy.testing.assert_array_equal(vector1.getX() , 2 * vector.getX())
+
+        vector1 = vector.getNormalizedVector()
+        numpy.testing.assert_array_almost_equal(vector1.norm(), numpy.ones_like(x1))
+
+        self.assertTrue( vector.isArray() )
+
+        self.assertTrue(vector.nStack() == x1.size)
+
+        vector1 = vector.getOnePerpendicularVector()
+        numpy.testing.assert_array_almost_equal( vector1.scalarProduct(vector), numpy.zeros_like(x1))
+
+
+        vector1 = vector.crossProduct(vector)
+
+        numpy.testing.assert_array_almost_equal(vector.angle(vector), numpy.zeros_like(x1))
+
+
