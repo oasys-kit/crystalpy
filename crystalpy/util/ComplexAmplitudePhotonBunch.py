@@ -4,10 +4,11 @@ This object is used as input to and output from the passive crystal widget.
 """
 import numpy as np
 
-from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitude
+# from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitude
 from crystalpy.util.PhotonBunch import PhotonBunch
 
 
+#todo: replace name "polarized" by "complex_amplitude"
 class ComplexAmplitudePhotonBunch(PhotonBunch):
     """
     is a collection of ComplexAmplitudePhoton objects, making up the photon beam.
@@ -22,6 +23,16 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
         else:
             self.polarized_photon_bunch = complex_amplitude_photons
 
+
+    def rescaleEsigma(self, factor):
+        # print(">>>>> factor", factor)
+        # print(">>>>> factor", type(factor))
+        for i, polarized_photon in enumerate(self):
+            polarized_photon.rescaleEsigma(factor[i])
+
+    def rescaleEpi(self, factor):
+        for i, polarized_photon in enumerate(self):
+            polarized_photon.rescaleEpi(factor[i])
 
     def toDictionary(self):
         """
@@ -42,8 +53,10 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
             intensityP[i] = polarized_photon.getIntensityP()
             phaseS    [i] = polarized_photon.getPhaseS()
             phaseP    [i] = polarized_photon.getPhaseP()
-            complexAmplitudeS[i] = polarized_photon.getComplexAmplitudeS().complexAmplitude()
-            complexAmplitudeP[i] = polarized_photon.getComplexAmplitudeP().complexAmplitude()
+            # complexAmplitudeS[i] = polarized_photon.getComplexAmplitudeS().complexAmplitude()
+            # complexAmplitudeP[i] = polarized_photon.getComplexAmplitudeP().complexAmplitude()
+            complexAmplitudeS[i] = polarized_photon.getComplexAmplitudeS()
+            complexAmplitudeP[i] = polarized_photon.getComplexAmplitudeP()
 
 
         array_dict["intensityS"] = intensityS

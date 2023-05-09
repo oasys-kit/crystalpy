@@ -7,8 +7,9 @@ Except for energy all units are in SI. Energy is in eV.
 import numpy
 from numpy import pi, cos, sin, sqrt, abs, exp, tanh, sinh, cosh, imag, real
 
-from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
+# from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
 from crystalpy.util.Photon import Photon
+from crystalpy.util.PhotonBunch import PhotonBunch
 from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction, BraggTransmission, LaueTransmission
 
 # Use mpmath if possible. Otherwise use native cmath.
@@ -16,6 +17,13 @@ try:
     # raise ImportError
     import mpmath
     use_mpmath = True
+    # mpmath_sin   =  numpy.vectorize(mpmath.sin)
+    # mpmath_cos   =  numpy.vectorize(mpmath.cos)
+    # mpmath_exp   =  numpy.vectorize(mpmath.exp)
+
+    mpmath_sin   =  (mpmath.sin)
+    mpmath_cos   =  (mpmath.cos)
+    mpmath_exp   =  (mpmath.exp)
 
 except ImportError:
     # import cmath
@@ -23,6 +31,11 @@ except ImportError:
     use_mpmath = False
     print("mpmath module for arbitrary-precision floating-point arithmetic could not be found!\n "
           "Using numpy instead. This could lead to overflow errors for Zachariasen calculations.\n")
+
+if use_mpmath:
+    print("Using mpmath.")
+else:
+    print("Using numpy instead of mpmath (not available).")
 
 
 class CalculationStrategy(object):
@@ -102,7 +115,14 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :param power: The power to raise to.
         :return: Exponential.
         """
-        return mpmath.exp(power)
+        # return mpmath.exp(power)
+        if isinstance(power, numpy.ndarray):
+            power_out = numpy.zeros_like(power, dtype=complex)
+            for i in range(power.size):
+                power_out[i] = mpmath_exp(power[i])
+            return power_out
+        else:
+            return mpmath_exp(power)
 
     def sin(self, power):
         """
@@ -110,7 +130,14 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :param power: The power to raise to.
         :return: Sin.
         """
-        return mpmath.sin(power)
+        # return mpmath.sin(power)
+        if isinstance(power, numpy.ndarray):
+            power_out = numpy.zeros_like(power, dtype=complex)
+            for i in range(power.size):
+                power_out[i] = mpmath_sin(power[i])
+            return power_out
+        else:
+            return mpmath_sin(power)
 
     def cos(self, power):
         """
@@ -118,7 +145,14 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :param power: The power to raise to.
         :return: Cos.
         """
-        return mpmath.cos(power)
+        # return mpmath.cos(power)
+        if isinstance(power, numpy.ndarray):
+            power_out = numpy.zeros_like(power, dtype=complex)
+            for i in range(power.size):
+                power_out[i] = mpmath_cos(power[i])
+            return power_out
+        else:
+            return mpmath_cos(power)
 
     def toComplex(self, variable):
         """
@@ -126,7 +160,9 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :param variable: Calculation variable to convert.
         :return: Native python complex variable.
         """
-        return complex(variable)
+        # return complex(variable)
+
+        return numpy.array(variable, dtype=complex)
 
 
 class CalculationStrategyMath(CalculationStrategy):
@@ -436,6 +472,7 @@ class PerfectCrystalDiffraction(object):
 
         return zac_b
 
+
     def _calculateGuigayB(self, photon_in):
         """
         Calculates asymmetry ratio b as defined in Guigay.
@@ -444,8 +481,13 @@ class PerfectCrystalDiffraction(object):
         Note that this b changes when K0 (photon_in.wavevector()) changes
         """
         KH = photon_in.wavevector().addVector(self.braggNormal())
-        photon_outG = Photon(energy_in_ev=photon_in.energy(), direction_vector=KH)
-        return self._calculateGamma(photon_in) / self._calculateGamma(photon_outG)
+        if isinstance(photon_in, Photon):
+            photon_outG = Photon(energy_in_ev=photon_in.energy(), direction_vector=KH)
+            return self._calculateGamma(photon_in) / self._calculateGamma(photon_outG)
+        elif isinstance(photon_in, PhotonBunch):
+            photon_outG = PhotonBunch.initialize_from_energies_and_directions(photon_in.energy(), KH)
+            return self._calculateGamma(photon_in) / self._calculateGamma(photon_outG)
+
 
     def _calculateZacQ(self, zac_b, effective_psi_h, effective_psi_h_bar):
         """
@@ -571,7 +613,7 @@ class PerfectCrystalDiffraction(object):
             self.logDebug("zac_x2: " + str(cv_zac_x2))
 
         # return ComplexAmplitude(complex(complex_amplitude))
-        return ComplexAmplitude(complex_amplitude)
+        return complex_amplitude # ComplexAmplitude(complex_amplitude)
 
     def _calculatePolarizationS(self, photon_in, zac_b, zac_z, gamma_0):
         """
@@ -609,7 +651,7 @@ class PerfectCrystalDiffraction(object):
                              ):
         """
         Calculate diffraction for incoming photon.
-        :param photon_in: Incoming photon.
+        :param photon_in: Incoming photon or Photon bunch.
         :return: Complex amplitude of the diffraction.
         """
 
@@ -628,8 +670,10 @@ class PerfectCrystalDiffraction(object):
         :return: Complex amplitude of the diffraction.
         """
         # Initialize return variable.
+
         result = {"S": None,
                   "P": None}
+
 
         # Calculate photon out.
         photon_out = self._calculatePhotonOut(photon_in)
@@ -638,7 +682,8 @@ class PerfectCrystalDiffraction(object):
         zac_alpha = self._calculateAlphaZac(photon_in)
 
         # Calculate asymmetry ratio.
-        zac_b = self._calculateZacB(photon_in, photon_out)
+        # zac_b = self._calculateZacB(photon_in, photon_out)
+        zac_b = self._calculateGuigayB(photon_in)  # todo: check if this is the same for Zac
 
         # Calculate z as defined in Zachariasen [3-123].
         zac_z = self._calculateZacZ(zac_b, zac_alpha)
@@ -657,8 +702,10 @@ class PerfectCrystalDiffraction(object):
         # (see private communication M. Rio (ESRF) and J. Sutter (DLS))
         if (self.geometryType() == BraggDiffraction() or
                 self.geometryType() == LaueDiffraction()):
-            result["S"].rescale(1.0 / sqrt(abs(zac_b)))
-            result["P"].rescale(1.0 / sqrt(abs(zac_b)))
+            # result["S"].rescale(1.0 / sqrt(abs(zac_b)))
+            # result["P"].rescale(1.0 / sqrt(abs(zac_b)))
+            result["S"] *= (1.0 / sqrt(abs(zac_b)))
+            result["P"] *= (1.0 / sqrt(abs(zac_b)))
 
         # If debugging output is turned on.
         if self.isDebug:
@@ -678,6 +725,12 @@ class PerfectCrystalDiffraction(object):
         result = {"S": None,
                   "P": None}
 
+        # if isinstance(photon_in, Photon):
+        #     result = {}
+        # elif isinstance(photon_in, PhotonBunch):
+        #     result = [{}] * photon_in.getNumberOfPhotons()
+
+
         if s_ratio is None:
             transfer_matrix_s = self.calculateTransferMatrix(photon_in, polarization=0)
             m11_s, m12_s, m21_s, m22_s = transfer_matrix_s
@@ -689,10 +742,10 @@ class PerfectCrystalDiffraction(object):
             scattering_matrix_p = self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix_p)
             s11_p, s12_p, s21_p, s22_p = scattering_matrix_p
 
-            result["transfer_matrix_s"] = transfer_matrix_s
-            result["transfer_matrix_p"] = transfer_matrix_p
-            result["scattering_matrix_s"] = scattering_matrix_s
-            result["scattering_matrix_p"] = scattering_matrix_p
+            # result["transfer_matrix_s"] = transfer_matrix_s
+            # result["transfer_matrix_p"] = transfer_matrix_p
+            # result["scattering_matrix_s"] = scattering_matrix_s
+            # result["scattering_matrix_p"] = scattering_matrix_p
 
 
             if self.geometryType() == BraggDiffraction():
@@ -714,7 +767,7 @@ class PerfectCrystalDiffraction(object):
             else:
                 raise Exception
 
-        else:  # todo: delete........
+        else:  # todo: try to fix this and then delete........
             # Calculate photon out.
             photon_out = self._calculatePhotonOut(photon_in)
 
@@ -816,8 +869,8 @@ class PerfectCrystalDiffraction(object):
                 a = pi / photon_in.wavelength() * SQ
 
                 # guigay, sanchez del rio,  eq 27a todo: as a function of s
-                complex_amplitude_s = 1j * guigay_b * uh * sin(a * s) / a
-                complex_amplitude_s *= numpy.exp(1j * s * (omega + u0))
+                complex_amplitude_s = 1j * guigay_b * uh * self._sin(a * s) / a
+                complex_amplitude_s *= self._exponentiate(1j * s * (omega + u0))
 
                 # pi polarization
                 effective_psi_h     = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
@@ -828,8 +881,8 @@ class PerfectCrystalDiffraction(object):
                 a = pi / photon_in.wavelength() * SQ
 
                 # guigay, sanchez del rio,  eq 27a todo: as a function of s
-                complex_amplitude_p = 1j * guigay_b * uh * sin(a * s) / a
-                complex_amplitude_p *= numpy.exp(1j * s * (omega + u0))
+                complex_amplitude_p = 1j * guigay_b * uh * self._sin(a * s) / a
+                complex_amplitude_p *= self._exponentiate(1j * s * (omega + u0))
 
 
             elif self.geometryType() == LaueTransmission():
@@ -846,8 +899,8 @@ class PerfectCrystalDiffraction(object):
                 u0 = effective_psi_0 * pi / photon_in.wavelength()
 
                 # guigay, sanchez del rio,  eq 27b todo: as a function of s
-                complex_amplitude_s = cos(a * s) - 1j * omega * sin(a * s) / a
-                complex_amplitude_s *= numpy.exp(1j * s * (omega + u0))
+                complex_amplitude_s = cos(a * s) - 1j * omega * self._sin(a * s) / a
+                complex_amplitude_s *= self._exponentiate(1j * s * (omega + u0))
 
                 # pi polarization
                 effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
@@ -857,8 +910,8 @@ class PerfectCrystalDiffraction(object):
                 u0 = effective_psi_0 * pi / photon_in.wavelength()
 
                 # guigay, sanchez del rio,  eq 27b todo: as a function of s
-                complex_amplitude_p = cos(a * s) - 1j * omega * sin(a * s) / a
-                complex_amplitude_p *= numpy.exp(1j * s * (omega + u0))
+                complex_amplitude_p = cos(a * s) - 1j * omega * self._sin(a * s) / a
+                complex_amplitude_p *= self._exponentiate(1j * s * (omega + u0))
 
             else:
                 raise Exception
@@ -867,34 +920,81 @@ class PerfectCrystalDiffraction(object):
             result["b"] = guigay_b
 
         # Calculate complex amplitude for S and P polarization.
-        result["S"] = ComplexAmplitude(complex(complex_amplitude_s))
-        result["P"] = ComplexAmplitude(complex(complex_amplitude_p))
-
-        # added info
-        result["s"] = complex_amplitude_s
-        result["p"] = complex_amplitude_p
 
 
-        # Note division by |b| in intensity (thus sqrt(|b|) in amplitude)
-        # for power balance (see Zachariasen pag. 122)
+        if isinstance(photon_in, Photon):
+            result["S"] = complex_amplitude_s # ComplexAmplitude(complex(complex_amplitude_s))
+            result["P"] = complex_amplitude_p # ComplexAmplitude(complex(complex_amplitude_p))
+            result["s"] = complex_amplitude_s
+            result["p"] = complex_amplitude_p
+            # Note division by |b| in intensity (thus sqrt(|b|) in amplitude)
+            # for power balance (see Zachariasen pag. 122)
+            #
+            # This factor only applies to diffracted beam, not to transmitted beams
+            # (see private communication M. Rio (ESRF) and J. Sutter (DLS))
+
+            if (self.geometryType() == BraggDiffraction() or self.geometryType() == LaueDiffraction()):
+                # recalculate guigay_b ...
+                photon_out = self._calculatePhotonOut(photon_in)
+                # alpha = self._calculateGuigayAlpha(photon_in)
+                guigay_b = self._calculateGuigayB(photon_in)  # gamma_0 / gamma_H
+                # result["S"].rescale(1.0 / sqrt(abs(guigay_b)))
+                # result["P"].rescale(1.0 / sqrt(abs(guigay_b)))
+                result["S"] *= 1.0 / sqrt(abs(guigay_b))
+                result["P"] *= 1.0 / sqrt(abs(guigay_b))
+
+            # If debugging output is turned on.
+            if self.isDebug:
+                self._logMembers(guigay_b, zac_alpha, photon_in, photon_out, result)
+        elif isinstance(photon_in, PhotonBunch):
+            result["S"] = complex_amplitude_s # ComplexAmplitude(complex(complex_amplitude_s))
+            result["P"] = complex_amplitude_p # ComplexAmplitude(complex(complex_amplitude_p))
+            result["s"] = complex_amplitude_s
+            result["p"] = complex_amplitude_p
+            if (self.geometryType() == BraggDiffraction() or self.geometryType() == LaueDiffraction()):
+                # recalculate guigay_b ...
+                photon_out = self._calculatePhotonOut(photon_in)
+                # alpha = self._calculateGuigayAlpha(photon_in)
+                guigay_b = self._calculateGuigayB(photon_in)  # gamma_0 / gamma_H
+
+                result["S"] *= 1.0 / sqrt(abs(guigay_b))
+                result["P"] *= 1.0 / sqrt(abs(guigay_b))
+
+            # for i in range(photon_in.getNumberOfPhotons()):
+            #     result[i]["S"] = ComplexAmplitude(complex(complex_amplitude_s[i]))
+            #     result[i]["P"] = ComplexAmplitude(complex(complex_amplitude_p[i]))
+            #     result[i]["s"] = complex_amplitude_s[i]
+            #     result[i]["p"] = complex_amplitude_p[i]
+            # if (self.geometryType() == BraggDiffraction() or self.geometryType() == LaueDiffraction()):
+            #     # recalculate guigay_b ...
+            #     photon_out = self._calculatePhotonOut(photon_in)
+            #     # alpha = self._calculateGuigayAlpha(photon_in)
+            #     guigay_b = self._calculateGuigayB(photon_in)  # gamma_0 / gamma_H
+            #     for i in range(photon_in.getNumberOfPhotons()):
+            #         result[i]["S"].rescale(1.0 / sqrt(abs(guigay_b[i])))
+            #         result[i]["P"].rescale(1.0 / sqrt(abs(guigay_b[i])))
+
+
+        # # Note division by |b| in intensity (thus sqrt(|b|) in amplitude)
+        # # for power balance (see Zachariasen pag. 122)
+        # #
+        # # This factor only applies to diffracted beam, not to transmitted beams
+        # # (see private communication M. Rio (ESRF) and J. Sutter (DLS))
         #
-        # This factor only applies to diffracted beam, not to transmitted beams
-        # (see private communication M. Rio (ESRF) and J. Sutter (DLS))
-
-        if (self.geometryType() == BraggDiffraction() or self.geometryType() == LaueDiffraction()):
-
-            # recalculate guigay_b ...
-            photon_out = self._calculatePhotonOut(photon_in)
-            alpha = self._calculateGuigayAlpha(photon_in)
-            guigay_b = self._calculateGuigayB(photon_in) # gamma_0 / gamma_H
-
-
-            result["S"].rescale(1.0 / sqrt(abs(guigay_b)))
-            result["P"].rescale(1.0 / sqrt(abs(guigay_b)))
-
-        # If debugging output is turned on.
-        if self.isDebug:
-            self._logMembers(guigay_b, zac_alpha, photon_in, photon_out, result)
+        # if (self.geometryType() == BraggDiffraction() or self.geometryType() == LaueDiffraction()):
+        #
+        #     # recalculate guigay_b ...
+        #     photon_out = self._calculatePhotonOut(photon_in)
+        #     alpha = self._calculateGuigayAlpha(photon_in)
+        #     guigay_b = self._calculateGuigayB(photon_in) # gamma_0 / gamma_H
+        #
+        #
+        #     result["S"].rescale(1.0 / sqrt(abs(guigay_b)))
+        #     result["P"].rescale(1.0 / sqrt(abs(guigay_b)))
+        #
+        # # If debugging output is turned on.
+        # if self.isDebug:
+        #     self._logMembers(guigay_b, zac_alpha, photon_in, photon_out, result)
 
         # Returns the complex amplitudes.
         return result
@@ -927,10 +1027,10 @@ class PerfectCrystalDiffraction(object):
 
         # guigay, sanchez del rio,  eq 26
         phase_term = numpy.exp(1j * T * (omega + u0))
-        m11 = cos(a * T) - 1j * omega * sin(a * T) / a
-        m12 = 1j *  uh_bar * sin(a * T) / a
-        m21 = 1j * guigay_b * uh * sin(a * T) / a
-        m22 = cos(a * T) + 1j * omega * sin(a * T) / a
+        m11 = self._cos(a * T) - 1j * omega * self._sin(a * T) / a
+        m12 = 1j *  uh_bar * self._sin(a * T) / a
+        m21 = 1j * guigay_b * uh * self._sin(a * T) / a
+        m22 = self._cos(a * T) + 1j * omega * self._sin(a * T) / a
 
 
         return m11 * phase_term, m12 * phase_term, m21 * phase_term, m22 * phase_term
@@ -971,3 +1071,17 @@ class PerfectCrystalDiffraction(object):
         self.logDebug('PhotonOutDirection: ' + str(photon_out.unitDirectionVector().components()))
         self.logDebug('comp ampl S: ' + str(result["S"].intensity()) + str(result["S"].phase()))
         self.logDebug('comp ampl P: ' + str(result["P"].intensity()) + str(result["P"].phase()))
+
+
+if __name__ == "__main__":
+    a = CalculationStrategyMPMath()
+
+    a0 = a.createVariable(numpy.array(0))
+    print("cos(0)", a.cos(a0))
+
+    api = a.createVariable(numpy.array(numpy.pi))
+    print("cos(pi)", a.cos(api))
+
+    api = a.createVariable(numpy.array([numpy.pi] * 10))
+    print("cos(pi)", a.cos(api))
+    # print("exp(pi)", a.exponentiate(api))

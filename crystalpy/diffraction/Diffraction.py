@@ -296,39 +296,28 @@ class Diffraction(object):
             raise Exception("The incoming photon bunch must be a ComplexAmplitudePhotonBunch object!")
 
 
-        method_new = 0
+        vectorized_method = 1
 
-        if method_new:
+        if vectorized_method:
             perfect_crystal = cls._perfectCrystalForPhotonBunch(diffraction_setup, incoming_bunch)
-            # coeffs_list = perfect_crystal.calculateDiffraction(incoming_bunch, method=method)
+            coeffs = perfect_crystal.calculateDiffraction(incoming_bunch, method=method)
+            outgoing_bunch = perfect_crystal._calculatePhotonOut(incoming_bunch)
+            outgoing_bunch.rescaleEsigma(coeffs["S"])
+            outgoing_bunch.rescaleEpi(coeffs["P"])
 
-
-            for index, complex_amplitude_photon in enumerate(incoming_bunch):
-
-                # Get PerfectCrystal instance for the current photon.
-                perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, complex_amplitude_photon)
-                coeffs = perfect_crystal.calculateDiffraction(complex_amplitude_photon, method=method)
-
-                # this is redundant, recalculates perfect crystal
-                # coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, complex_amplitude_photon, method=method)
-
-                outgoing_complex_amplitude_photon = perfect_crystal._calculatePhotonOut(complex_amplitude_photon)
-                outgoing_complex_amplitude_photon.rescaleEsigma(coeffs["S"])
-                outgoing_complex_amplitude_photon.rescaleEpi(coeffs["P"])
-
-                # Add result of current deviation.
-                outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
         else:
+            perfect_crystal_bunch = cls._perfectCrystalForPhotonBunch(diffraction_setup, incoming_bunch)
+            outgoing_bunch2 = perfect_crystal_bunch._calculatePhotonOut(incoming_bunch)
+
             for index, complex_amplitude_photon in enumerate(incoming_bunch):
 
                 # Get PerfectCrystal instance for the current photon.
                 perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, complex_amplitude_photon)
                 coeffs = perfect_crystal.calculateDiffraction(complex_amplitude_photon, method=method)
-                # this is redundant, recalculates perfect crystal
-                # coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, complex_amplitude_photon, method=method)
 
                 # Calculate outgoing Photon.
                 outgoing_complex_amplitude_photon = perfect_crystal._calculatePhotonOut(complex_amplitude_photon)
+                # outgoing_complex_amplitude_photon = outgoing_bunch2.getPhotonIndex(index)
                 # apply reflectivities
                 outgoing_complex_amplitude_photon.rescaleEsigma(coeffs["S"])
                 outgoing_complex_amplitude_photon.rescaleEpi(coeffs["P"])
@@ -519,10 +508,10 @@ if __name__ == "__main__":
 
     diffraction = Diffraction()
     coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
-    print(coeffs_r['S'].complexAmplitude(), coeffs_r['P'].complexAmplitude())
+    print(coeffs_r['S'], coeffs_r['P'])
 
 
     diffraction1 = Diffraction()
     coeffs_r = diffraction1.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
-    print(coeffs_r['S'].complexAmplitude(), coeffs_r['P'].complexAmplitude())
+    print(coeffs_r['S'], coeffs_r['P'])
 

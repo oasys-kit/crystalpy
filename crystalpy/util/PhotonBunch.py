@@ -6,6 +6,9 @@ import numpy
 import scipy.constants as codata
 from crystalpy.util.Vector import Vector
 import copy
+from crystalpy.util.Photon import Photon
+from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
+from crystalpy.util.PolarizedPhoton import PolarizedPhoton
 
 class PhotonBunch(object):
     """
@@ -21,6 +24,18 @@ class PhotonBunch(object):
         else:
             self.polarized_photon_bunch = photons
         # self._set_dict()
+
+    @classmethod
+    def initialize_from_energies_and_directions(cls, energies, V):
+        if V.nStack() != energies.size:
+            raise Exception("incompatible inputs")
+
+        bunch = PhotonBunch()
+
+        for i in range(energies.size):
+            bunch.addPhoton(Photon(energy_in_ev=energies[i], direction_vector=V.extractStackItem(i)))
+
+        return bunch
 
     def energies(self):
         energies = numpy.zeros(len(self))
