@@ -5,7 +5,7 @@ Except for energy all units are in SI. Energy is in eV.
 """
 
 import numpy
-from numpy import pi, cos, sin, sqrt, abs, exp, tanh, sinh, cosh, imag, real
+# from numpy import pi, cos, sin, sqrt, abs, exp, tanh, sinh, cosh, imag, real
 
 # from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
 from crystalpy.util.Photon import Photon
@@ -17,13 +17,13 @@ try:
     # raise ImportError
     import mpmath
     use_mpmath = True
-    # mpmath_sin   =  numpy.vectorize(mpmath.sin)
-    # mpmath_cos   =  numpy.vectorize(mpmath.cos)
-    # mpmath_exp   =  numpy.vectorize(mpmath.exp)
+    mpmath_sin   =  numpy.vectorize(mpmath.sin)
+    mpmath_cos   =  numpy.vectorize(mpmath.cos)
+    mpmath_exp   =  numpy.vectorize(mpmath.exp)
 
-    mpmath_sin   =  (mpmath.sin)
-    mpmath_cos   =  (mpmath.cos)
-    mpmath_exp   =  (mpmath.exp)
+    # mpmath_sin   =  (mpmath.sin)
+    # mpmath_cos   =  (mpmath.cos)
+    # mpmath_exp   =  (mpmath.exp)
 
 except ImportError:
     # import cmath
@@ -116,8 +116,8 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :return: Exponential.
         """
         # return mpmath.exp(power)
-        if isinstance(power, numpy.ndarray):
-            power_out = numpy.zeros_like(power, dtype=complex)
+        if False: # isinstance(power, numpy.ndarray):
+            power_out = numpy.zeros_like(power, dtype=mpmath.mpc)
             for i in range(power.size):
                 power_out[i] = mpmath_exp(power[i])
             return power_out
@@ -131,8 +131,8 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :return: Sin.
         """
         # return mpmath.sin(power)
-        if isinstance(power, numpy.ndarray):
-            power_out = numpy.zeros_like(power, dtype=complex)
+        if False: # isinstance(power, numpy.ndarray):
+            power_out = numpy.zeros_like(power, dtype=mpmath.mpc)
             for i in range(power.size):
                 power_out[i] = mpmath_sin(power[i])
             return power_out
@@ -146,8 +146,8 @@ class CalculationStrategyMPMath(CalculationStrategy):
         :return: Cos.
         """
         # return mpmath.cos(power)
-        if isinstance(power, numpy.ndarray):
-            power_out = numpy.zeros_like(power, dtype=complex)
+        if False: # isinstance(power, numpy.ndarray):
+            power_out = numpy.zeros_like(power, dtype=mpmath.mpc)
             for i in range(power.size):
                 power_out[i] = mpmath_cos(power[i])
             return power_out
@@ -376,7 +376,7 @@ class PerfectCrystalDiffraction(object):
         k_out_parallel = k_in_parallel.addVector(B_H_parallel)
 
         # Calculate K_out normal.
-        k_out_normal_modulus = sqrt(k_in.norm() ** 2 - k_out_parallel.norm() ** 2)
+        k_out_normal_modulus = numpy.sqrt(k_in.norm() ** 2 - k_out_parallel.norm() ** 2)
         k_out_normal = self.surface_normal().scalarMultiplication(k_out_normal_modulus)
 
         # # Calculate the outgoing photon.
@@ -730,14 +730,17 @@ class PerfectCrystalDiffraction(object):
         # elif isinstance(photon_in, PhotonBunch):
         #     result = [{}] * photon_in.getNumberOfPhotons()
 
+        # TESTING THICK................................................................................................
+        is_thick = 0
+        use_transfer_matrix = 1  # is faster to use use_transfer_matrix=0
 
-        if s_ratio is None:
-            transfer_matrix_s = self.calculateTransferMatrix(photon_in, polarization=0)
+        if use_transfer_matrix:
+            transfer_matrix_s = self.calculateTransferMatrix(photon_in, polarization=0, is_thick=is_thick)
             m11_s, m12_s, m21_s, m22_s = transfer_matrix_s
             scattering_matrix_s = self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix_s)
             s11_s, s12_s, s21_s, s22_s = scattering_matrix_s
 
-            transfer_matrix_p = self.calculateTransferMatrix(photon_in, polarization=1)
+            transfer_matrix_p = self.calculateTransferMatrix(photon_in, polarization=1, is_thick=is_thick)
             m11_p, m12_p, m21_p, m22_p = transfer_matrix_p
             scattering_matrix_p = self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix_p)
             s11_p, s12_p, s21_p, s22_p = scattering_matrix_p
@@ -798,28 +801,47 @@ class PerfectCrystalDiffraction(object):
                 # sigma polarization
                 effective_psi_h = numpy.conjugate(self.PsiH())
                 effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
-                uh = effective_psi_h * pi / photon_in.wavelength()
-                u0 = effective_psi_0 * pi / photon_in.wavelength()
-                a = pi / photon_in.wavelength() * SQ
+                uh = effective_psi_h * numpy.pi / photon_in.wavelength()
+                uh_bar = effective_psi_h_bar * numpy.pi / photon_in.wavelength()
+                u0 = effective_psi_0 * numpy.pi / photon_in.wavelength()
 
                 # guigay, sanchez del rio,  eq 31a
-                complex_amplitude_s = 1j * guigay_b * uh * self._sin(a * s - a * T) / \
-                                    (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
-                                    self._exponentiate(1j * s * (omega + u0))
+                if is_thick == 0:
+                    SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    a = numpy.pi / photon_in.wavelength() * SQ
+                    complex_amplitude_s = 1j * guigay_b * uh * self._sin(a * s - a * T) / \
+                                        (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
+                                        self._exponentiate(1j * s * (omega + u0))
+                else:
+                    #Thickkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk!
+                    asquared = (numpy.pi / photon_in.wavelength())**2 * (guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
+                                               1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
 
+                    complex_amplitude_s = (aa + omega) / uh_bar
+
+                # print(">>> complex_amplitude_s: ", complex_amplitude_s)
                 # pi polarization
-                effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
-                effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
-                uh = effective_psi_h * pi / photon_in.wavelength()
-                u0 = effective_psi_0 * pi / photon_in.wavelength()
-                a = pi / photon_in.wavelength() * SQ
+                effective_psi_h = numpy.conjugate(self.PsiH()) * numpy.cos(2 * self.braggAngle())
+                effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * numpy.cos(2 * self.braggAngle())
+                uh = effective_psi_h * numpy.pi / photon_in.wavelength()
+                uh_bar = effective_psi_h_bar * numpy.pi / photon_in.wavelength()
+                u0 = effective_psi_0 * numpy.pi / photon_in.wavelength()
 
                 # guigay, sanchez del rio,  eq 31b
-                complex_amplitude_p = 1j * guigay_b * uh * self._sin( a * s - a * T) / \
-                                    (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
-                                    self._exponentiate(1j * s * (omega + u0))
+                if is_thick == 0:
+                    SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    a = numpy.pi / photon_in.wavelength() * SQ
+                    complex_amplitude_p = 1j * guigay_b * uh * self._sin( a * s - a * T) / \
+                                        (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
+                                        self._exponentiate(1j * s * (omega + u0))
+                else:
+                    #Thickkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk!
+                    asquared = (numpy.pi / photon_in.wavelength())**2 * (guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
+                                               1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
+
+                    complex_amplitude_p = (aa + omega) / uh_bar
 
             elif self.geometryType() == BraggTransmission():
                 if s_ratio is None:
@@ -829,30 +851,52 @@ class PerfectCrystalDiffraction(object):
                 # sigma polarization
                 effective_psi_h = numpy.conjugate(self.PsiH())
                 effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                uh_bar = effective_psi_h_bar * pi / photon_in.wavelength()
+
                 u0 = effective_psi_0 * pi / photon_in.wavelength()
-                a = pi / photon_in.wavelength() * SQ
+
 
                 # guigay, sanchez del rio,  eq 31b
                 # complex_amplitude_s = 1 / (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
                 # complex_amplitude_s *= numpy.exp(1j * T * (omega + u0))
-                complex_amplitude_s = (a * self._cos(a * s - a * T) - 1j * omega * self._sin(a * s - a * T)) / \
-                                      (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
-                complex_amplitude_s *= numpy.exp(1j * T * (omega + u0))
+                if is_thick == 0:
+                    SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    a = pi / photon_in.wavelength() * SQ
+
+                    complex_amplitude_s = (a * self._cos(a * s - a * T) - 1j * omega * self._sin(a * s - a * T)) / \
+                                          (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
+                    complex_amplitude_s *= numpy.exp(1j * T * (omega + u0))
+                else:
+                    #Thickkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk!
+                    asquared = (numpy.pi / photon_in.wavelength())**2 * (guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
+                                               1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
+
+                    complex_amplitude_s = 2 * a / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
 
                 # pi polarization
                 effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
                 effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
                 u0 = effective_psi_0 * pi / photon_in.wavelength()
-                a = pi / photon_in.wavelength() * SQ
 
                 # guigay, sanchez del rio,  eq 31b
                 # complex_amplitude_p = 1 / (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
                 # complex_amplitude_p *= numpy.exp(1j * T * (omega + u0))
-                complex_amplitude_p = (a * self._cos(a * s - a * T) - 1j * omega * self._sin(a * s - a * T)) / \
-                                      (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
-                complex_amplitude_p *= numpy.exp(1j * T * (omega + u0))
+                if is_thick == 0:
+                    SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    a = pi / photon_in.wavelength() * SQ
+
+                    complex_amplitude_p = (a * self._cos(a * s - a * T) - 1j * omega * self._sin(a * s - a * T)) / \
+                                          (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
+                    complex_amplitude_p *= numpy.exp(1j * T * (omega + u0))
+                else:
+                    # Thickkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk!
+                    asquared = (numpy.pi / photon_in.wavelength()) ** 2 * (
+                                guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                    aa = 1 / numpy.sqrt(2) * ((asquared).imag / numpy.sqrt(numpy.abs(asquared) - (asquared).real) + \
+                                              1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
+
+                    complex_amplitude_p = 2 * a / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
 
             elif self.geometryType() == LaueDiffraction():
                 if s_ratio is None:
@@ -863,22 +907,22 @@ class PerfectCrystalDiffraction(object):
                 # sigma polarization
                 effective_psi_h     = numpy.conjugate(self.PsiH())
                 effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
-                uh = effective_psi_h * pi / photon_in.wavelength()
-                u0 = effective_psi_0 * pi / photon_in.wavelength()
-                a = pi / photon_in.wavelength() * SQ
+                SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                uh = effective_psi_h * numpy.pi / photon_in.wavelength()
+                u0 = effective_psi_0 * numpy.pi / photon_in.wavelength()
+                a = numpy.pi / photon_in.wavelength() * SQ
 
                 # guigay, sanchez del rio,  eq 27a todo: as a function of s
                 complex_amplitude_s = 1j * guigay_b * uh * self._sin(a * s) / a
                 complex_amplitude_s *= self._exponentiate(1j * s * (omega + u0))
 
                 # pi polarization
-                effective_psi_h     = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
-                effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
-                uh = effective_psi_h * pi / photon_in.wavelength()
-                u0 = effective_psi_0 * pi / photon_in.wavelength()
-                a = pi / photon_in.wavelength() * SQ
+                effective_psi_h     = numpy.conjugate(self.PsiH()) * numpy.cos(2 * self.braggAngle())
+                effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * numpy.cos(2 * self.braggAngle())
+                SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                uh = effective_psi_h * numpy.pi / photon_in.wavelength()
+                u0 = effective_psi_0 * numpy.pi / photon_in.wavelength()
+                a = numpy.pi / photon_in.wavelength() * SQ
 
                 # guigay, sanchez del rio,  eq 27a todo: as a function of s
                 complex_amplitude_p = 1j * guigay_b * uh * self._sin(a * s) / a
@@ -894,8 +938,8 @@ class PerfectCrystalDiffraction(object):
                 # sigma polarization
                 effective_psi_h = numpy.conjugate(self.PsiH())
                 effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
-                a = pi / photon_in.wavelength() * SQ
+                SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                a = numpy.pi / photon_in.wavelength() * SQ
                 u0 = effective_psi_0 * pi / photon_in.wavelength()
 
                 # guigay, sanchez del rio,  eq 27b todo: as a function of s
@@ -905,7 +949,7 @@ class PerfectCrystalDiffraction(object):
                 # pi polarization
                 effective_psi_h = numpy.conjugate(self.PsiH()) * cos(2 * self.braggAngle())
                 effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * cos(2 * self.braggAngle())
-                SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+                SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
                 a = pi / photon_in.wavelength() * SQ
                 u0 = effective_psi_0 * pi / photon_in.wavelength()
 
@@ -957,8 +1001,8 @@ class PerfectCrystalDiffraction(object):
                 # alpha = self._calculateGuigayAlpha(photon_in)
                 guigay_b = self._calculateGuigayB(photon_in)  # gamma_0 / gamma_H
 
-                result["S"] *= 1.0 / sqrt(abs(guigay_b))
-                result["P"] *= 1.0 / sqrt(abs(guigay_b))
+                result["S"] *= 1.0 / numpy.sqrt(abs(guigay_b))
+                result["P"] *= 1.0 / numpy.sqrt(abs(guigay_b))
 
             # for i in range(photon_in.getNumberOfPhotons()):
             #     result[i]["S"] = ComplexAmplitude(complex(complex_amplitude_s[i]))
@@ -999,7 +1043,7 @@ class PerfectCrystalDiffraction(object):
         # Returns the complex amplitudes.
         return result
 
-    def calculateTransferMatrix(self, photon_in, polarization=0):
+    def calculateTransferMatrix(self, photon_in, polarization=0, is_thick=0):
 
         photon_out = self._calculatePhotonOut(photon_in)
         alpha = self._calculateGuigayAlpha(photon_in)
@@ -1010,7 +1054,7 @@ class PerfectCrystalDiffraction(object):
         if polarization == 0:
             pol_factor = 1.0
         else:
-            pol_factor = cos(2 * self.braggAngle())
+            pol_factor = numpy.cos(2 * self.braggAngle())
 
         effective_psi_0 = numpy.conjugate(self.Psi0())  # I(Psi0) > 0 (for absorption!!)
 
@@ -1019,18 +1063,49 @@ class PerfectCrystalDiffraction(object):
 
         effective_psi_h     = numpy.conjugate(self.PsiH()) * pol_factor
         effective_psi_h_bar = numpy.conjugate(self.PsiHBar()) * pol_factor
-        SQ = sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
-        uh = effective_psi_h * pi / photon_in.wavelength()
-        uh_bar = effective_psi_h_bar * pi / photon_in.wavelength()
-        u0 = effective_psi_0 * pi / photon_in.wavelength()
-        a = pi / photon_in.wavelength() * SQ
+
+        uh = effective_psi_h * numpy.pi / photon_in.wavelength()
+        uh_bar = effective_psi_h_bar * numpy.pi / photon_in.wavelength()
+        u0 = effective_psi_0 * numpy.pi / photon_in.wavelength()
+
+
 
         # guigay, sanchez del rio,  eq 26
-        phase_term = numpy.exp(1j * T * (omega + u0))
-        m11 = self._cos(a * T) - 1j * omega * self._sin(a * T) / a
-        m12 = 1j *  uh_bar * self._sin(a * T) / a
-        m21 = 1j * guigay_b * uh * self._sin(a * T) / a
-        m22 = self._cos(a * T) + 1j * omega * self._sin(a * T) / a
+        # phase_term = self._exponentiate(1j * T * (omega + u0))
+        # m11 = self._cos(a * T) - 1j * omega * self._sin(a * T) / a
+        # m12 = 1j *  uh_bar * self._sin(a * T) / a
+        # m21 = 1j * guigay_b * uh * self._sin(a * T) / a
+        # m22 = self._cos(a * T) + 1j * omega * self._sin(a * T) / a
+
+        if is_thick:
+            asquared = (numpy.pi / photon_in.wavelength()) ** 2 * (
+                        guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            aa = 1 / numpy.sqrt(2) * ((asquared).imag / numpy.sqrt(numpy.abs(asquared) - (asquared).real) + \
+                                      1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
+
+            print(">>>>> aa: ", aa)
+            phase_term = numpy.exp(1j * T * (omega + u0))
+            sin_aT = 1j / 2 * numpy.exp(-1j * aa * T) # self._sin(a * T)
+            cos_aT = 1  / 2 * numpy.exp(-1j * aa * T) # self._cos(a * T)
+            m11 = cos_aT - 1j * omega * sin_aT / aa
+            m12 = 1j *  uh_bar * sin_aT / aa
+            m21 = 1j * guigay_b * uh * sin_aT / aa
+            m22 = cos_aT + 1j * omega * sin_aT / aa
+        else:
+            SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
+            a = numpy.pi / photon_in.wavelength() * SQ
+
+            phase_term = numpy.exp(1j * T * (omega + u0))
+            sin_aT = self._sin(a * T)
+            cos_aT = self._cos(a * T)
+            m11 = cos_aT - 1j * omega * sin_aT / a
+            m12 = 1j *  uh_bar * sin_aT / a
+            m21 = 1j * guigay_b * uh * sin_aT / a
+            m22 = cos_aT + 1j * omega * sin_aT / a
+
+        print(">>>>>> m22: ", type(m11[0]), type(m12[0]), type(m21[0]), type(m22[0]))
+        print("            ", (m11[0]), (m12[0]), (m21[0]), (m22[0]))
+
 
 
         return m11 * phase_term, m12 * phase_term, m21 * phase_term, m22 * phase_term

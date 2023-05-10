@@ -444,7 +444,7 @@ if __name__ == "__main__":
     set_qt()
     import time
 
-    calculation_method=0
+    calculation_method = 1
 
     if True:
         calc_xcrystal_angular_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method)
@@ -497,7 +497,7 @@ if __name__ == "__main__":
     if True:
         calc_xcrystal_double_scan(        material_constants_library_flag=0,
             crystal_name="Si",
-            thickness=1e-4,
+            thickness=0.010,
             miller_h=1,
             miller_k=1,
             miller_l=1,

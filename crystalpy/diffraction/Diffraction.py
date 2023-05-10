@@ -198,12 +198,12 @@ class Diffraction(object):
 
         energies = incoming_bunch.energies()
 
-        print(">>>> energies: ", energies)
+        # print(">>>> energies: ", energies)
 
         # Retrieve bragg angle.
         angle_bragg = diffraction_setup.angleBragg(energies)
 
-        print(">>>>>angle_bragg: ", angle_bragg)
+        # print(">>>>>angle_bragg: ", angle_bragg)
 
         # Check if given Bragg/Laue geometry and given miller indices are possible.
         cls._checkSetupDiffraction(diffraction_setup, angle_bragg[0])
