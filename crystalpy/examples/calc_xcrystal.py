@@ -69,6 +69,8 @@ def calc_xcrystal_angular_scan(
         angle_deviation_points=200,
         angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
         calculation_method=0,
+        is_thick=0,
+        use_transfer_matrix=0,
         do_plot=0,
 ):
 
@@ -85,6 +87,8 @@ def calc_xcrystal_angular_scan(
     print("angle_deviation_points             = ", angle_deviation_points)
     print("angle_center_flag                  = ", angle_center_flag)
     print("calculation_method                 = ", calculation_method)
+    print("is_thick                           = ", is_thick)
+    print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
 
     # Create a diffraction setup.
@@ -126,7 +130,9 @@ def calc_xcrystal_angular_scan(
 
     bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
-                                                                           method=calculation_method)
+                                                                           calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
     bunch_out_dict = bunch_out.toDictionary()
 
@@ -135,7 +141,7 @@ def calc_xcrystal_angular_scan(
         plot(1e6*deviations,bunch_out_dict["intensity"],
              1e6*deviations,bunch_out_dict["intensityS"],
              1e6*deviations,bunch_out_dict["intensityP"],
-             xtitle="theta - thetaB [urad]",title="Reflectivity calculation using ComplexAmplitudePhoton method:%d"%calculation_method,
+             xtitle="theta - thetaB [urad]",title="Reflectivity calculation using ComplexAmplitudePhoton calculation_method:%d"%calculation_method,
              legend=["Total","Sigma","Pi"])
 
     return bunch_out_dict, diffraction_setup, deviations
@@ -155,6 +161,8 @@ def calc_xcrystal_alphazachariasen_scan(
         angle_deviation_max=2,
         angle_deviation_points=200,
         calculation_method=0,
+        is_thick=0,
+        use_transfer_matrix=0,
         do_plot=0,
 ):
 
@@ -170,6 +178,8 @@ def calc_xcrystal_alphazachariasen_scan(
     print("angle_deviation_max                = ", angle_deviation_max)
     print("angle_deviation_points             = ", angle_deviation_points)
     print("calculation_method                 = ", calculation_method)
+    print("is_thick                           = ", is_thick)
+    print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
 
     # Create a diffraction setup.
@@ -216,7 +226,9 @@ def calc_xcrystal_alphazachariasen_scan(
 
     bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
-                                                                           method=calculation_method)
+                                                                           calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
     bunch_out_dict = bunch_out.toDictionary()
 
@@ -225,7 +237,7 @@ def calc_xcrystal_alphazachariasen_scan(
         plot(deviations,bunch_out_dict["intensity"],
              deviations,bunch_out_dict["intensityS"],
              deviations,bunch_out_dict["intensityP"],
-             xtitle="y_zac",title="Reflectivity calculation using ComplexAmplitudePhoton method:%d"%calculation_method,
+             xtitle="y_zac",title="Reflectivity calculation using ComplexAmplitudePhoton calculation_method:%d"%calculation_method,
              legend=["Total","Sigma","Pi"])
 
     return bunch_out_dict, diffraction_setup, deviations
@@ -245,6 +257,8 @@ def calc_xcrystal_energy_scan(
         energy_max=8010,
         energy_points=200,
         calculation_method=0,
+        is_thick=0,
+        use_transfer_matrix=0,
         do_plot=0,
 ):
 
@@ -260,6 +274,8 @@ def calc_xcrystal_energy_scan(
     print("energy_max                         = ", energy_max)
     print("energy_points                      = ", energy_points)
     print("calculation_method                 = ", calculation_method)
+    print("is_thick                           = ", is_thick)
+    print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
 
     # Create a diffraction setup.
@@ -301,7 +317,9 @@ def calc_xcrystal_energy_scan(
 
     bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
-                                                                           method=calculation_method)
+                                                                           calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
     bunch_out_dict = bunch_out.toDictionary()
 
@@ -310,7 +328,7 @@ def calc_xcrystal_energy_scan(
         plot(energies,bunch_out_dict["intensity"],
              energies,bunch_out_dict["intensityS"],
              energies,bunch_out_dict["intensityP"],
-             xtitle="photon energy [eV]",title="Reflectivity calculation using ComplexAmplitudePhoton method:%d"%calculation_method,
+             xtitle="photon energy [eV]",title="Reflectivity calculation using ComplexAmplitudePhoton calculation_method:%d"%calculation_method,
              legend=["Total","Sigma","Pi"])
 
     return bunch_out_dict, diffraction_setup, energies
@@ -331,6 +349,8 @@ def calc_xcrystal_double_scan(
         angle_deviation_points=200,
         angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
         calculation_method=0,
+        is_thick=0,
+        use_transfer_matrix=0,
         geometry_type_index=0,
         do_plot=0,
 ):
@@ -351,6 +371,8 @@ def calc_xcrystal_double_scan(
     print("angle_deviation_points             = ", angle_deviation_points)
     print("angle_center_flag                  = ", angle_center_flag)
     print("calculation_method                 = ", calculation_method)
+    print("is_thick                           = ", is_thick)
+    print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
 
 
@@ -408,7 +430,9 @@ def calc_xcrystal_double_scan(
     t0 = time.time()
     bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
-                                                                           method=calculation_method)
+                                                                           calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
     print("Done (%d ms)." % (1e3*(time.time() - t0)))
 
@@ -421,14 +445,14 @@ def calc_xcrystal_double_scan(
             plot(energies,bunch_out_dict["intensity"],
                  energies,bunch_out_dict["intensityS"],
                  energies,bunch_out_dict["intensityP"],
-                 xtitle="photon energy [eV]",title="Reflectivity calculation using ComplexAmplitudePhoton method:%d"%calculation_method,
+                 xtitle="photon energy [eV]",title="Reflectivity calculation using ComplexAmplitudePhoton calculation_method:%d"%calculation_method,
                  legend=["Total","Sigma","Pi"])
 
         if energy_points == 1:
             plot(1e6*deviations,bunch_out_dict["intensity"],
                  1e6*deviations,bunch_out_dict["intensityS"],
                  1e6*deviations,bunch_out_dict["intensityP"],
-                 xtitle="theta - thetaB [urad]",title="Reflectivity calculation using ComplexAmplitudePhoton method:%d"%calculation_method,
+                 xtitle="theta - thetaB [urad]",title="Reflectivity calculation using ComplexAmplitudePhoton calculation_method:%d"%calculation_method,
                  legend=["Total","Sigma","Pi"])
 
         if (angle_deviation_points > 1) and (energy_points > 1):
@@ -445,17 +469,27 @@ if __name__ == "__main__":
     import time
 
     calculation_method = 1
+    is_thick = 0
+    use_transfer_matrix = 0
 
     if True:
-        calc_xcrystal_angular_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method)
+        calc_xcrystal_angular_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
     if True:
         calc_xcrystal_angular_scan(material_constants_library_flag=0, geometry_type_index=1, thickness=10e-6,
-                                   asymmetry_angle=numpy.radians(90), do_plot=True, calculation_method=calculation_method)
+                                   asymmetry_angle=numpy.radians(90), do_plot=True, calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
-        calc_xcrystal_energy_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method)
+        calc_xcrystal_energy_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
-        calc_xcrystal_alphazachariasen_scan(do_plot=1, calculation_method=calculation_method)
+        calc_xcrystal_alphazachariasen_scan(do_plot=1, calculation_method=calculation_method,
+                                                                           is_thick=is_thick,
+                                                                           use_transfer_matrix=use_transfer_matrix)
 
     if True:
         calc_xcrystal_double_scan(        material_constants_library_flag=0,
@@ -473,6 +507,8 @@ if __name__ == "__main__":
             angle_deviation_points=200,
             angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
             calculation_method=calculation_method,
+            is_thick=is_thick,
+            use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
             do_plot=1,)
 
@@ -491,6 +527,8 @@ if __name__ == "__main__":
             angle_deviation_points=1,
             angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
             calculation_method=calculation_method,
+            is_thick=is_thick,
+            use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
             do_plot=1,)
 
@@ -510,5 +548,7 @@ if __name__ == "__main__":
             angle_deviation_points=150,
             angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
             calculation_method=calculation_method,
+            is_thick=is_thick,
+            use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
             do_plot=1,)

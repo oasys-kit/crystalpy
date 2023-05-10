@@ -647,7 +647,9 @@ class PerfectCrystalDiffraction(object):
 
     def calculateDiffraction(self,
                              photon_in,
-                             method=0, # 0=Zachariasen, 1=Guigay
+                             calculation_method=0, # 0=Zachariasen, 1=Guigay
+                             is_thick=0, # for Guigay only
+                             use_transfer_matrix=0, # for Guigay only
                              ):
         """
         Calculate diffraction for incoming photon.
@@ -655,12 +657,12 @@ class PerfectCrystalDiffraction(object):
         :return: Complex amplitude of the diffraction.
         """
 
-        if method == 0:
+        if calculation_method == 0:
             # print(">>>> Using Zachariasen equations...")
             return self.calculateDiffractionZachariasen(photon_in)
         else:
             # print(">>>> Using Guigay equations...")
-            return self.calculateDiffractionGuigay(photon_in)
+            return self.calculateDiffractionGuigay(photon_in, is_thick=is_thick, use_transfer_matrix=use_transfer_matrix)
 
 
     def calculateDiffractionZachariasen(self, photon_in):
@@ -870,7 +872,7 @@ class PerfectCrystalDiffraction(object):
                     aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
                                                1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
 
-                    complex_amplitude_s = 2 * a / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
+                    complex_amplitude_s = 2 * aa / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
 
                 # pi polarization
                 effective_psi_h = numpy.conjugate(self.PsiH()) * numpy.cos(2 * self.braggAngle())
@@ -894,7 +896,7 @@ class PerfectCrystalDiffraction(object):
                     aa = 1 / numpy.sqrt(2) * ((asquared).imag / numpy.sqrt(numpy.abs(asquared) - (asquared).real) + \
                                               1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
 
-                    complex_amplitude_p = 2 * a / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
+                    complex_amplitude_p = 2 * aa / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
 
             elif self.geometryType() == LaueDiffraction():
                 if s_ratio is None:

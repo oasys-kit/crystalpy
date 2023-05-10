@@ -123,25 +123,25 @@ class Diffraction(object):
 
     # calculate complex reflectivity and transmitivity
     @classmethod
-    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, method=0):
+    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, calculation_method=0):
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
 
         # Calculate diffraction for current incoming photon.
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, method=method)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
 
         return complex_amplitudes
 
 
     # using ComplexAmplitudePhoton
     @classmethod
-    def calculateDiffractedComplexAmplitudePhoton(cls, diffraction_setup, photon, method=0):
+    def calculateDiffractedComplexAmplitudePhoton(cls, diffraction_setup, photon, calculation_method=0):
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, photon)
 
-        coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=method)
+        coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(photon)
@@ -235,18 +235,18 @@ class Diffraction(object):
 
 
     @classmethod
-    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, method=0):
+    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, calculation_method=0):
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
 
         # Calculate diffraction for current incoming photon.
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, method=method)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
 
         return complex_amplitudes
 
     # @classmethod
-    # def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch, method=0):
+    # def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch, calculation_method=0):
     #     """
     #     Calculates the diffraction/transmission given by the setup.
     #     :param diffraction_setup: The diffraction setup.
@@ -270,7 +270,7 @@ class Diffraction(object):
     #         outgoing_complex_amplitude_photon = cls.calculateDiffractedComplexAmplitudePhoton(
     #                                                                     diffraction_setup,
     #                                                                     complex_amplitude_photon,
-    #                                                                     method=method,
+    #                                                                     calculation_method=calculation_method,
     #                                                                     )
     #         # Add result of current deviation.
     #         outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
@@ -279,7 +279,10 @@ class Diffraction(object):
     #     return outgoing_bunch
 
     @classmethod
-    def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch, method=0):
+    def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch,
+                                                       calculation_method=0,
+                                                       is_thick=0,
+                                                       use_transfer_matrix=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
@@ -300,7 +303,10 @@ class Diffraction(object):
 
         if vectorized_method:
             perfect_crystal = cls._perfectCrystalForPhotonBunch(diffraction_setup, incoming_bunch)
-            coeffs = perfect_crystal.calculateDiffraction(incoming_bunch, method=method)
+            coeffs = perfect_crystal.calculateDiffraction(incoming_bunch,
+                                                          calculation_method=calculation_method,
+                                                          is_thick=is_thick,
+                                                          use_transfer_matrix=use_transfer_matrix)
             outgoing_bunch = perfect_crystal._calculatePhotonOut(incoming_bunch)
             outgoing_bunch.rescaleEsigma(coeffs["S"])
             outgoing_bunch.rescaleEpi(coeffs["P"])
@@ -313,7 +319,10 @@ class Diffraction(object):
 
                 # Get PerfectCrystal instance for the current photon.
                 perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, complex_amplitude_photon)
-                coeffs = perfect_crystal.calculateDiffraction(complex_amplitude_photon, method=method)
+                coeffs = perfect_crystal.calculateDiffraction(complex_amplitude_photon,
+                                                              calculation_method=calculation_method,
+                                                              is_thick=is_thick,
+                                                              use_transfer_matrix=use_transfer_matrix)
 
                 # Calculate outgoing Photon.
                 outgoing_complex_amplitude_photon = perfect_crystal._calculatePhotonOut(complex_amplitude_photon)
@@ -330,7 +339,10 @@ class Diffraction(object):
 
 
     @classmethod
-    def calculateDiffractedPolarizedPhoton(cls, diffraction_setup, incoming_polarized_photon, inclination_angle, method=0):
+    def calculateDiffractedPolarizedPhoton(cls, diffraction_setup, incoming_polarized_photon, inclination_angle,
+                                           calculation_method=0,
+                                           is_thick=0,
+                                           use_transfer_matrix=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
@@ -343,7 +355,10 @@ class Diffraction(object):
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_polarized_photon)
 
         # Calculate diffraction for current incoming photon.
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_polarized_photon, method=method)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_polarized_photon,
+                                                                  calculation_method=calculation_method,
+                                                                  is_thick=is_thick,
+                                                                  use_transfer_matrix=use_transfer_matrix)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(incoming_polarized_photon)
@@ -373,7 +388,10 @@ class Diffraction(object):
         return outgoing_polarized_photon
 
     @classmethod
-    def calculateDiffractedPolarizedPhotonBunch(cls, diffraction_setup, incoming_bunch, inclination_angle, method=0):
+    def calculateDiffractedPolarizedPhotonBunch(cls, diffraction_setup, incoming_bunch, inclination_angle,
+                                                calculation_method=0,
+                                                is_thick=0,
+                                                use_transfer_matrix=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
@@ -398,7 +416,10 @@ class Diffraction(object):
             # self._onProgressEveryTenPercent(index, len(incoming_bunch))
 
             outgoing_polarized_photon = cls.calculateDiffractedPolarizedPhoton(diffraction_setup, polarized_photon,
-                                                                                inclination_angle, method=method)
+                                                                                inclination_angle,
+                                                                               calculation_method=calculation_method,
+                                                                               is_thick=is_thick,
+                                                                               use_transfer_matrix=use_transfer_matrix)
             # Add result of current deviation.
             outgoing_bunch.addPhoton(outgoing_polarized_photon)
 
@@ -412,7 +433,10 @@ class Diffraction(object):
     # these methods use DiffractionSetupSweeps (for scans)
     # ##################################################################################################
     @classmethod
-    def _calculateDiffractionForEnergy(cls, diffraction_setup, energy, result, method=0):
+    def _calculateDiffractionForEnergy(cls, diffraction_setup, energy, result,
+                                       calculation_method=0,
+                                       is_thick=0,
+                                       use_transfer_matrix=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
@@ -434,7 +458,10 @@ class Diffraction(object):
             photon_in = Photon(energy, photon_direction)
 
             # Calculate diffraction for current incoming photon.
-            result_deviation = perfect_crystal.calculateDiffraction(photon_in, method=method)
+            result_deviation = perfect_crystal.calculateDiffraction(photon_in,
+                                                                    calculation_method=calculation_method,
+                                                                    is_thick=is_thick,
+                                                                    use_transfer_matrix=use_transfer_matrix)
 
             # Calculate polarization difference between pi and sigma polarization.
             polarization_difference = result_deviation["P"] / result_deviation["S"]
@@ -453,11 +480,11 @@ class Diffraction(object):
         return result
 
     @classmethod
-    def calculateDiffraction(cls, diffraction_setup, method=0):
+    def calculateDiffraction(cls, diffraction_setup, calculation_method=0, is_thick=0, use_transfer_matrix=0):
         """
         Calculates the diffraction/transmission given by the setup.
         :param diffraction_setup: The diffraction setup.
-        :method: 0=Zachariasen, 1=Guigay
+        :calculation_method: 0=Zachariasen, 1=Guigay
         :return: DiffractionResult representing this setup.
         """
 
@@ -468,7 +495,10 @@ class Diffraction(object):
         result = DiffractionResult(diffraction_setup, 0.0)
 
         for energy in diffraction_setup.energies():
-            cls._calculateDiffractionForEnergy(diffraction_setup, energy, result, method=method)
+            cls._calculateDiffractionForEnergy(diffraction_setup, energy, result,
+                                               calculation_method=calculation_method,
+                                               is_thick=is_thick,
+                                               use_transfer_matrix=use_transfer_matrix)
 
         # Return diffraction results.
         return result
