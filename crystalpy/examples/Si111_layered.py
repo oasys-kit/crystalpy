@@ -93,8 +93,14 @@ def calculate_simple_diffraction(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_r_half = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r_half, photon, method=calculation_method)
-        coeffs_r      = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, method=calculation_method)
+        coeffs_r_half = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r_half, photon,
+                                                                         calculation_method=calculation_method,
+                                                                         is_thick=0,
+                                                                         use_transfer_matrix=True)
+        coeffs_r      = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon,
+                                                                         calculation_method=calculation_method,
+                                                                         is_thick=0,
+                                                                         use_transfer_matrix=True)
 
         # 0    1     2    3
         # 11   12    21   22

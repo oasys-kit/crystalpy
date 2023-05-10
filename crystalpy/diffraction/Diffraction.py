@@ -123,25 +123,39 @@ class Diffraction(object):
 
     # calculate complex reflectivity and transmitivity
     @classmethod
-    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, calculation_method=0):
+    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon,
+                                             calculation_method=0,
+                                             is_thick=0,
+                                             use_transfer_matrix=0,
+                                             ):
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
 
         # Calculate diffraction for current incoming photon.
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon,
+                                                                  calculation_method=calculation_method,
+                                                                  is_thick=is_thick,
+                                                                  use_transfer_matrix=use_transfer_matrix)
 
         return complex_amplitudes
 
 
     # using ComplexAmplitudePhoton
     @classmethod
-    def calculateDiffractedComplexAmplitudePhoton(cls, diffraction_setup, photon, calculation_method=0):
+    def calculateDiffractedComplexAmplitudePhoton(cls, diffraction_setup, photon,
+                                                  calculation_method=0,
+                                                  is_thick=0,
+                                                  use_transfer_matrix=0,
+                                                  ):
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, photon)
 
-        coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
+        coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                          calculation_method=calculation_method,
+                                                          is_thick=is_thick,
+                                                          use_transfer_matrix=use_transfer_matrix)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(photon)

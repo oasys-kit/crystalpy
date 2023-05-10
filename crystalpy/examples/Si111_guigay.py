@@ -84,14 +84,14 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=method)
         # print(">>>> ", coeffs["transfer_matrix_s"])
         # store results
         deviations[ia] = deviation
-        intensityS[ia] = coeffs['S'].intensity()
-        intensityP[ia] = coeffs['P'].intensity()
-        phaseS[ia] = coeffs['S'].phase()
-        phaseP[ia] = coeffs['P'].phase()
+        intensityS[ia] = numpy.abs(coeffs['S']) ** 2
+        intensityP[ia] = numpy.abs(coeffs['P']) ** 2
+        phaseS[ia] = numpy.angle( numpy.array(coeffs['S'], dtype=complex) )
+        phaseP[ia] = numpy.angle( numpy.array(coeffs['P'], dtype=complex) )
 
 
     # plot results

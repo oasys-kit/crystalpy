@@ -14,8 +14,8 @@ import xraylib
 from dabax.dabax_xraylib import DabaxXraylib
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction, BraggTransmission, LaueDiffraction, LaueTransmission
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
-from crystalpy.diffraction.Diffraction1 import Diffraction1 as Diffraction
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
+from crystalpy.diffraction.Diffraction import Diffraction
 from crystalpy.util.Photon import Photon
 
 from srxraylib.plot.gol import plot
@@ -167,7 +167,7 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = geometry_type,
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = geometry_type,
                                                crystal_name           = crystal_name,
                                                thickness              = thickness,
                                                miller_h               = miller_h,
@@ -225,8 +225,8 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
 
         # store results
         deviations[ia] = deviation
-        intensityS[ia] = coeffs['S'].intensity()
-        intensityP[ia] = coeffs['P'].intensity()
+        intensityS[ia] = numpy.abs(coeffs['S'])**2
+        intensityP[ia] = numpy.abs(coeffs['P'])**2
 
     return deviations,intensityS,intensityP
 

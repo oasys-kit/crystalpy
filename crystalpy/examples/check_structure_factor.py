@@ -1,5 +1,5 @@
 from crystalpy.diffraction.GeometryType import BraggDiffraction
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
 from crystalpy.diffraction.DiffractionSetupDabax import DiffractionSetupDabax
 from crystalpy.diffraction.DiffractionSetupShadowPreprocessorV1 import DiffractionSetupShadowPreprocessorV1
 from crystalpy.diffraction.DiffractionSetupShadowPreprocessorV2 import DiffractionSetupShadowPreprocessorV2
@@ -8,7 +8,7 @@ from xoppylib.crystals.create_bragg_preprocessor_file_v1 import create_bragg_pre
 from xoppylib.crystals.create_bragg_preprocessor_file_v2 import create_bragg_preprocessor_file_v2
 import numpy
 
-a = DiffractionSetup(geometry_type=BraggDiffraction,
+a = DiffractionSetupXraylib(geometry_type=BraggDiffraction,
                                        crystal_name="Si", thickness=1e-5,
                                        miller_h=1, miller_k=1, miller_l=1,
                                        asymmetry_angle=0.0,

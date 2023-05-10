@@ -71,7 +71,7 @@ def calculate_standard_interface(do_plot=0, calculation_method=0):
 
     # Create a DiffractionResult object holding the results of the diffraction calculations.
     print("\nCalculating the diffraction results...")
-    diffraction_result = diffraction.calculateDiffraction(diffraction_setup, method=calculation_method)
+    diffraction_result = diffraction.calculateDiffraction(diffraction_setup, calculation_method=calculation_method)
 
     #
     # Now the Mueller/Stokes calculation from the diffraction results

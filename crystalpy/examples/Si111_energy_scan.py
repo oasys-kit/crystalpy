@@ -47,10 +47,10 @@ def calculate_bragg_dcm(energy_setup=8000.0,energies=numpy.linspace(7990,8010,20
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, method=calculation_method)
+        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, calculation_method=calculation_method)
 
         scan[i] = energy
-        r[i] = numpy.abs( coeffs_r['S'].complexAmplitude() )**4
+        r[i] = numpy.abs( coeffs_r['S'] )**4
 
     return scan,r
 
@@ -91,10 +91,10 @@ def calculate_laue_monochromator(energy_setup=8000.0,energies=numpy.linspace(799
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, method=calculation_method)
+        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon, calculation_method=calculation_method)
 
         scan[i] = energy
-        r[i] = numpy.abs( coeffs_r['S'].complexAmplitude() )**4
+        r[i] = numpy.abs( coeffs_r['S'] )**4
 
     return scan,r
 

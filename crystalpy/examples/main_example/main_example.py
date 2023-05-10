@@ -298,7 +298,7 @@ if __name__ == "__main__":
 
     # Create a DiffractionResult object holding the results of the diffraction calculations.
     print("\nCalculating the diffraction results...")
-    diffraction_result = diffraction.calculateDiffraction(diffraction_setup, method=int(values.calculation_method))
+    diffraction_result = diffraction.calculateDiffraction(diffraction_setup, calculation_method=int(values.calculation_method))
 
     # Create a PlotData1D object.
     print("\nCreating the diffraction profile plots...")

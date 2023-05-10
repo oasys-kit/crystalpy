@@ -4,7 +4,6 @@ This object is used as input to and output from the passive crystal widget.
 """
 import numpy as np
 
-# from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitude
 from crystalpy.util.PhotonBunch import PhotonBunch
 
 
@@ -53,8 +52,6 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
             intensityP[i] = polarized_photon.getIntensityP()
             phaseS    [i] = polarized_photon.getPhaseS()
             phaseP    [i] = polarized_photon.getPhaseP()
-            # complexAmplitudeS[i] = polarized_photon.getComplexAmplitudeS().complexAmplitude()
-            # complexAmplitudeP[i] = polarized_photon.getComplexAmplitudeP().complexAmplitude()
             complexAmplitudeS[i] = polarized_photon.getComplexAmplitudeS()
             complexAmplitudeP[i] = polarized_photon.getComplexAmplitudeP()
 

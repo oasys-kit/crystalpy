@@ -2,7 +2,6 @@ import unittest
 
 # diffraction
 from crystalpy.tests.diffraction.GeometryTypeTest import GeometryTypeTest
-from crystalpy.tests.diffraction.ComplexAmplitudeTest import ComplexAmplitudeTest
 from crystalpy.tests.diffraction.PerfectCrystalDiffractionTest import PerfectCrystalDiffractionTest
 from crystalpy.tests.diffraction.DiffractionSetupTest import DiffractionSetupTest
 from crystalpy.tests.diffraction.DiffractionSetupSweepsTest import DiffractionSetupSweepsTest

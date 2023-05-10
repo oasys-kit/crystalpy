@@ -238,11 +238,11 @@ class DiffractionResult(object):
         energy_index = self._energyIndexByEnergy(energy)
         deviation_index = self._deviationIndexByDeviation(deviation)
 
-        self._intensities[energy_index, deviation_index, self.INDEX_POLARIZATION_S] = s_complex_amplitude.intensity()
-        self._intensities[energy_index, deviation_index, self.INDEX_POLARIZATION_P] = p_complex_amplitude.intensity()
-        self._intensities[energy_index, deviation_index, self.INDEX_DIFFERENCE_PS] = difference_complex_amplitude.intensity()
+        self._intensities[energy_index, deviation_index, self.INDEX_POLARIZATION_S] = numpy.abs(s_complex_amplitude)**2
+        self._intensities[energy_index, deviation_index, self.INDEX_POLARIZATION_P] = numpy.abs(p_complex_amplitude)**2
+        self._intensities[energy_index, deviation_index, self.INDEX_DIFFERENCE_PS] = numpy.abs(difference_complex_amplitude)**2
 
-        self._phases[energy_index, deviation_index, self.INDEX_POLARIZATION_S] = s_complex_amplitude.phase()
-        self._phases[energy_index, deviation_index, self.INDEX_POLARIZATION_P] = p_complex_amplitude.phase()
-        self._phases[energy_index, deviation_index, self.INDEX_DIFFERENCE_PS] = difference_complex_amplitude.phase()
+        self._phases[energy_index, deviation_index, self.INDEX_POLARIZATION_S] = numpy.angle(numpy.array(s_complex_amplitude, dtype=complex))
+        self._phases[energy_index, deviation_index, self.INDEX_POLARIZATION_P] = numpy.angle(numpy.array(p_complex_amplitude, dtype=complex))
+        self._phases[energy_index, deviation_index, self.INDEX_DIFFERENCE_PS] = numpy.angle(numpy.array(difference_complex_amplitude, dtype=complex))
 

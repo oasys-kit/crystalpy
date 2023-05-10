@@ -7,6 +7,8 @@ import unittest
 from crystalpy.util.Photon import Photon
 from crystalpy.util.Vector import Vector
 
+import scipy.constants as codata
+import numpy
 
 class PhotonTest(unittest.TestCase):
 
@@ -31,27 +33,30 @@ class PhotonTest(unittest.TestCase):
 
     def testWavelength(self):
         # Test data in eV : m.
-        test_data = {   3: 413.28 * 1e-9,
-                        4: 309.96 * 1e-9,
-                        8: 154.98 * 1e-9,
-                     5000: 2.4797 * 1e-10,
-                    10000: 1.2398 * 1e-10}
+        test_data = [   3,
+                        4,
+                        8,
+                     5000,
+                    10000, ]
 
-        for energy, wavelength in test_data.items():
+        for energy in test_data:
             photon = Photon(energy, Vector(0, 0, 1))
             # print("Energy=%f, Wavelength=%f A (reference = %f A)"%(energy,1e10*photon.wavelength(),1e10*wavelength))
-            self.assertAlmostEqual(1e10*photon.wavelength(),1e10*wavelength,places=1)
+            wavelength = codata.h * codata.c / codata.e / energy
+            self.assertAlmostEqual(photon.wavelength(),wavelength,places=1)
 
     def testWavenumber(self):
         # Test data in eV : m^-1.
-        test_data = {   3: 15203192.28,
-                        4: 20270923.03,
-                        8: 40541846.07,
-                     5000: 25338653792.67,
-                    10000: 50677307585.34}
+        test_data = [   3,
+                        4,
+                        8,
+                     5000,
+                    10000,]
 
-        for energy, wavenumber in test_data.items():
+        for energy in test_data:
             photon = Photon(energy, Vector(0, 0, 1))
+            wavelength = codata.h * codata.c / codata.e / energy
+            wavenumber = 2 * numpy.pi / wavelength
             self.assertAlmostEqual(photon.wavenumber(),
                                    wavenumber, places=1)
 
@@ -60,9 +65,10 @@ class PhotonTest(unittest.TestCase):
         photon = Photon(5000.0, direction)
 
         wavevector = photon.wavevector()
-
+        wavelength = codata.h * codata.c / codata.e / 5000
+        aa = 2 * numpy.pi / wavelength
         self.assertAlmostEqual(wavevector.norm(),
-                               25338653792.67, places=1)
+                               aa, places=1)
 
         self.assertEqual(wavevector.getNormalizedVector(),
                          direction)

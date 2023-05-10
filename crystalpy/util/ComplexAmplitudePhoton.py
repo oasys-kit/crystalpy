@@ -4,7 +4,6 @@ This object is used as input to and output from the passive crystal widget.
 """
 
 from crystalpy.util.Photon import Photon
-# from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
 import numpy
 
 # TODO create tests
@@ -42,7 +41,7 @@ class ComplexAmplitudePhoton(Photon):
             self._Esigma = Esigma
 
         if Epi == None:
-            self._Epi = ComplexAmplitude(1/numpy.sqrt(2)+0j)
+            self._Epi = (1/numpy.sqrt(2)+0j)
         else:
             self._Epi = Epi
 

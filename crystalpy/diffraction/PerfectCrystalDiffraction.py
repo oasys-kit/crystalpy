@@ -5,9 +5,6 @@ Except for energy all units are in SI. Energy is in eV.
 """
 
 import numpy
-# from numpy import pi, cos, sin, sqrt, abs, exp, tanh, sinh, cosh, imag, real
-
-# from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
 from crystalpy.util.Photon import Photon
 from crystalpy.util.PhotonBunch import PhotonBunch
 from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction, BraggTransmission, LaueTransmission
@@ -957,7 +954,7 @@ class PerfectCrystalDiffraction(object):
                 # sigma polarization
                 effective_psi_h = numpy.conjugate(self.PsiH())
                 effective_psi_h_bar = numpy.conjugate(self.PsiHBar())
-                u0 = effective_psi_0 * pi / photon_in.wavelength()
+                u0 = effective_psi_0 * numpy.pi / photon_in.wavelength()
 
 
                 # guigay, sanchez del rio,  eq 27b todo: as a function of s

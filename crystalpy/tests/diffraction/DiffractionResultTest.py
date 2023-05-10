@@ -6,7 +6,6 @@ import unittest
 
 import numpy
 
-from crystalpy.diffraction.ComplexAmplitude import ComplexAmplitude
 from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
 from crystalpy.diffraction.Diffraction import Diffraction
 from crystalpy.diffraction.DiffractionResult import DiffractionResult

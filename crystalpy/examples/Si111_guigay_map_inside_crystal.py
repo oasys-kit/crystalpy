@@ -87,8 +87,8 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(), as
 
             # store results
             deviations[ia] = deviation
-            intensityS[ia, isr] = coeffs['S'].intensity()
-            intensityP[ia, isr] = coeffs['P'].intensity()
+            intensityS[ia, isr] = numpy.abs(coeffs['S']) ** 2
+            intensityP[ia, isr] = numpy.abs(coeffs['P']) ** 2
 
 
 

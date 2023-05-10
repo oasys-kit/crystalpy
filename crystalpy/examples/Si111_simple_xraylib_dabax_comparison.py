@@ -175,12 +175,12 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=calculation_method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
 
         # store results
         deviations[ia] = deviation
-        intensityS[ia] = coeffs['S'].intensity()
-        intensityP[ia] = coeffs['P'].intensity()
+        intensityS[ia] = numpy.abs(coeffs['S']) ** 2
+        intensityP[ia] = numpy.abs(coeffs['P']) ** 2
 
     psi_0, psi_H, psi_H_bar = diffraction_setup_dabax.psiAll(energy)
 
@@ -214,11 +214,11 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
                                                     thickness=diffraction_setup_dabax.thickness(),
                                                     d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10)
 
-        complex_amplitudes = perfect_crystal.calculateDiffraction(photon, method=calculation_method)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(photon, calculation_method=calculation_method)
 
         deviations[ia] = deviation
-        intensityS_dabax[ia] = complex_amplitudes['S'].intensity()  # 0.0 # coeffs_dabax['S'].intensity()
-        intensityP_dabax[ia] = complex_amplitudes['P'].intensity()  # 0.0 # coeffs_dabax['P'].intensity()
+        intensityS_dabax[ia] = numpy.abs(complex_amplitudes['S']) ** 2  # 0.0 # coeffs_dabax['S'].intensity()
+        intensityP_dabax[ia] = numpy.abs(complex_amplitudes['P']) ** 2  # 0.0 # coeffs_dabax['P'].intensity()
 
 
 
@@ -427,11 +427,11 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
         photon = Photon(energy_in_ev=energies[ia],direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=calculation_method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
 
         # store results
-        intensityS[ia] = coeffs['S'].intensity()
-        intensityP[ia] = coeffs['P'].intensity()
+        intensityS[ia] = numpy.abs(coeffs['S']) ** 2
+        intensityP[ia] = numpy.abs(coeffs['P']) ** 2
 
 
 
@@ -471,10 +471,10 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
                                                     thickness=diffraction_setup_dabax.thickness(),
                                                     d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10)
 
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, method=calculation_method)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
 
-        intensityS_dabax[ia] = complex_amplitudes['S'].intensity() # 0.0 # coeffs_dabax['S'].intensity()
-        intensityP_dabax[ia] = complex_amplitudes['P'].intensity() # 0.0 # coeffs_dabax['P'].intensity()
+        intensityS_dabax[ia] = numpy.abs(complex_amplitudes['S']) ** 2 # 0.0 # coeffs_dabax['S'].intensity()
+        intensityP_dabax[ia] = numpy.abs(complex_amplitudes['P']) ** 2 # 0.0 # coeffs_dabax['P'].intensity()
 
     t2 = time.time()
 

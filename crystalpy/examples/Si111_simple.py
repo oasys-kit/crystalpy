@@ -75,12 +75,12 @@ def calculate_simple_diffraction(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=calculation_method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
 
         # store results
         deviations[ia] = deviation
-        intensityS[ia] = coeffs['S'].intensity()
-        intensityP[ia] = coeffs['P'].intensity()
+        intensityS[ia] = numpy.abs(coeffs['S']) ** 2
+        intensityP[ia] = numpy.abs(coeffs['P']) ** 2
 
     # plot results
     import matplotlib.pylab as plt
