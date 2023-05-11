@@ -12,11 +12,11 @@ from setuptools import setup
 
 
 setup(name='crystalpy',
-      version='0.0.9',
+      version='0.0.10',
       description='Python crystal polarization calcution',
-      author='Edoardo Cappelli, Mark Glass, Manuel Sanchez del Rio',
+      author='Manuel Sanchez del Rio, Edoardo Cappelli, Mark Glass',
       author_email='srio@esrf.eu',
-      url='https://github.com/edocappelli/crystalpy/',
+      url='https://github.com/oasys-kit/crystalpy/',
       packages=['crystalpy',
                 'crystalpy.util',
                 'crystalpy.diffraction',

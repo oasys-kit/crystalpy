@@ -28,11 +28,6 @@ from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
 
 class Diffraction(object):
 
-
-    # def __init__(self):
-    #     pass
-
-
     @classmethod
     def _checkSetup(cls, diffraction_setup, bragg_angle, F_0, F_H, F_H_bar):
         """
@@ -168,7 +163,7 @@ class Diffraction(object):
 
 
     # ##################################################################################################
-    # # FUNCTIONS ADAPTED TO WORK WITH GENERAL BUNCHES OF PHOTONS AND NOT WITH DIRECTION/ENERGY SWEEPS #
+    # FUNCTIONS ADAPTED TO WORK WITH A PHOTON OR PHOTON BUNCH
     # ##################################################################################################
 
     @classmethod
@@ -213,16 +208,11 @@ class Diffraction(object):
 
         energies = incoming_bunch.energies()
 
-        # print(">>>> energies: ", energies)
-
         # Retrieve bragg angle.
         angle_bragg = diffraction_setup.angleBragg(energies)
 
-        # print(">>>>>angle_bragg: ", angle_bragg)
-
         # Check if given Bragg/Laue geometry and given miller indices are possible.
         cls._checkSetupDiffraction(diffraction_setup, angle_bragg[0])
-
 
         # Retrieve lattice spacing d.
         d_spacing = diffraction_setup.dSpacing() * 1e-10
@@ -248,51 +238,6 @@ class Diffraction(object):
 
         return perfect_crystal
 
-
-    # @classmethod
-    # def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, calculation_method=0):
-    #
-    #     # Get PerfectCrystal instance for the current photon.
-    #     perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
-    #
-    #     # Calculate diffraction for current incoming photon.
-    #     complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
-    #
-    #     return complex_amplitudes
-
-    # @classmethod
-    # def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch, calculation_method=0):
-    #     """
-    #     Calculates the diffraction/transmission given by the setup.
-    #     :param diffraction_setup: The diffraction setup.
-    #     :return: PhotonBunch object made up of diffracted/transmitted photons.
-    #     """
-    #     # Create PhotonBunch instance.
-    #     outgoing_bunch = ComplexAmplitudePhotonBunch([])
-    #
-    #     # Retrieve the photon bunch from the diffraction setup.
-    #     # incoming_bunch = diffraction_setup.incomingPhotons()
-    #
-    #     # Check that photon_bunch is indeed a PhotonBunch object.
-    #     if not isinstance(incoming_bunch, ComplexAmplitudePhotonBunch):
-    #         raise Exception("The incoming photon bunch must be a ComplexAmplitudePhotonBunch object!")
-    #
-    #     for index, complex_amplitude_photon in enumerate(incoming_bunch):
-    #
-    #         # Raise OnProgress event if progressed by 10 percent.
-    #         # self._onProgressEveryTenPercent(index, len(incoming_bunch))
-    #
-    #         outgoing_complex_amplitude_photon = cls.calculateDiffractedComplexAmplitudePhoton(
-    #                                                                     diffraction_setup,
-    #                                                                     complex_amplitude_photon,
-    #                                                                     calculation_method=calculation_method,
-    #                                                                     )
-    #         # Add result of current deviation.
-    #         outgoing_bunch.addPhoton(outgoing_complex_amplitude_photon)
-    #
-    #     # Return diffraction results.
-    #     return outgoing_bunch
-
     @classmethod
     def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch,
                                                        calculation_method=0,
@@ -312,7 +257,6 @@ class Diffraction(object):
         # Check that photon_bunch is indeed a PhotonBunch object.
         if not isinstance(incoming_bunch, ComplexAmplitudePhotonBunch):
             raise Exception("The incoming photon bunch must be a ComplexAmplitudePhotonBunch object!")
-
 
         vectorized_method = 1
 
@@ -415,20 +359,11 @@ class Diffraction(object):
         # Create PhotonBunch instance.
         outgoing_bunch = PolarizedPhotonBunch([])
 
-        # Retrieve the photon bunch from the diffraction setup.
-        # incoming_bunch = diffraction_setup.incomingPhotons()
-
         # Check that photon_bunch is indeed a PhotonBunch object.
         if not isinstance(incoming_bunch, PolarizedPhotonBunch):
             raise Exception("The incoming photon bunch must be a PolarizedPhotonBunch object!")
 
-        # Raise calculation start.
-        # self._onCalculationStart()
-
         for index, polarized_photon in enumerate(incoming_bunch):
-
-            # Raise OnProgress event if progressed by 10 percent.
-            # self._onProgressEveryTenPercent(index, len(incoming_bunch))
 
             outgoing_polarized_photon = cls.calculateDiffractedPolarizedPhoton(diffraction_setup, polarized_photon,
                                                                                 inclination_angle,
@@ -437,9 +372,6 @@ class Diffraction(object):
                                                                                use_transfer_matrix=use_transfer_matrix)
             # Add result of current deviation.
             outgoing_bunch.addPhoton(outgoing_polarized_photon)
-
-        # Raise calculation end.
-        # self._onCalculationEnd()
 
         # Return diffraction results.
         return outgoing_bunch
@@ -465,9 +397,6 @@ class Diffraction(object):
 
         # For every deviation from Bragg angle ...
         for index, deviation in enumerate(diffraction_setup.angleDeviationGrid()):
-            # Raise OnProgress event if progressed by 10 percent.
-            # self._onProgressEveryTenPercent(index, diffraction_setup.angleDeviationPoints())
-
             # Calculate deviated incoming photon.
             photon_direction = diffraction_setup.incomingPhotonDirection(energy, deviation)
             photon_in = Photon(energy, photon_direction)
@@ -487,9 +416,6 @@ class Diffraction(object):
                        result_deviation["S"],
                        result_deviation["P"],
                        polarization_difference)
-
-        # Raise calculation end.
-        # self._onCalculationEnd()
 
         # Return diffraction results.
         return result
@@ -542,10 +468,7 @@ if __name__ == "__main__":
     deviation = 3e-6  # angle_deviation_min + ia * angle_step
     angle = deviation + bragg_angle
 
-    # calculate the components of the unitary vector of the incident photon scan
-    # Note that diffraction plane is YZ
-    # yy = numpy.cos(angle)
-    # zz = - numpy.abs(numpy.sin(angle))
+    # calculate the components of the unitary vector of the incident photon scan. Note that diffraction plane is YZ
     photon = Photon(energy_in_ev=energy_setup, direction_vector=Vector(0.0,
                                                                        numpy.cos(angle),
                                                                        - numpy.abs(numpy.sin(angle))))

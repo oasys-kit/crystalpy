@@ -9,7 +9,7 @@ import numpy
 
 from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
 
-from xoppylib.crystals.bragg_preprocessor_file_io import bragg_preprocessor_file_v1_read
+from crystalpy.util.bragg_preprocessor_file_io import bragg_preprocessor_file_v1_read
 
 import scipy.constants as codata
 
@@ -202,20 +202,25 @@ class DiffractionSetupShadowPreprocessorV1(DiffractionSetupAbstract):
         return FOA, FOB
 
 if __name__ == "__main__":
-
+    import numpy
     from crystalpy.diffraction.GeometryType import BraggDiffraction
     from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
-    from xoppylib.crystals.create_bragg_preprocessor_file_v1 import create_bragg_preprocessor_file_v1
-    import xraylib
-    import numpy
+
+    try:
+        from xoppylib.crystals.create_bragg_preprocessor_file_v1 import create_bragg_preprocessor_file_v1
+        import xraylib
+        preprocessor_file = "bragg.dat"
+        create_bragg_preprocessor_file_v1(interactive=False,
+                                              DESCRIPTOR="Si", H_MILLER_INDEX=1, K_MILLER_INDEX=1, L_MILLER_INDEX=1,
+                                              TEMPERATURE_FACTOR=1.0,
+                                              E_MIN=5000.0, E_MAX=15000.0, E_STEP=100.0,
+                                              SHADOW_FILE=preprocessor_file,
+                                              material_constants_library=xraylib)
+
+    except:
+        raise Exception("xoppylib must be installed to create shadow preprocessor files.")
 
 
-    create_bragg_preprocessor_file_v1(interactive=False,
-                                          DESCRIPTOR="Si", H_MILLER_INDEX=1, K_MILLER_INDEX=1, L_MILLER_INDEX=1,
-                                          TEMPERATURE_FACTOR=1.0,
-                                          E_MIN=5000.0, E_MAX=15000.0, E_STEP=100.0,
-                                          SHADOW_FILE="bragg.dat",
-                                          material_constants_library=xraylib)
 
     a = DiffractionSetupShadowPreprocessorV1(
                  geometry_type=BraggDiffraction,
@@ -223,7 +228,7 @@ if __name__ == "__main__":
                  miller_h=1, miller_k=1, miller_l=1,
                  asymmetry_angle=0.0,
                  azimuthal_angle=0.0,
-                 preprocessor_file="bragg.dat")
+                 preprocessor_file=preprocessor_file)
 
     b = DiffractionSetupXraylib(geometry_type=BraggDiffraction,
                  crystal_name="Si", thickness=1e-5,

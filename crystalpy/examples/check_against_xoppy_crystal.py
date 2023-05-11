@@ -9,8 +9,12 @@
 #
 #
 import numpy
-from xoppylib.crystals.tools import bragg_calc2, run_diff_pat
-import xraylib
+
+try:
+    from xoppylib.crystals.tools import bragg_calc2, run_diff_pat
+    import xraylib
+except:
+    raise Exception("This example needs xoppylib and must be installed")
 from dabax.dabax_xraylib import DabaxXraylib
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction, BraggTransmission, LaueDiffraction, LaueTransmission
@@ -435,6 +439,7 @@ def input_cases(case):
 # main
 #
 if __name__ == "__main__":
+
 
     if True:
         for case in ["bragg_symmetric","laue_symmetric","bragg_asymmetric","laue_asymmetric"]:

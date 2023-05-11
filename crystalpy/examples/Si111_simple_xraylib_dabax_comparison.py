@@ -33,7 +33,7 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2,                             # meters
                                                miller_h               = 1,                                # int
@@ -245,7 +245,7 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
     # Create a diffraction setup.
 
     print("\nCreating a diffraction setup...")
-    diffraction_setup = DiffractionSetup(geometry_type          = BraggDiffraction(),  # GeometryType object
+    diffraction_setup = DiffractionSetupXraylib(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
                                                thickness              = 1e-2,                             # meters
                                                miller_h               = 1,                                # int
