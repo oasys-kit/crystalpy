@@ -747,7 +747,23 @@ class PerfectCrystalDiffraction(object):
             # result["transfer_matrix_p"] = transfer_matrix_p
             # result["scattering_matrix_s"] = scattering_matrix_s
             # result["scattering_matrix_p"] = scattering_matrix_p
+            result["m11_s"] = m11_s
+            result["m12_s"] = m12_s
+            result["m21_s"] = m21_s
+            result["m22_s"] = m22_s
+            result["m11_p"] = m11_p
+            result["m12_p"] = m12_p
+            result["m21_p"] = m21_p
+            result["m22_p"] = m22_p
 
+            result["s11_s"] = s11_s
+            result["s12_s"] = s12_s
+            result["s21_s"] = s21_s
+            result["s22_s"] = s22_s
+            result["s11_p"] = s11_p
+            result["s12_p"] = s12_p
+            result["s21_p"] = s21_p
+            result["s22_p"] = s22_p
 
             if self.geometryType() == BraggDiffraction():
                 # guigay, sanchez del rio,  eq 31a
@@ -1004,8 +1020,8 @@ class PerfectCrystalDiffraction(object):
         if isinstance(photon_in, Photon):
             result["S"] = complex_amplitude_s # ComplexAmplitude(complex(complex_amplitude_s))
             result["P"] = complex_amplitude_p # ComplexAmplitude(complex(complex_amplitude_p))
-            result["s"] = complex_amplitude_s
-            result["p"] = complex_amplitude_p
+            result["s"] = complex_amplitude_s # these coefficients will not be weighted for power.
+            result["p"] = complex_amplitude_p # these coefficients will not be weighted for power.
             # Note division by |b| in intensity (thus sqrt(|b|) in amplitude)
             # for power balance (see Zachariasen pag. 122)
             #
@@ -1140,11 +1156,6 @@ class PerfectCrystalDiffraction(object):
             m12 = 1j *  uh_bar * sin_aT / a
             m21 = 1j * guigay_b * uh * sin_aT / a
             m22 = cos_aT + 1j * omega * sin_aT / a
-
-        print(">>>>>> m22: ", type(m11[0]), type(m12[0]), type(m21[0]), type(m22[0]))
-        print("            ", (m11[0]), (m12[0]), (m21[0]), (m22[0]))
-
-
 
         return m11 * phase_term, m12 * phase_term, m21 * phase_term, m22 * phase_term
 

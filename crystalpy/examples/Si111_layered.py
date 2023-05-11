@@ -20,12 +20,7 @@ from crystalpy.diffraction.Diffraction import Diffraction
 import scipy.constants as codata
 
 from crystalpy.util.Vector import Vector
-
-
 from crystalpy.util.Photon import Photon
-
-
-
 
 #
 def calculate_simple_diffraction(calculation_method=0):
@@ -76,10 +71,10 @@ def calculate_simple_diffraction(calculation_method=0):
 
     # initialize arrays for storing outputs
     deviations = numpy.zeros(angle_deviation_points)
-    complex_amplitude_half = numpy.zeros(angle_deviation_points)
-    complex_amplitude = numpy.zeros(angle_deviation_points)
-    complex_amplitude_bis = numpy.zeros(angle_deviation_points)
-    complex_amplitude_ter = numpy.zeros(angle_deviation_points)
+    complex_amplitude_half = numpy.zeros(angle_deviation_points, dtype=complex)
+    complex_amplitude      = numpy.zeros(angle_deviation_points, dtype=complex)
+    complex_amplitude_bis  = numpy.zeros(angle_deviation_points, dtype=complex)
+    complex_amplitude_ter  = numpy.zeros(angle_deviation_points, dtype=complex)
 
 
     for ia in range(angle_deviation_points):
@@ -97,6 +92,8 @@ def calculate_simple_diffraction(calculation_method=0):
                                                                          calculation_method=calculation_method,
                                                                          is_thick=0,
                                                                          use_transfer_matrix=True)
+
+
         coeffs_r      = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon,
                                                                          calculation_method=calculation_method,
                                                                          is_thick=0,
@@ -105,11 +102,19 @@ def calculate_simple_diffraction(calculation_method=0):
         # 0    1     2    3
         # 11   12    21   22
         # t    t_bar r    r_bar
-        complex_amplitude_half[ia] = coeffs_r_half['scattering_matrix_s'][2]
-        complex_amplitude[ia]      = coeffs_r['scattering_matrix_s'][2]
+
+        complex_amplitude_half[ia] = coeffs_r_half['s21_s']
+        complex_amplitude[ia]      = coeffs_r['s21_s']
+
+        #
+        # calculate the new transfer matrix and the scattering matrix from it
+        #
 
         # retrieves transfer matrix
-        m11, m12, m21, m22 = coeffs_r_half['transfer_matrix_s']
+        m11 = coeffs_r_half['m11_s']
+        m12 = coeffs_r_half['m12_s']
+        m21 = coeffs_r_half['m21_s']
+        m22 = coeffs_r_half['m22_s']
 
         # squares it
         m11_bis = (m11**2 + m12 * m21)
@@ -118,9 +123,11 @@ def calculate_simple_diffraction(calculation_method=0):
         m22_bis = (m21 * m12 + m22**2)
 
         # just a check
-        if False:
-            M11, M12, M21, M22 =      coeffs_r['transfer_matrix_s']
-            print(M11 - m11_bis, M12 - m12_bis,  M21 - m21_bis,   M22 - m22_bis )
+        if True:
+            assert (numpy.abs(coeffs_r['m11_s'] - m11_bis) < 1e-10)
+            assert (numpy.abs(coeffs_r['m12_s'] - m12_bis) < 1e-10)
+            assert (numpy.abs(coeffs_r['m21_s'] - m21_bis) < 1e-10)
+            assert (numpy.abs(coeffs_r['m22_s'] - m22_bis) < 1e-10)
 
         # calculate scattering matrix from transfer matrix (eq 30 in Guigay and Sanchez del Rio)
         from crystalpy.diffraction.PerfectCrystalDiffraction import PerfectCrystalDiffraction
@@ -129,20 +136,17 @@ def calculate_simple_diffraction(calculation_method=0):
         # store complex amplitude of reflectivity
         complex_amplitude_bis[ia] = S21
 
-        #
-        # using scattering matrix
-        #
-        t, t_bar, r, r_bar = coeffs_r_half['scattering_matrix_s']
-        # R1 = - m21_bis / m22_bis  # = - (m21 * m11 + m22 * m21) / (m21 * m12 + m22**2)  OK!!
 
-        # this other method from the infinite series does not work....
-        R2 = r * (1 + t * t_bar / (1 - r * r_bar))
-        # or similarly:
-        numerator = m12/m22 * (m11 - m12*m21/m22)
-        denominator = 1 + m21 / m22**2
-        R2 = - m21/m22 * (1 + numerator/denominator)
 
-        complex_amplitude_ter[ia] = R2
+        #
+        # using infinite series from scattering matrix
+        #
+        t = coeffs_r_half['s11_s']
+        t_bar = coeffs_r_half['s22_s']
+        r = coeffs_r_half['s21_s']
+        r_bar = coeffs_r_half['s12_s']
+
+        complex_amplitude_ter[ia] = r * (1 + t * t_bar / (1 - r * r_bar))
 
         deviations[ia] = deviation
 

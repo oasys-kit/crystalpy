@@ -123,7 +123,8 @@ class Diffraction(object):
 
     # calculate complex reflectivity and transmitivity
     @classmethod
-    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon,
+    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup,
+                                             incoming_photon,
                                              calculation_method=0,
                                              is_thick=0,
                                              use_transfer_matrix=0,
@@ -248,16 +249,16 @@ class Diffraction(object):
         return perfect_crystal
 
 
-    @classmethod
-    def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, calculation_method=0):
-
-        # Get PerfectCrystal instance for the current photon.
-        perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
-
-        # Calculate diffraction for current incoming photon.
-        complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
-
-        return complex_amplitudes
+    # @classmethod
+    # def calculateDiffractedComplexAmplitudes(cls, diffraction_setup, incoming_photon, calculation_method=0):
+    #
+    #     # Get PerfectCrystal instance for the current photon.
+    #     perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
+    #
+    #     # Calculate diffraction for current incoming photon.
+    #     complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
+    #
+    #     return complex_amplitudes
 
     # @classmethod
     # def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch, calculation_method=0):
