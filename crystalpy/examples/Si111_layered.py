@@ -153,11 +153,21 @@ def calculate_simple_diffraction(calculation_method=0):
     # plot results
     from srxraylib.plot.gol import plot
 
+    # plot(1e6 * deviations, numpy.abs(complex_amplitude_half) ** 2,
+    #      1e6 * deviations, numpy.abs(complex_amplitude) ** 2,
+    #      1e6 * deviations, numpy.abs(complex_amplitude_bis) ** 2,
+    #      1e6 * deviations, numpy.abs(complex_amplitude_ter) ** 2,
+    #      legend=['half','single','single by transfer matrix multiplication', 'single by series']
+    #     )
+
     plot(1e6 * deviations, numpy.abs(complex_amplitude_half) ** 2,
          1e6 * deviations, numpy.abs(complex_amplitude) ** 2,
-         1e6 * deviations, numpy.abs(complex_amplitude_bis) ** 2,
          1e6 * deviations, numpy.abs(complex_amplitude_ter) ** 2,
-         legend=['half','single','single by transfer matrix multiplication', 'single by series']
+         legend=['T','2T','2T by series'],
+         linestyle=[None,None,''],
+         marker=[None,None,'+'],
+         xtitle=r'$\theta$-$\theta_B$ [$\mu$ rad]',
+         ytitle=r'$|r_2|^2$',
         )
 
 

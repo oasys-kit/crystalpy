@@ -705,11 +705,15 @@ class PerfectCrystalDiffraction(object):
         #     result = [{}] * photon_in.getNumberOfPhotons()
 
         if use_transfer_matrix:
-            m11_s, m12_s, m21_s, m22_s = self.calculateTransferMatrix(photon_in, polarization=0, is_thick=is_thick)
-            s11_s, s12_s, s21_s, s22_s = self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix_s)
+            transfer_matrix_s = self.calculateTransferMatrix(photon_in, polarization=0, is_thick=is_thick)
+            m11_s, m12_s, m21_s, m22_s = transfer_matrix_s
+            scattering_matrix_s = self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix_s)
+            s11_s, s12_s, s21_s, s22_s = scattering_matrix_s
 
-            m11_p, m12_p, m21_p, m22_p = self.calculateTransferMatrix(photon_in, polarization=1, is_thick=is_thick)
-            s11_p, s12_p, s21_p, s22_p = self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix_p)
+            transfer_matrix_p = self.calculateTransferMatrix(photon_in, polarization=1, is_thick=is_thick)
+            m11_p, m12_p, m21_p, m22_p = transfer_matrix_p
+            scattering_matrix_p = self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix_p)
+            s11_p, s12_p, s21_p, s22_p = scattering_matrix_p
 
             result["m11_s"] = m11_s
             result["m12_s"] = m12_s
