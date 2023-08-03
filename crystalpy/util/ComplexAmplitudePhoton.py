@@ -8,31 +8,32 @@ import numpy
 
 # TODO create tests
 class ComplexAmplitudePhoton(Photon):
+    "This object represents a photon with energy, direction and complex amplitudes (sigma and pi)."
+    def __init__(self, energy_in_ev, direction_vector, Esigma=None,Epi=None):
+        """Constructor.
 
-    def __init__(self, energy_in_ev,direction_vector, Esigma=None,Epi=None):
-        """
-        Constructor.
-        :param complex_amplitude: Complex amplitude of the wave.
+        Parameters
+        ----------
+        energy_in_ev : float
+            Photon energy in eV.
+
+        direction_vector : Vector instance
+            The direction of the photon (no need to be normalized).
+
+        Esigma : complex
+            The sigma-amplitude.
+
+        Esigma : complex
+            The pi-amplitude.
+
+        Returns
+        -------
+            ComplexAmplitudePhoton instance.
+
         """
 
         # Call base constructor.
         Photon.__init__(self, energy_in_ev, direction_vector)
-
-        # if Esigma == None:
-        #     self._Esigma = ComplexAmplitude(1/numpy.sqrt(2)+0j)
-        # else:
-        #     if isinstance(Esigma,ComplexAmplitude):
-        #         self._Esigma = Esigma
-        #     else:
-        #         self._Esigma = ComplexAmplitude(Esigma)
-        #
-        # if Epi == None:
-        #     self._Epi = ComplexAmplitude(1/numpy.sqrt(2)+0j)
-        # else:
-        #     if isinstance(Epi,ComplexAmplitude):
-        #         self._Epi = Epi
-        #     else:
-        #         self._Epi = ComplexAmplitude(Epi)
 
         if Esigma == None:
             self._Esigma = (1/numpy.sqrt(2)+0j)
@@ -47,75 +48,121 @@ class ComplexAmplitudePhoton(Photon):
 
 
 
-    def rescaleEsigma(self,factor):
-        # if isinstance(factor,ComplexAmplitude):
-        #     self._Esigma.rescale(factor.complexAmplitude())
-        # else:
-        #     self._Esigma.rescale(factor)
+    def rescaleEsigma(self, factor):
+        """Multiply the sigma complex amplitude by a factor.
 
+        Parameters
+        ----------
+        factor : float
+            The multiplying factor.
+
+        """
         self._Esigma *= factor
 
 
-    def rescaleEpi(self,factor):
-        # if isinstance(factor,ComplexAmplitude):
-        #     self._Epi.rescale(factor.complexAmplitude())
-        # else:
-        #     self._Epi.rescale(factor)
+    def rescaleEpi(self, factor):
+        """Multiply the pi complex amplitude by a factor.
+
+        Parameters
+        ----------
+        factor : float
+            The multiplying factor.
+
+        """
         self._Epi *= factor
 
     def getIntensityS(self):
+        """Gets the sigma intensity.
+
+        Returns
+        -------
+        float
+            Intensity (sigma) of photon.
+
         """
-        Sets the complex amplitude.
-        :param complex_amplitude: Complex amplitude of the wave.
-        """
-        # return self._Esigma.intensity()
         return numpy.abs(self._Esigma) ** 2
 
     def getIntensityP(self):
+        """Gets the pi intensity.
+
+        Returns
+        -------
+        float
+            Intensity (pi) of photon.
+
         """
-        Sets the complex amplitude.
-        :param complex_amplitude: Complex amplitude of the wave.
-        """
-        # return self._Epi.intensity()
         return numpy.abs(self._Epi) ** 2
 
     def getIntensity(self):
-        """
-        Sets the complex amplitude.
-        :param complex_amplitude: Complex amplitude of the wave.
+        """Gets the total (sigma plus pi) intensity.
+
+        Returns
+        -------
+        float
+            Intensity of photon.
+
         """
         return self.getIntensityS() + self.getIntensityP()
 
     def getPhaseS(self):
+        """Gets the sigma phase.
+
+        Returns
+        -------
+        float
+            Sigma-phase in radians.
+
+        """
         return numpy.angle(numpy.array(self._Esigma, dtype=complex))
 
     def getPhaseP(self):
+        """Gets the pi phase.
+
+        Returns
+        -------
+        float
+            Pi-phase in radians.
+
+        """
         return numpy.angle(numpy.array(self._Epi, dtype=complex))
 
     def getComplexAmplitudeS(self):
+        """Gets the sigma complex amplitude.
+
+        Returns
+        -------
+        complex
+            Sigma-complex amplitude.
+
+        """
         return self._Esigma
 
     def getComplexAmplitudeP(self):
+        """Gets the pi complex amplitude.
+
+        Returns
+        -------
+        complex
+            Pi-complex amplitude.
+
+        """
         return self._Epi
 
-    # def duplicate(self):
-    #     return ComplexAmplitudePhoton(self._energy_in_ev,
-    #                            self._unit_direction_vector.duplicate(),
-    #                            self._Esigma.complexAmplitude(),
-    #                            self._Epi.complexAmplitude())
-
     def duplicate(self):
+        """Duplicates a complex-amplitude photon.
+
+        Returns
+        -------
+        Photon instance
+            New ComplexAmplitudePhoton instance with an identical photon.
+
+        """
         return ComplexAmplitudePhoton(self._energy_in_ev,
                                self._unit_direction_vector.duplicate(),
                                self._Esigma,
                                self._Epi)
 
     def __eq__(self, candidate):
-        """
-        Determines if two polarized photons are identical (same energy, direction and polarization).
-        :param candidate: Polarized photon to compare with.
-        :return: True if equal otherwise False.
-        """
         if ((self.energy() == candidate.energy() and
                 self.unitDirectionVector() == candidate.unitDirectionVector()) and
                 self._Esigma.complexAmplitude() == candidate._Esigma.complexAmplitude() and
@@ -124,11 +171,5 @@ class ComplexAmplitudePhoton(Photon):
 
         return False
 
-    # TODO not needed? inheritated?
     def __ne__(self, candidate):
-        """
-        Determines if two polarized photons are not identical (same energy, direction and polarization).
-        :param candidate: Polarized photon to compare with.
-        :return: True if not equal otherwise False.
-        """
         return not (self == candidate)

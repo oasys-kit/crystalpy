@@ -8,14 +8,22 @@ from crystalpy.util.PhotonBunch import PhotonBunch
 
 
 class PolarizedPhotonBunch(PhotonBunch):
-    """
-    is a collection of PolarizedPhoton objects, making up the photon beam.
-    """
+    """The PolarizadPhotonBunch is is a collection of PolarizedPhoton objects, making up the polarized photon beam."""
     def __init__(self, polarized_photons=None):
+
+        """Constructor.
+
+        Parameters
+        ----------
+        polarized_photons : list
+            List of PolarizedPhoton instances.
+
+        Returns
+        -------
+        PolarizedPhotonBunch instance
+
         """
-        :param polarized_photons: bunch of PolarizedPhoton objects.
-        :type polarized_photons: list(PolarizedPhoton, PolarizedPhoton, ...)
-        """
+
         if polarized_photons == None:
             self.polarized_photon_bunch = []
         else:
@@ -23,9 +31,16 @@ class PolarizedPhotonBunch(PhotonBunch):
 
 
     def toDictionary(self):
+        """Created a dictionary containing information about the bunch.
+
+        Returns
+        -------
+        dict
+            Information in tags: "number of photons", "energies", "deviations", "vx", "vy", "vz", "s0", "s1", "s2", "s3" and "polarization degree".
+
         """
-        defines a dictionary containing information about the bunch.
-        """
+
+        """defines a dictionary containing information about the bunch."""
         array_dict = PhotonBunch.toDictionary(self)
 
         stokes = numpy.zeros([4, len(self)])
@@ -48,9 +63,7 @@ class PolarizedPhotonBunch(PhotonBunch):
 
 
     def toString(self):
-        """
-        :return: string containing the parameters characterizing each photon in the bunch.
-        """
+        """Returns a string containing the parameters characterizing each polarized photon in the bunch."""
         bunch_string = str()
 
         for i in range(self.getNumberOfPhotons()):

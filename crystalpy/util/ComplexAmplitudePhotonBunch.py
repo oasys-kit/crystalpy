@@ -1,7 +1,3 @@
-"""
-This object contains a list of PolarizedPhoton objects, characterized by energy, direction vector and Stokes vector.
-This object is used as input to and output from the passive crystal widget.
-"""
 import numpy as np
 
 from crystalpy.util.PhotonBunch import PhotonBunch
@@ -9,13 +5,19 @@ from crystalpy.util.PhotonBunch import PhotonBunch
 
 #todo: replace name "polarized" by "complex_amplitude"
 class ComplexAmplitudePhotonBunch(PhotonBunch):
-    """
-    is a collection of ComplexAmplitudePhoton objects, making up the photon beam.
-    """
+    """The ComplexAmplitudePhotonBunch is is a collection of ComplexAmplitudePhoton objects, making up the photon beam."""
     def __init__(self, complex_amplitude_photons=None):
-        """
-        :param polarized_photons: bunch of PolarizedPhoton objects.
-        :type polarized_photons: list(PolarizedPhoton, PolarizedPhoton, ...)
+        """Constructor.
+
+        Parameters
+        ----------
+        complex_amplitude_photons : list
+            List of ComplexAmplitudePhoton instances.
+
+        Returns
+        -------
+        ComplexAmplitudePhotonBunch instance
+
         """
         if complex_amplitude_photons == None:
             self.polarized_photon_bunch = []
@@ -24,18 +26,37 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
 
 
     def rescaleEsigma(self, factor):
-        # print(">>>>> factor", factor)
-        # print(">>>>> factor", type(factor))
+        """Multiply the sigma complex amplitudes by a factor array.
+
+        Parameters
+        ----------
+        factor : list. numpy array
+            The multiplying factor array.
+
+        """
         for i, polarized_photon in enumerate(self):
             polarized_photon.rescaleEsigma(factor[i])
 
     def rescaleEpi(self, factor):
+        """Multiply the pi complex amplitudes by a factor array.
+
+        Parameters
+        ----------
+        factor : list. numpy array
+            The multiplying factor array.
+
+        """
         for i, polarized_photon in enumerate(self):
             polarized_photon.rescaleEpi(factor[i])
 
     def toDictionary(self):
-        """
-        defines a dictionary containing information about the bunch.
+        """Created a dictionary containing information about the bunch.
+
+        Returns
+        -------
+        dict
+            Information in tags: "number of photons", "energies", "deviations", "vx", "vy", "vz", "intensityS", "intensityP", "intensity", "phaseS", "phaseP", "complexAmplitudeS","complexAmplitudeP"
+
         """
         array_dict = PhotonBunch.toDictionary(self)
 
@@ -69,9 +90,7 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
 
 
     def toString(self):
-        """
-        :return: string containing the parameters characterizing each photon in the bunch.
-        """
+        """Returns a string containing the parameters characterizing each photon in the bunch."""
         bunch_string = str()
 
         for i in range(self.getNumberOfPhotons()):

@@ -7,6 +7,17 @@ import numpy
 
 # todo: return txt
 def bragg_preprocessor_file_v1_write(out_dict, fileout=""):
+    """Writes data from dictionary to Bragg-preprocessor file V1.
+
+    Parameters
+    ----------
+    out_dict : dict
+        Input dictionary to write to file
+        
+    fileout : str
+         Filename for output.
+
+    """
     if fileout != "":
         f = open(fileout, 'wt')
 
@@ -39,6 +50,17 @@ def bragg_preprocessor_file_v1_write(out_dict, fileout=""):
 
 
 def bragg_preprocessor_file_v2_write(output_dictionary, fileout=None):
+    """Writes data from dictionary to Bragg-preprocessor file V2.
+
+    Parameters
+    ----------
+    out_dict : dict
+        Input dictionary to write to file
+
+    fileout : str
+         Filename for output.
+
+    """
 
     txt = ""
     txt += "# Bragg version, Data file type\n"
@@ -114,6 +136,19 @@ def bragg_preprocessor_file_v2_write(output_dictionary, fileout=None):
     return txt
 
 def bragg_preprocessor_file_v1_read(filename):
+    """Reads data from Bragg-preprocessor file V1 to dictionary.
+
+    Parameters
+    ----------
+
+    filename : str
+         Filename with input.
+
+    Returns
+    -------
+    dict
+
+    """
 
     try:
         f = open(filename, 'r')
@@ -221,6 +256,19 @@ def bragg_preprocessor_file_v1_read(filename):
     return out_dict
 
 def bragg_preprocessor_file_v2_read(filename=""):
+    """Reads data from Bragg-preprocessor file V2 to dictionary.
+
+    Parameters
+    ----------
+
+    filename : str
+         Filename with input.
+
+    Returns
+    -------
+    dict
+
+    """
 
     f = open(filename, 'r')
     lines = f.read().splitlines()
@@ -326,7 +374,6 @@ def bragg_preprocessor_file_v2_read(filename=""):
     for i in range(npoint):
         line_index += 1
         variables = __parse_line(lines[line_index])
-        # print(">>>>>>>>>> variables Energy[i]", variables)
         Energy[i] = float(variables[0])
         for j in range(out_dict["nbatom"]):
             line_index += 1

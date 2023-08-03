@@ -8,70 +8,89 @@ from crystalpy.util.StokesVector import StokesVector
 from crystalpy.polarization.MuellerMatrix import MuellerMatrix
 
 class PolarizedPhoton(Photon):
-    """
-    is a Photon object with a specified polarization state described by a Stokes vector.
-    """
+    """A Photon object with a specified polarization state described by a Stokes vector."""
     def __init__(self, energy_in_ev, direction_vector, stokes_vector):
-        """
-        Constructor.
-        :param energy_in_ev: photon energy in electron volts.
-        :type energy_in_ev: float
-        :param direction_vector: it doesn't have to be a unit vector, it gets normalized in Photon.__init__.
-        :type direction_vector: crystalpy.util.Vector
-        :param stokes_vector: Stokes vector describing the polarization state.
-        :type stokes_vector: StokesVector
-        """
-        # self._energy_in_ev holds the energy in the base class.
-        # self._unit_direction_vector holds the vector in the base class.
-        self._stokes_vector = stokes_vector
+        """Constructor.
 
+        Parameters
+        ----------
+        energy_in_ev : float
+            Photon energy in eV.
+
+        direction_vector : Vector instance
+            The direction of the photon (no need to be normalized).
+
+        stokes_vector : StokesVector instance
+            Stokes vector describing the polarization state.
+
+        Returns
+        -------
+        PolarizedPhoton instance
+
+
+        """
+
+        self._stokes_vector = stokes_vector
         super(PolarizedPhoton, self).__init__(energy_in_ev, direction_vector)
 
     def duplicate(self):
+        """Duplicates a stokes photon.
+
+        Returns
+        -------
+        Photon instance
+            New StokesPhoton instance with identical photon.
+
+        """
         return PolarizedPhoton(self._energy_in_ev,
                                self._unit_direction_vector.duplicate(),
                                self._stokes_vector.duplicate())
 
 
     def stokesVector(self):
-        """
-        :return: Stokes vector.
-        """
+        """Returns the Stokes vector."""
         return self._stokes_vector
 
     def setStokesVector(self,stokes_vector):
+        """Sets the stokes vector
+
+        Parameters
+        ----------
+        stokes_vector : StokesVector instance
+
+
+        """
         self._stokes_vector = stokes_vector
 
     def applyMuellerMatrix(self,mueller_matrix=MuellerMatrix()):
+        """Modify the stokes vector by a Muller matrix.
+
+        Parameters
+        ----------
+        mueller_matrix :
+             (Default value = MuellerMatrix())
+
+        """
         s_in = self.stokesVector()
         s_out = mueller_matrix.calculate_stokes_vector( s_in )
         self.setStokesVector(s_out)
 
 
     def circularPolarizationDegree(self):
-        """
-        :return: degree of circular polarization.
+        """Returns the degree of circular polarization.
+
+        Returns
+        -------
+        float
+            The polarization degree.
+
         """
         return self._stokes_vector.circularPolarizationDegree()
 
     def __eq__(self, candidate):
-        """
-        Determines if two polarized photons are identical (same energy, direction and polarization).
-        :param candidate: Polarized photon to compare with.
-        :return: True if equal otherwise False.
-        """
         if ((self.energy() == candidate.energy() and
                 self.unitDirectionVector() == candidate.unitDirectionVector()) and
                 self.stokesVector() == candidate.stokesVector()):
             return True
 
         return False
-
-    # # TODO not needed? inheritated?
-    # def __ne__(self, candidate):
-    #     """
-    #     Determines if two polarized photons are not identical (same energy, direction and polarization).
-    #     :param candidate: Polarized photon to compare with.
-    #     :return: True if not equal otherwise False.
-    #     """
-    #     return not (self == candidate)

@@ -11,22 +11,45 @@ from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
 from crystalpy.util.PolarizedPhoton import PolarizedPhoton
 
 class PhotonBunch(object):
-    """
-    is a collection of Photon objects, making up the photon beam.
-    """
+    """The PhotonBunch is is a collection of Photon objects, making up the photon beam."""
+
     def __init__(self, photons=None):
-        """
-        :param photons: bunch of Photon objects.
-        :type photons: list(Photon, Photon, ...)
+        """Constructor.
+
+        Parameters
+        ----------
+        photons : list
+            List of Photon instances.
+
+        Returns
+        -------
+        PhotonBunch instance
+
         """
         if photons == None:
             self.polarized_photon_bunch = []
         else:
             self.polarized_photon_bunch = photons
-        # self._set_dict()
 
     @classmethod
     def initialize_from_energies_and_directions(cls, energies, V):
+        """Construct a bunch from photon energies and directions
+
+
+        Parameters
+        ----------
+
+        energies : list, numpy array
+            
+        V : Vector instance (with a tack of vectors)
+            
+
+        Returns
+        -------
+        PhotonBunch instance
+
+
+        """
         if V.nStack() != energies.size:
             raise Exception("incompatible inputs")
 
@@ -38,17 +61,40 @@ class PhotonBunch(object):
         return bunch
 
     def energies(self):
+        """Return the energies of the photons.
+
+
+        Returns
+        -------
+        numpy array
+            The energies of the photons.
+
+        """
         energies = numpy.zeros(len(self))
         for i,photon in enumerate(self):
             energies[i]      = photon.energy()  # Photon.energy()
         return energies
 
     def energy(self): # just in case
+        """Return the energies of the photons.
+
+
+        Returns
+        -------
+        numpy array
+            The energies of the photons.
+
+        """
         return self.energies()
 
     def wavelength(self):
-        """
-        :return: The photon wavelength in meter.
+        """Return the wavelengths of the photons (in m).
+
+        Returns
+        -------
+        numpy array
+            The wavelengths of the photons.
+
         """
         E_in_Joule = self.energies() * codata.e # elementary_charge
         # Wavelength in meter
@@ -56,12 +102,25 @@ class PhotonBunch(object):
         return wavelength
 
     def wavenumber(self):
-        """
-        :return: Wavenumber in m^-1.
+        """Return the wavenumbers of the photons (in m^-1).
+
+        Returns
+        -------
+        numpy array
+            The wavenumbers of the photons.
+
         """
         return (2.0 * numpy.pi) / self.wavelength()
 
     def unitDirectionVector(self):
+        """Return the directions of the photons.
+
+        Returns
+        -------
+        Vector instance
+            The directions in stacked vectors.
+
+        """
         X = numpy.zeros(len(self))
         Y = numpy.zeros(len(self))
         Z = numpy.zeros(len(self))
@@ -74,26 +133,49 @@ class PhotonBunch(object):
 
 
     def wavevector(self):
-        """
-        :return: Photon wavevector in m^-1.
+        """Return the wavevectors of the photons.
+
+        Returns
+        -------
+        Vector instance
+            The wavevectors in stacked vectors.
+
         """
         return self.unitDirectionVector().scalarMultiplication(self.wavenumber())
 
     def duplicate(self):
+        """Return a clone of the PhotonBunch instance.
+
+        Returns
+        -------
+        PhotonBunch instance
+
+        """
         return copy.deepcopy(self)
 
     def setUnitDirectionVector(self, vector):
+        """Sets the directions of the photons.
+
+        Parameters
+        ----------
+        vector : Vector instance
+            Stack of vectors with the directions.
+
+        """
         for i,photon in enumerate(self):
             photon._unit_direction_vector = vector.extractStackItem(i)
-            #
-            # self._unit_direction_vector = vector.getNormalizedVector()
 
     #
     # extend these methods when heritating from Photon
     #
     def toDictionary(self):
-        """
-        defines a dictionary containing information about the bunch.
+        """Created a dictionary containing information about the bunch.
+
+        Returns
+        -------
+        dict
+            Information in tags: "number of photons", "energies", "deviations", "vx", "vy" and "vz".
+
         """
         array_dict = dict()
         energies = numpy.zeros(len(self))
@@ -121,9 +203,7 @@ class PhotonBunch(object):
 
 
     def toString(self):
-        """
-        :return: string containing the parameters characterizing each photon in the bunch.
-        """
+        """Returns a string containing the parameters characterizing each photon in the bunch."""
         bunch_string = str()
         for photon in self:
             string_to_attach = str(photon.energy()) + " " + \
@@ -136,41 +216,123 @@ class PhotonBunch(object):
     #
 
     def addPhoton(self, to_be_added):
+        """Adds a photon to the bunch.
+
+        Parameters
+        ----------
+        to_be_added : Photon instance
+
+        """
         self.polarized_photon_bunch.append(to_be_added)
 
 
     def addPhotonsFromList(self, to_be_added):
+        """Adds a list of photons to the bunch.
+
+        Parameters
+        ----------
+        to_be_added : list
+            The photons to be added
+
+        """
         self.polarized_photon_bunch.extend(to_be_added)
 
     def addBunch(self, to_be_added):
+        """Adds photons in a PhotonBunch instance.
+
+        Parameters
+        ----------
+        to_be_added : PhotonBunch instance
+            Photons to be added.
+            
+
+        """
         self.polarized_photon_bunch.extend(to_be_added.getListOfPhotons())
 
     def getNumberOfPhotons(self):
+        """Returns the number of photons in the bunch.
+
+        Returns
+        -------
+        int
+            Number of photons.
+        """
         return len(self.polarized_photon_bunch)
 
     def getListOfPhotons(self):
+        """Returns a list with the photons in the bunch.
+
+        Returns
+        -------
+        list
+            List with photons.
+        """
         return self.polarized_photon_bunch
 
     def getPhotonIndex(self,index):
+        """Returns the photon in the bunch with a given index.
+
+        Parameters
+        ----------
+        index : int
+            The photon index to be referenced.
+
+        Returns
+        -------
+        Photon instance
+            The referenced photon (not copied).
+
+        """
+
         return self.polarized_photon_bunch[index]
 
     def setPhotonIndex(self,index,polarized_photon):
+        """Sets the photon in the bunch with a given index.
+
+        Parameters
+        ----------
+        index : int
+            The photon index to be modified.
+
+        polarized_photon : Photon instance
+            The photon to be stored.
+
+        """
         self.polarized_photon_bunch[index] = polarized_photon
 
     def keys(self):
+        """return the keys of the dictionary resulting from toDictionary method"""
         return self.toDictionary().keys()
 
     def getArrayByKey(self, key):
-        """
-        :param key: 'deviations', 's0', 's1', 's2', 's3'.
-        :return: numpy.ndarray
+        """Returns the array of a givem key in from toDictionary method
+
+        Parameters
+        ----------
+        key :
+            deviations', 's0', 's1', 's2', 's3'.
+
+        Returns
+        -------
+        numpy array
+
+
         """
         return self.toDictionary()[key]
 
     def isMonochromatic(self, places):
-        """
-        :param places: number of decimal places to be taken into account.
-        :return: True if the bunch holds photons of the same energy.
+        """Inquires about bunch monochromaticity.
+
+        Parameters
+        ----------
+        places :
+            number of decimal places to be taken into account for comparing energies.
+
+        Returns
+        -------
+        bool
+            True if all photons in the bunch have the same energy.
+
         """
         first_energy = round(self.polarized_photon_bunch[0].energy(), places)
 
@@ -182,8 +344,14 @@ class PhotonBunch(object):
         return True
 
     def isUnidirectional(self):
-        """
-        :return: True if the bunch holds photons going the same direction.
+        """Inquires if all photons in the bunch have the same direction.
+
+
+        Returns
+        -------
+        bool
+            True if all photons have the same direction.
+
         """
         first_direction = self.polarized_photon_bunch[0].unitDirectionVector()  # Vector object.
 
