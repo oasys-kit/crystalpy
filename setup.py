@@ -17,13 +17,13 @@ from setuptools import setup
 # pyment -o numpydoc Vector.py  # apply to all files,
 #   complete/edit by hand, see https://numpydoc.readthedocs.io/en/latest/format.html ...
 # patch Vector.py < Vector.py.patch
-# cd doc
+# cd docs
 # sphinx-quickstart  # needed only once...
 # cd ..
 # iterate:
-# rm doc/crystalpy*.rst doc/modules.rst
-# sphinx-apidoc -o doc crystalpy
-# cd doc
+# rm docs/crystalpy*.rst docs/modules.rst
+# sphinx-apidoc -o docs crystalpy
+# cd docs
 # make clean html
 
 
