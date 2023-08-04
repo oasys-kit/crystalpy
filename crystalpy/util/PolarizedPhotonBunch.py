@@ -1,6 +1,5 @@
 """
-This object contains a list of PolarizedPhoton objects, characterized by energy, direction vector and Stokes vector.
-This object is used as input to and output from the passive crystal widget.
+This object represents a bunch of polarized photons. It contains a stack of PolarizedPhoton instances, characterized by photon energy, direction vector and Stokes vector.
 """
 import numpy
 
@@ -8,22 +7,18 @@ from crystalpy.util.PhotonBunch import PhotonBunch
 
 
 class PolarizedPhotonBunch(PhotonBunch):
-    """The PolarizadPhotonBunch is is a collection of PolarizedPhoton objects, making up the polarized photon beam."""
-    def __init__(self, polarized_photons=None):
+    """The PolarizadPhotonBunch is is a collection of PolarizedPhoton objects, making up the polarized photon beam.
 
-        """Constructor.
-
+    Constructor.
         Parameters
         ----------
-        polarized_photons : list
+        polarized_photons : list, optional
             List of PolarizedPhoton instances.
 
-        Returns
-        -------
-        PolarizedPhotonBunch instance
+    """
 
-        """
 
+    def __init__(self, polarized_photons=None):
         if polarized_photons == None:
             self.polarized_photon_bunch = []
         else:

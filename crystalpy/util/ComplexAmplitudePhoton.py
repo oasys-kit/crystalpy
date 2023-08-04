@@ -1,37 +1,29 @@
 """
-This object contains a list of PolarizedPhoton objects, characterized by energy, direction vector and Stokes vector.
-This object is used as input to and output from the passive crystal widget.
+Represents a photon defined by its energy, direction vector and pi and sigma complex amplitudes.
 """
 
 from crystalpy.util.Photon import Photon
 import numpy
 
-# TODO create tests
 class ComplexAmplitudePhoton(Photon):
-    "This object represents a photon with energy, direction and complex amplitudes (sigma and pi)."
+    """Constructor.
+
+    Parameters
+    ----------
+    energy_in_ev : float
+        Photon energy in eV.
+
+    direction_vector : Vector instance
+        The direction of the photon (no need to be normalized).
+
+    Esigma : complex
+        The sigma-amplitude.
+
+    Esigma : complex
+        The pi-amplitude.
+
+    """
     def __init__(self, energy_in_ev, direction_vector, Esigma=None,Epi=None):
-        """Constructor.
-
-        Parameters
-        ----------
-        energy_in_ev : float
-            Photon energy in eV.
-
-        direction_vector : Vector instance
-            The direction of the photon (no need to be normalized).
-
-        Esigma : complex
-            The sigma-amplitude.
-
-        Esigma : complex
-            The pi-amplitude.
-
-        Returns
-        -------
-            ComplexAmplitudePhoton instance.
-
-        """
-
         # Call base constructor.
         Photon.__init__(self, energy_in_ev, direction_vector)
 
@@ -45,8 +37,6 @@ class ComplexAmplitudePhoton(Photon):
             self._Epi = (1/numpy.sqrt(2)+0j)
         else:
             self._Epi = Epi
-
-
 
     def rescaleEsigma(self, factor):
         """Multiply the sigma complex amplitude by a factor.

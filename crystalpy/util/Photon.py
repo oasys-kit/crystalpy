@@ -1,30 +1,27 @@
+"""
+Represents a photon defined by its energy and direction vector
+"""
+
 from crystalpy.util.Vector import Vector
 import scipy.constants as codata
 import numpy
 
 
 class Photon(object):
-    "This object represents a photon with energy and direction."
+    """Constructor.
+
+    Parameters
+    ----------
+    energy_in_ev : float, optional
+        Photon energy in eV.
+
+    direction_vector : Vector instance, optional
+        The direction of the photon (no need to be normalized).
+
+    """
     def __init__(self, energy_in_ev=1000.0, direction_vector=Vector(0.0,1.0,0.0)):
-        """Constructor.
-
-        Parameters
-        ----------
-        energy_in_ev : float
-            Photon energy in eV.
-
-        direction_vector : Vector instance
-            The direction of the photon (no need to be normalized).
-
-        Returns
-        -------
-        Photon instance.
-
-        """
         self._energy_in_ev = float(energy_in_ev)
         self._unit_direction_vector = direction_vector.getNormalizedVector()
-
-
 
     def duplicate(self):
         """Duplicates a photon.
@@ -68,7 +65,6 @@ class Photon(object):
             the photon wavelength
 
         """
-        """:return: The photon wavelength in meter."""
         E_in_Joule = self.energy() * codata.e # elementary_charge
         # Wavelength in meter
         wavelength = (codata.c * codata.h / E_in_Joule)
@@ -83,7 +79,6 @@ class Photon(object):
             the photon wavenumber
 
         """
-        """:return: Wavenumber in m^-1."""
         return (2.0 * numpy.pi) / self.wavelength()
 
     def wavevector(self):
@@ -114,6 +109,7 @@ class Photon(object):
         Parameters
         ----------
         vector : Vector instance
+            The vector with the direction (may be not normalized).
 
         """
         self._unit_direction_vector = vector.getNormalizedVector()

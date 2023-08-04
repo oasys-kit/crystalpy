@@ -21,7 +21,7 @@ from setuptools import setup
 # sphinx-quickstart  # needed only once...
 # cd ..
 # iterate:
-# rm doc/crystalpy.*.rst doc/modules.rst
+# rm doc/crystalpy*.rst doc/modules.rst
 # sphinx-apidoc -o doc crystalpy
 # cd doc
 # make clean html

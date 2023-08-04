@@ -7,24 +7,19 @@ import numpy
 
 
 class Vector(object):
+    """Vector Constructor.
+
+    Parameters
+    ----------
+    x : float
+        x component. It can be an array.
+    y : float
+        y component. It can be an array of the same size of x.
+    z : float
+        z component. It can be an array of the same size of x.
+
+    """
     def __init__(self, x, y, z):
-        """Vector Constructor.
-
-        Parameters
-        ----------
-        x : float
-            x component. It can be an array.
-        y : float
-            y component. It can be an array of the same size of x.
-        z : float
-            z component. It can be an array of the same size of x.
-
-        Returns
-        -------
-            Vector instance
-                Vector having these x,y,z components.
-        """
-
         self.setComponents(x, y, z)
 
     @staticmethod
@@ -33,13 +28,9 @@ class Vector(object):
 
         Parameters
         ----------
-        components : list
-            [x,y,z] components of the vector.
+        components : list, numpy array
+            A list with the [x,y,z] components of the vector.
 
-        Returns
-        -------
-        Vector instance
-            Vector having these x,y,z components.
 
         """
         return Vector(components[0],
@@ -51,8 +42,10 @@ class Vector(object):
 
         Returns
         -------
-        Vector instance
-            New Vector instance with identical x,y,z components."""
+        result : Vector instance
+            New Vector instance with identical x,y,z components.
+
+        """
         return Vector(self.components()[0],self.components()[1],self.components()[2])
 
     def setComponents(self, x, y, z):
@@ -75,9 +68,8 @@ class Vector(object):
 
         Returns
         -------
-
         numpy array
-            The Vector components
+            The Vector components (referenced, not copied).
 
         """
         return self._components
@@ -88,7 +80,7 @@ class Vector(object):
         Returns
         -------
         numpy array
-            The Vector components
+            The Vector components (referenced, not copied).
 
         """
         if self.isArray():
@@ -123,7 +115,6 @@ class Vector(object):
 
         Returns
         -------
-
         Vector instance
             A new vector instance with components of the i-th element only.
 
@@ -138,7 +129,6 @@ class Vector(object):
 
         Returns
         -------
-
         bool
             True if Vector contsins a stack of vector, False if there is a single vector.
 
@@ -153,15 +143,14 @@ class Vector(object):
 
         Returns
         -------
-
         float, numpy array
-            The x component(s).
+            The x component(s) (referenced, not copied).
 
         """
         return self.components()[0]
 
     def getY(self):
-        """Returns the y component.
+        """Returns the y component (referenced, not copied).
 
         Returns
         -------
@@ -173,7 +162,7 @@ class Vector(object):
         return self.components()[1]
 
     def getZ(self):
-        """Returns the z component.
+        """Returns the z component (referenced, not copied).
 
         Returns
         -------
@@ -189,13 +178,13 @@ class Vector(object):
 
         Parameters
         ----------
-        summand : Cector instance
-            The vector to add to this instance.
+        summand : Vector instance
+            The vector to be added.
 
         Returns
         -------
         Vector instance
-            The sum as a vector.
+            The sum as a new vector.
 
         """
 
@@ -216,7 +205,7 @@ class Vector(object):
         Returns
         -------
         Vector instance
-            Scalar multiplied vector.
+            The scalar multiplied vector as a new vector.
 
         """
         return Vector.initializeFromComponents([self.getX() * k, self.getY() * k, self.getZ() * k])
@@ -234,7 +223,7 @@ class Vector(object):
         Returns
         -------
         Vector instance
-            The difference of the two vectors.
+            The difference of the two vectors as a new vector.
 
         """
         result = self.addVector(tosubstract.scalarMultiplication(-1.0))
@@ -251,7 +240,7 @@ class Vector(object):
         Returns
         -------
         Vector instance
-            Scalar product of the two vectors.
+            Scalar product of the two vectors as a new vector.
 
         """
         # scalar_product = numpy.dot(self.components(), factor.components())
@@ -275,7 +264,7 @@ class Vector(object):
         Returns
         -------
         Vector instance
-            Cross product of the two vectors.
+            Cross product of the two vectors as a new vector.
 
         """
         uX = self.getX()
@@ -299,7 +288,7 @@ class Vector(object):
         Returns
         -------
         float, numpy array
-            The vector norm
+            The vector norm.
 
         """
         norm = self.scalarProduct(self) ** 0.5
@@ -312,13 +301,13 @@ class Vector(object):
         Returns
         -------
         Vector instance
-            Normalized vector.
+            The Normalized vector as a new vector.
 
         """
         return self.scalarMultiplication(self.norm() ** -1.0)
 
     def rotateAroundAxis(self, rotation_axis, angle):
-        """Rotates the vector around an axis.
+        """Rotates the vector around an axis. It uses the Rodrigues formula [rf]
 
         Parameters
         ----------
@@ -330,11 +319,13 @@ class Vector(object):
         Returns
         -------
         Vector instance
-            Rotated vector.
+            Rotated vector as a new vector.
+
+        References
+        ----------
+        .. [rf] http://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
 
         """
-        # For the mathematics look for: Rodrigues rotation formula.
-        # http://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
         unit_rotation_axis = rotation_axis.getNormalizedVector()
 
         rotated_vector = self.scalarMultiplication(numpy.cos(angle))
@@ -350,12 +341,12 @@ class Vector(object):
         return rotated_vector
 
     def parallelTo(self, vector):
-        """Returns the parallel projection of this vector along the given vector.
+        """Returns the (parallel) projection of this vector along the given vector.
 
         Parameters
         ----------
-        vector :
-            Vector defining the parallel direction.
+        vector : Vector instance
+            Vector defining the projection direction. It does not need to be normalized.
 
         Returns
         -------
@@ -375,7 +366,7 @@ class Vector(object):
         Parameters
         ----------
         vector : Vector instance
-            Vector that defines the direction.
+            Vector that defines the direction. It does not need to be normalized.
 
         Returns
         -------
@@ -455,7 +446,8 @@ class Vector(object):
         return vector_with_angle
 
     def printComponents(self):
-        """Print vector components"""
+        """Print vector components
+        """
         print(self.toString())
 
     def toString(self):

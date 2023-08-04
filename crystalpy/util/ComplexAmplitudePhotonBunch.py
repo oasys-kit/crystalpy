@@ -1,3 +1,7 @@
+"""
+This object represents a bunch of "complex-amplitude"" photons. It contains a stack of ComplexAmplitudePhoton instances, characterized by photon energy, direction vector and sigma and pi complex amplitudes.
+"""
+
 import numpy as np
 
 from crystalpy.util.PhotonBunch import PhotonBunch
@@ -5,20 +9,16 @@ from crystalpy.util.PhotonBunch import PhotonBunch
 
 #todo: replace name "polarized" by "complex_amplitude"
 class ComplexAmplitudePhotonBunch(PhotonBunch):
-    """The ComplexAmplitudePhotonBunch is is a collection of ComplexAmplitudePhoton objects, making up the photon beam."""
+    """Constructor.
+
+    Parameters
+    ----------
+    complex_amplitude_photons : list, optional
+        List of ComplexAmplitudePhoton instances.
+
+    """
     def __init__(self, complex_amplitude_photons=None):
-        """Constructor.
 
-        Parameters
-        ----------
-        complex_amplitude_photons : list
-            List of ComplexAmplitudePhoton instances.
-
-        Returns
-        -------
-        ComplexAmplitudePhotonBunch instance
-
-        """
         if complex_amplitude_photons == None:
             self.polarized_photon_bunch = []
         else:

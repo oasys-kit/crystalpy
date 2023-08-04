@@ -1,6 +1,6 @@
 """
-This object contains a list of PolarizedPhoton objects, characterized by energy, direction vector and Stokes vector.
-This object is used as input to and output from the passive crystal widget.
+This object represents a polarized photon, characterized by energy, direction vector and Stokes parameters.
+
 """
 
 from crystalpy.util.Photon import Photon
@@ -8,27 +8,22 @@ from crystalpy.util.StokesVector import StokesVector
 from crystalpy.polarization.MuellerMatrix import MuellerMatrix
 
 class PolarizedPhoton(Photon):
-    """A Photon object with a specified polarization state described by a Stokes vector."""
+    """Constructor.
+
+    Parameters
+    ----------
+    energy_in_ev : float
+        Photon energy in eV.
+
+    direction_vector : Vector instance
+        The direction of the photon (no need to be normalized).
+
+    stokes_vector : StokesVector instance
+        Stokes vector describing the polarization state.
+
+    """
     def __init__(self, energy_in_ev, direction_vector, stokes_vector):
-        """Constructor.
 
-        Parameters
-        ----------
-        energy_in_ev : float
-            Photon energy in eV.
-
-        direction_vector : Vector instance
-            The direction of the photon (no need to be normalized).
-
-        stokes_vector : StokesVector instance
-            Stokes vector describing the polarization state.
-
-        Returns
-        -------
-        PolarizedPhoton instance
-
-
-        """
 
         self._stokes_vector = stokes_vector
         super(PolarizedPhoton, self).__init__(energy_in_ev, direction_vector)
@@ -38,8 +33,8 @@ class PolarizedPhoton(Photon):
 
         Returns
         -------
-        Photon instance
-            New StokesPhoton instance with identical photon.
+        PolarizedPhoton instance
+            New PolarizedPhoton instance with identical photon.
 
         """
         return PolarizedPhoton(self._energy_in_ev,
@@ -48,16 +43,21 @@ class PolarizedPhoton(Photon):
 
 
     def stokesVector(self):
-        """Returns the Stokes vector."""
+        """Returns the Stokes vector.
+
+        Returns
+        -------
+        StokesVector instance
+            The Stokes vector (referenced, not copied).
+        """
         return self._stokes_vector
 
-    def setStokesVector(self,stokes_vector):
+    def setStokesVector(self, stokes_vector):
         """Sets the stokes vector
 
         Parameters
         ----------
         stokes_vector : StokesVector instance
-
 
         """
         self._stokes_vector = stokes_vector
@@ -67,8 +67,12 @@ class PolarizedPhoton(Photon):
 
         Parameters
         ----------
-        mueller_matrix :
-             (Default value = MuellerMatrix())
+        mueller_matrix : MuellerMatrix instance, optional
+            The Mueller matrix
+
+        See Also
+        --------
+        crystalpy.polarization.MuellerMatrix.MuellerMatrix
 
         """
         s_in = self.stokesVector()

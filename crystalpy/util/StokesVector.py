@@ -1,24 +1,20 @@
 """
 Represents a Stokes vector.
+
 Except for energy all units are in SI. Energy is in eV.
 """
 import numpy
 
 class StokesVector(object):
-    """ """
+    """StokesVector Constructor.
 
-    #TODO define elements individually and not in list?
+    Parameters
+    ----------
+    element_list : list, optional
+        the Stokes parameters [S0,S1,S2,S3]
 
+    """
     def __init__(self, element_list=[0.0,0.0,0.0,0.0]):
-        """StokesVector Constructor.
-
-        Parameters
-        ----------
-        element_list : list, optional
-            the Stokes parameters [S0,S1,S2,S3]
-
-        """
-
         self.s0 = float(element_list[0])
         self.s1 = float(element_list[1])
         self.s2 = float(element_list[2])

@@ -1,5 +1,5 @@
 """
-This object contains a list of Photon objects, characterized by energy and direction.
+This object contains a stack of photons, each one characterized by energy and direction.
 
 """
 import numpy
@@ -11,21 +11,18 @@ from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
 from crystalpy.util.PolarizedPhoton import PolarizedPhoton
 
 class PhotonBunch(object):
-    """The PhotonBunch is is a collection of Photon objects, making up the photon beam."""
+    """The PhotonBunch is is a collection of Photon instances, making up the photon bunch or beam.
 
-    def __init__(self, photons=None):
-        """Constructor.
+    Constructor.
 
         Parameters
         ----------
         photons : list
             List of Photon instances.
 
-        Returns
-        -------
-        PhotonBunch instance
+    """
 
-        """
+    def __init__(self, photons=None):
         if photons == None:
             self.polarized_photon_bunch = []
         else:
@@ -33,8 +30,7 @@ class PhotonBunch(object):
 
     @classmethod
     def initialize_from_energies_and_directions(cls, energies, V):
-        """Construct a bunch from photon energies and directions
-
+        """Construct a bunch from arrays with photon energies and directions
 
         Parameters
         ----------
@@ -42,7 +38,6 @@ class PhotonBunch(object):
         energies : list, numpy array
             
         V : Vector instance (with a tack of vectors)
-            
 
         Returns
         -------
@@ -67,12 +62,12 @@ class PhotonBunch(object):
         Returns
         -------
         numpy array
-            The energies of the photons.
+            The energies of the photons (copied, not referenced).
 
         """
         energies = numpy.zeros(len(self))
         for i,photon in enumerate(self):
-            energies[i]      = photon.energy()  # Photon.energy()
+            energies[i] = photon.energy()  # Photon.energy()
         return energies
 
     def energy(self): # just in case
@@ -82,7 +77,7 @@ class PhotonBunch(object):
         Returns
         -------
         numpy array
-            The energies of the photons.
+            The energies of the photons (copied, not referenced).
 
         """
         return self.energies()
@@ -280,7 +275,7 @@ class PhotonBunch(object):
         Returns
         -------
         Photon instance
-            The referenced photon (not copied).
+            The photon (referenced, not copied).
 
         """
 
