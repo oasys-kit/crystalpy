@@ -95,10 +95,10 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
 
         # store results
         deviations[ia] = deviation
-        intensityS[ia] = coeffs['S'].intensity()
-        intensityP[ia] = coeffs['P'].intensity()
-        intensityS_dabax[ia] = coeffs_dabax['S'].intensity()
-        intensityP_dabax[ia] = coeffs_dabax['P'].intensity()
+        intensityS[ia] = numpy.abs(coeffs['S'])**2 # coeffs['S'].intensity()
+        intensityP[ia] = numpy.abs(coeffs['P'])**2 # coeffs['P'].intensity()
+        intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2 # coeffs_dabax['S'].intensity()
+        intensityP_dabax[ia] = numpy.abs(coeffs_dabax['P'])**2 # coeffs_dabax['P'].intensity()
 
     # plot results
     import matplotlib.pylab as plt
@@ -317,8 +317,8 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
         coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=calculation_method)
 
         # store results
-        intensityS[ia] = coeffs['S'].intensity()
-        intensityP[ia] = coeffs['P'].intensity()
+        intensityS[ia] = numpy.abs(coeffs['S'])**2 # coeffs['S'].intensity()
+        intensityP[ia] = numpy.abs(coeffs['P'])**2 # coeffs['P'].intensity()
 
 
     t1 = time.time()
@@ -334,8 +334,8 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
         coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon, method=calculation_method)
 
         # store results
-        intensityS_dabax[ia] = coeffs_dabax['S'].intensity()
-        intensityP_dabax[ia] = coeffs_dabax['P'].intensity()
+        intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2 # coeffs_dabax['S'].intensity()
+        intensityP_dabax[ia] = numpy.abs(coeffs_dabax['P'])**2 # coeffs_dabax['P'].intensity()
 
     t2 = time.time()
 

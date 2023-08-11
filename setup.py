@@ -28,7 +28,7 @@ from setuptools import setup
 
 
 setup(name='crystalpy',
-      version='0.0.11',
+      version='0.0.12',
       description='Python crystal polarization calcution',
       author='Manuel Sanchez del Rio, Edoardo Cappelli, Mark Glass',
       author_email='srio@esrf.eu',
@@ -37,8 +37,7 @@ setup(name='crystalpy',
                 'crystalpy.util',
                 'crystalpy.diffraction',
                 'crystalpy.polarization',
-                'crystalpy.examples',
-                'crystalpy.tests'],
+                'crystalpy.examples'],
       install_requires=[
                         'numpy',
                         'scipy',

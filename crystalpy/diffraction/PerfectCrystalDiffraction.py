@@ -1540,8 +1540,8 @@ class PerfectCrystalDiffraction(object):
         self.logDebug('k_0 wavelength: ' + str(photon_in.wavelength()))
         self.logDebug('PhotonInDirection:  ' + str(photon_in.unitDirectionVector().components()))
         self.logDebug('PhotonOutDirection: ' + str(photon_out.unitDirectionVector().components()))
-        self.logDebug('comp ampl S: ' + str(result["S"].intensity()) + str(result["S"].phase()))
-        self.logDebug('comp ampl P: ' + str(result["P"].intensity()) + str(result["P"].phase()))
+        self.logDebug('intensity S: ' + str( numpy.abs(result["S"])**2) )
+        self.logDebug('intensity P: ' + str( numpy.abs(result["P"])**2) )
 
 
 if __name__ == "__main__":

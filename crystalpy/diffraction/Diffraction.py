@@ -3,6 +3,7 @@ Defines a crystal diffraction experiment setup.
 """
 
 from math import isnan
+import numpy
 
 from numpy import pi
 import scipy.constants.codata
@@ -497,10 +498,10 @@ class Diffraction(object):
         outgoing_photon = perfect_crystal._calculatePhotonOut(incoming_polarized_photon)
 
         # Calculate intensities and phases of the crystal  reflectivities or transmitivities
-        intensity_pi = complex_amplitudes["P"].intensity()
-        intensity_sigma = complex_amplitudes["S"].intensity()
-        phase_pi = complex_amplitudes["P"].phase()
-        phase_sigma = complex_amplitudes["S"].phase()
+        intensity_pi    = numpy.abs(complex_amplitudes["P"])**2 # complex_amplitudes["P"].intensity()
+        intensity_sigma = numpy.abs(complex_amplitudes["S"])**2 # complex_amplitudes["S"].intensity()
+        phase_pi    = numpy.angle( numpy.array(complex_amplitudes["P"], dtype=complex)) # complex_amplitudes["P"].phase()
+        phase_sigma = numpy.angle( numpy.array(complex_amplitudes["S"], dtype=complex)) # complex_amplitudes["S"].phase()
 
         # Get a CrystalPhasePlate instance which contains the Mueller matrix
         phase_plate = CrystalPhasePlate( #incoming_stokes_vector=incoming_stokes_vector,
