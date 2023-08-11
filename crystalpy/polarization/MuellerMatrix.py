@@ -8,69 +8,118 @@ from crystalpy.util.StokesVector import StokesVector
 
 
 class MuellerMatrix(object):
+    """Constructor.
 
+    Parameters
+    ----------
+    matrix :
+        Matrix as a numpy array (4,4).
+
+    """
     def __init__(self, matrix=numpy.zeros((4,4)) ):
-        """
-        Constructor.
-        :param matrix: Matrix as a numpy.ndarray object.
-        """
+
         self.matrix = matrix
 
     @classmethod
     def initialize_as_general_linear_polarizer(cls,theta=0.0):
+        """Creates a MuellerMatrix instance with a linear polarized.
+
+        Parameters
+        ----------
+        theta : float, optional
+            The the angle of the fast axis in rad. (Default value = 0.0)
+
+        """
         mm = MuellerMatrix()
         mm.set_general_linear_polarizer(theta)
         return mm
 
     @classmethod
     def initialize_as_linear_polarizer_horizontal(cls):
+        """Creates a MuellerMatrix instance with a horizontal linear polarized."""
         return cls.initialize_as_general_linear_polarizer(0.0)
 
     @classmethod
     def initialize_as_linear_polarizer_vertical(cls):
+        """Creates a MuellerMatrix instance with a vertical linear polarized."""
         return cls.initialize_as_general_linear_polarizer(numpy.pi/2)
 
     @classmethod
     def initialize_as_linear_polarizer_plus45(cls):
+        """Creates a MuellerMatrix instance with a +45 deg linear polarized."""
         return cls.initialize_as_general_linear_polarizer(numpy.pi/4)
 
     @classmethod
     def initialize_as_linear_polarizer_minus45(cls):
+        """Creates a MuellerMatrix instance with a -45 deg linear polarized."""
         return cls.initialize_as_general_linear_polarizer(-numpy.pi/4)
 
     @classmethod
     def initialize_as_general_linear_retarder(cls,theta=0.0, delta=0.0):
+        """Creates a MuellerMatrix instance with a phase retarder.
+
+        Parameters
+        ----------
+        theta : float, optional
+            The the angle of the fast axis in rad. (Default value = 0.0)
+        delta : float, optional
+            The phase difference between the fast and slow axis in rad. (Default value = 0.0)
+
+        """
         mm = MuellerMatrix()
         mm.set_general_linear_retarder(theta,delta)
         return mm
 
     @classmethod
     def initialize_as_quarter_wave_plate_fast_vertical(cls):
+        """Creare a MuellerMatrix instance with a quarter wave plate with fast axis vertical."""
         return cls.initialize_as_general_linear_retarder(numpy.pi/2,-numpy.pi/2)
 
     @classmethod
     def initialize_as_quarter_wave_plate_fast_horizontal(cls):
+        """Creare a MuellerMatrix instance with a quarter wave plate with fast axis horizontal."""
         return cls.initialize_as_general_linear_retarder(0.0,-numpy.pi/2)
 
     @classmethod
     def initialize_as_half_wave_plate(cls):
+        """Creare a MuellerMatrix instance with a half wave plate."""
         return cls.initialize_as_general_linear_retarder(0.0,numpy.pi)
 
     @classmethod
     def initialize_as_ideal_mirror(cls):
+        """Creare a MuellerMatrix instance with a quarter wave plate with an ideal mirror."""
         return cls.initialize_as_general_linear_retarder(0.0,numpy.pi)
 
     @classmethod
     def initialize_as_filter(cls,transmission=1.0):
+        """Creare a MuellerMatrix instance with a quarter wave plate with a filter.
+
+        Parameters
+        ----------
+        transmission : float, optional
+             The transmission value. (Default value = 1.0)
+
+        Returns
+        -------
+
+        """
         return cls.initialize_as_general_linear_retarder(0.0,0.0).matrix_by_scalar(transmission)
 
 
     def from_matrix_to_elements(self, return_numpy=True):
-        """
-        Returns a numpy.ndarray of the elements of a given matrix.
+        """Returns a list of flatten numpy array with the elements of a given matrix.
         If a list is needed one can use the numpy.array.tolist() method.
-        :param numpy: if True returns numpy.ndarray, if False returns list.
-        :return: [m00, m01, m02....mN0, mN1, mN2...]
+
+        Parameters
+        ----------
+        return_numpy : boolean, optional
+            if True returns numpy.ndarray, if False returns list. (Default value = True)
+
+        Returns
+        -------
+        numpy array or list
+            [m00, m01, m02....mN0, mN1, mN2...]
+
         """
         matrix = numpy.asarray(self.matrix)
         result = matrix.flatten()
@@ -81,24 +130,42 @@ class MuellerMatrix(object):
         return list(result)
 
     def get_matrix(self):
+        """Returns the muller matric (reference, not copied)."""
         return self.matrix
 
     def matrix_by_scalar(self, scalar):
-        """
-        Multiplies the matrix by a scalar.
-        :param scalar: the scalar factor.
-        :return: new Mueller matrix.
+        """Multiplies the matrix by a scalar.
+
+        Parameters
+        ----------
+        scalar :
+            the scalar factor.
+
+        Returns
+        -------
+        MullerMatric instance
+            the new Mueller matrix.
+
         """
         new_mueller_matrix = self.matrix * scalar
 
         return MuellerMatrix(new_mueller_matrix)
 
     def matrix_by_vector(self, vector, return_numpy=True):
-        """
-        Multiplies the matrix by a vector.
-        :param numpy: if True returns numpy.ndarray, if False returns list.
-        :param vector: the vector factor.
-        :return: matrix * vector (not a MuellerMatrix object).
+        """Multiplies the matrix by a vector.
+
+        Parameters
+        ----------
+        vector : numpy array
+            the vector factor.
+        return_numpy :
+            if True returns numpy.ndarray, if False returns list. (Default value = True)
+
+        Returns
+        -------
+        numpy array
+            matrix * vector.
+
         """
         matrix = numpy.asarray(self.matrix)
         result = numpy.dot(matrix, vector)
@@ -109,11 +176,20 @@ class MuellerMatrix(object):
         return list(result)
 
     def vector_by_matrix(self, vector, return_numpy=True):
-        """
-        Multiplies the matrix by a vector.
-        :param numpy: if True returns numpy.ndarray, if False returns list.
-        :param vector: the vector factor.
-        :return: matrix * vector (not a MuellerMatrix object).
+        """Multiplies a vector by the Muller matrix.
+
+        Parameters
+        ----------
+        vector : numpy array
+            the vector factor.
+        return_numpy : boolean, optional
+            if True returns numpy.ndarray, if False returns list. (Default value = True)
+
+        Returns
+        -------
+        numpy array
+            vector * matrix.
+
         """
         matrix = numpy.asarray(self.matrix)
         result = numpy.dot(vector, matrix)
@@ -124,12 +200,22 @@ class MuellerMatrix(object):
         return list(result)
 
     def mueller_times_mueller(self, matrix_2, mod=False):
-        """
-        Multiplies two Mueller matrices.
-        :param matrix_2: Mueller matrix factor.
-        :param mod: matrix multiplication is not commutative
-                 -> mod controls which of the two matrices is the first factor.
-        :return: Mueller matrix product.
+        """Multiplies two Mueller matrices.
+
+        Parameters
+        ----------
+        matrix_2 :
+            Mueller matrix factor.
+        mod : boolean, optional
+            matrix multiplication is not commutative
+            -> mod controls which of the two matrices is the first factor. (Default value = False, matrix_2 * mueller)
+
+        Returns
+        -------
+        MuellerMatrix instance
+            matrix * matrix_2 if mof=True
+            matrix_2 * matrix if mof=false
+
         """
         matrix_1 = self.matrix
 
@@ -142,11 +228,6 @@ class MuellerMatrix(object):
         return MuellerMatrix(product)
 
     def __eq__(self, candidate):
-        """
-        Determines whether two Mueller matrices are equal.
-        :param candidate: Mueller matrix to compare to.
-        :return: True if equal. False if not.
-        """
         for i in range(4):
             for j in range(4):
 
@@ -156,19 +237,22 @@ class MuellerMatrix(object):
         return True
 
     def __ne__(self, candidate):
-        """
-        Determines whether two Mueller matrices are not equal.
-        :param candidate: Mueller matrix to compare to.
-        :return: True if not equal. False if equal.
-        """
         return not self == candidate
 
-    def set_general_linear_polarizer(self,theta):
+    def set_general_linear_polarizer(self, theta):
 
-        """
-        :param theta: angle of the polarizer in rad
-        :return: Mueller matrix for a general liner polarizer (numpy.ndarray)
-                See: https://en.wikipedia.org/wiki/Mueller_calculus
+        """Sets the Muller matrix as a linear polarizer. See [rf].
+
+        Parameters
+        ----------
+        theta : float
+            the angle of the fast axis in rad
+
+
+        References
+        ----------
+        .. [rf] https://en.wikipedia.org/wiki/Mueller_calculus
+
         """
 
         # First row.
@@ -196,13 +280,21 @@ class MuellerMatrix(object):
         self.matrix[3, 3] = 0.0
 
 
-    def set_general_linear_retarder(self,theta,delta=0.0):
+    def set_general_linear_retarder(self, theta, delta=0.0):
 
-        """
-        :param theta: angle of fast axis in rad
-        :param delta: phase difference in rad between the fast and slow axis
-        :return: Mueller matrix for a general liner polarizer (numpy.ndarray)
-                See: https://en.wikipedia.org/wiki/Mueller_calculus
+        """Sets the Muller matrix as a generic line retarder. See [rf].
+
+        Parameters
+        ----------
+        theta : float
+            angle of fast axis in rad
+        delta :
+            phase difference in rad between the fast and slow axis in rad (Default value = 0.0)
+
+        References
+        ----------
+        .. [rf] https://en.wikipedia.org/wiki/Mueller_calculus
+
         """
 
         # First row.
@@ -229,11 +321,25 @@ class MuellerMatrix(object):
         self.matrix[3, 2] =  numpy.cos(2*theta) * numpy.sin(delta)
         self.matrix[3, 3] =  numpy.cos(delta)
 
-    def calculate_stokes_vector(self,incoming_stokes_vector):
-        """
-        Takes an incoming Stokes vector, multiplies it by a Mueller matrix
-        and gives an outgoing Stokes vector as a result.
-        :return: StokesVector object.
+    def calculate_stokes_vector(self, incoming_stokes_vector):
+        """Takes an incoming Stokes vector, multiplies it by a Mueller matrix and gives an outgoing Stokes vector as a result.
+
+        Parameters
+        ----------
+        incoming_stokes_vector : StokesVector instance
+            The incoming vector.
+            
+
+        Returns
+        -------
+            StokesVector instance
+                The resulting stokes vector.
+
+        See Also
+        --------
+        crystalpy.util.StokesVector.StokesVector
+
+
         """
         # incoming_stokes_vector = self.incoming_stokes_vector.get_array()  # Stokes vector.
         element_list = self.matrix_by_vector(incoming_stokes_vector.getList())

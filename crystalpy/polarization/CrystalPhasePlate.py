@@ -1,19 +1,40 @@
+"""
+Represents a Phase Plate by a perfect crystal.
+"""
 from crystalpy.polarization.MuellerMatrix import MuellerMatrix
 import numpy
 
 
 # TODO rename to PerfectCrystalMuellerMatrix
 class CrystalPhasePlate(MuellerMatrix):
+    """Constructor.
+
+    Parameters
+    ----------
+    intensity_sigma : float
+        intensity sigma
+
+    phase_sigma : float
+        phase sigma
+
+    intensity_pi : float
+        intensity pi
+
+    phase_pi : float
+        phase pi
+
+    incoming_stokes_vector : StokesVector instance
+        the Stokes vectoR.
+
+    inclination_angle : float, optional
+        The inclination angle in rad.
+
+    """
 
     def __init__(self, # incoming_stokes_vector,
                  intensity_sigma, phase_sigma,
                  intensity_pi, phase_pi,
                  inclination_angle=0.0):
-        """
-        Constructor.
-        """
-
-        # self.incoming_stokes_vector = incoming_stokes_vector  # StokesVector object.
 
         phase_plate_matrix = self._create_matrix(intensity_sigma, phase_sigma,
                  intensity_pi, phase_pi,
@@ -24,9 +45,32 @@ class CrystalPhasePlate(MuellerMatrix):
                         intensity_sigma, phase_sigma,
                         intensity_pi, phase_pi,
                         inclination_angle):
-        """
-        TODO: put article with the notation
-        :return: Mueller matrix for a phase plate (numpy.ndarray).
+        """Create a Mueller matrix for a phase plate.
+
+        intensity_sigma : float
+            intensity sigma
+
+        phase_sigma : float
+            phase sigma
+
+        intensity_pi : float
+            intensity pi
+
+        phase_pi : float
+            phase pi
+
+        incoming_stokes_vector : StokesVector instance
+            the Stokes vectoR.
+
+        inclination_angle : float
+            The inclination angle in rad.
+            
+
+        Returns
+        -------
+        numpy array
+            The Mueller matrix.
+
         """
         alpha = inclination_angle  # radians.
 
