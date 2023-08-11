@@ -15,10 +15,10 @@ class PhotonBunch(object):
 
     Constructor.
 
-        Parameters
-        ----------
-        photons : list
-            List of Photon instances.
+    Parameters
+    ----------
+    photons : list
+        List of Photon instances.
 
     """
 

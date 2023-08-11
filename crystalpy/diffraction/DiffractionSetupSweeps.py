@@ -14,6 +14,7 @@ from crystalpy.util.PhotonBunch import PhotonBunch
 
 
 class DiffractionSetupSweeps(DiffractionSetupXraylib):
+    """ """
 
     def __init__(self,
                  geometry_type, crystal_name, thickness,
@@ -99,9 +100,15 @@ class DiffractionSetupSweeps(DiffractionSetupXraylib):
     #
 
     def toDictionary(self):
-        """
-        Returns this setup in InfoDictionary form.
+        """Returns this setup in InfoDictionary form.
         :return: InfoDictionary form of this setup.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         info_dict = super().toDictionary()
 
@@ -170,38 +177,68 @@ class DiffractionSetupSweeps(DiffractionSetupXraylib):
     #
 
     def incomingPhotons(self):
-        """
-        Returns the incoming photons.
+        """Returns the incoming photons.
         :return: A list of photons.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         #TODO return the PhotonBunch object ?
         return self._incoming_photons.getListOfPhotons()
 
     def energyMin(self):
-        """
-        Returns the minimum energy in eV.
+        """Returns the minimum energy in eV.
         :return: The minimum energy in eV.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self.energies().min()
 
     def energyMax(self):
-        """
-        Returns the maximum energy in eV.
+        """Returns the maximum energy in eV.
         :return: The maximum energy in eV.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self.energies().max()
 
     def energyPoints(self):
-        """
-        Returns the number of energy points.
+        """Returns the number of energy points.
         :return: Number of energy points.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self.energies().shape[0]
 
     def energies(self):
-        """
-        Returns the energies of this setup.
+        """Returns the energies of this setup.
         :return: The angle deviations grid.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         if self._energies is None:
             self._energies = numpy.unique(numpy.array([photon.energy() for photon in self._incoming_photons.getListOfPhotons()]))
@@ -209,30 +246,54 @@ class DiffractionSetupSweeps(DiffractionSetupXraylib):
         return self._energies
 
     def angleDeviationMin(self):
-        """
-        Returns the minimal angle deviation.
+        """Returns the minimal angle deviation.
         :return: Minimal angle deviation.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self.angleDeviationGrid().min()
 
     def angleDeviationMax(self):
-        """
-        Returns the maximal angle deviation.
+        """Returns the maximal angle deviation.
         :return: Maximal angle deviation.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self.angleDeviationGrid().max()
 
     def angleDeviationPoints(self):
-        """
-        Returns the angle deviation points.
+        """Returns the angle deviation points.
         :return: Angle deviation points.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self.angleDeviationGrid().shape[0]
 
     def angleDeviationGrid(self):
-        """
-        Returns the grid of angle deviations according to this setup.
+        """Returns the grid of angle deviations according to this setup.
         :return: The angle deviations grid.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         if self._deviations is None:
             self._deviations = numpy.array([self.deviationOfIncomingPhoton(photon) for photon in self._incoming_photons.getListOfPhotons()])

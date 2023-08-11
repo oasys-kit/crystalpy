@@ -1,6 +1,5 @@
 """
-Calculates a crystal diffraction.
-Except for energy all units are in SI. Energy is in eV.
+Defines a crystal diffraction experiment setup.
 """
 
 from math import isnan
@@ -27,28 +26,59 @@ from crystalpy.polarization.CrystalPhasePlate import CrystalPhasePlate
 from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
 
 class Diffraction(object):
+    """This class contains methods to to make different diffraction calculations. It does not contain data."""
 
     @classmethod
     def _checkSetup(cls, diffraction_setup, bragg_angle, F_0, F_H, F_H_bar):
-        """
-        Checks if a given diffraction setup is possible, i.e. if a given Diffraction/Transmission for the given asymmetry
+        """Checks if a given diffraction setup is possible, i.e. if a given Diffraction/Transmission for the given asymmetry
         and Miller indices is possible. Raises an exception if impossible.
-        :param diffraction_setup: Diffraction setup.
-        :param bragg_angle: Bragg angle.
-        :param F_0: Structure factor F_0.
-        :param F_H: Structure factor F_H.
-        :param F_H_bar: Structure factor F_H_bar.
+
+        Parameters
+        ----------
+        diffraction_setup :
+            Diffraction setup.
+
+        bragg_angle :
+            Bragg angle.
+
+        F_0 :
+            Structure factor F_0.
+
+        F_H :
+            Structure factor F_H.
+
+        F_H_bar :
+            Structure factor F_H_bar.
+
+        Raises
+        ------
+        Exception
+            If the setup is not possible.
+
         """
         cls._checkSetupDiffraction(diffraction_setup, bragg_angle)
         cls._checkSetupStructureFactor(F_0, F_H, F_H_bar)
 
     @classmethod
     def _checkSetupStructureFactor(cls, F_0, F_H, F_H_bar):
-        """
-        Checks if the structure factor has reasonable values
-        :param F_0: Structure factor F_0.
-        :param F_H: Structure factor F_H.
-        :param F_H_bar: Structure factor F_H_bar.
+        """Checks if the structure factor has reasonable values
+
+        Parameters
+        ----------
+        F_0 :
+            Structure factor F_0.
+
+        F_H :
+            Structure factor F_H.
+
+        F_H_bar :
+            Structure factor F_H_bar.
+
+        Raises
+        ------
+        Exception
+            If the structure factor values are not reasonable
+
         """
 
         print(">>>> in _checkSetupStructureFactor")
@@ -66,11 +96,22 @@ class Diffraction(object):
 
     @classmethod
     def _checkSetupDiffraction(cls, diffraction_setup, bragg_angle):
-        """
-        Checks if a given diffraction setup is possible, i.e. if a given Diffraction/Transmission for the given asymmetry
+        """Checks if a given diffraction setup is possible, i.e. if a given Diffraction/Transmission for the given asymmetry
         and Miller indices is possible. Raises an exception if impossible.
-        :param diffraction_setup: Diffraction setup.
-        :param bragg_angle: Bragg angle.
+
+        Parameters
+        ----------
+        diffraction_setup :
+            Diffraction setup.
+
+        bragg_angle :
+            Bragg angle.
+
+        Raises
+        ------
+        Exception
+            If the this setup is not possible.
+
         """
 
         # Check if the given geometry is a valid Bragg/Laue geometry.
@@ -83,6 +124,21 @@ class Diffraction(object):
 
     @classmethod
     def _perfectCrystalForEnergy(cls, diffraction_setup, energy):
+        """
+
+        Parameters
+        ----------
+        diffraction_setup :
+            
+        energy :
+            
+
+        Returns
+        -------
+        PerfectCrystalDiffraction instance
+
+
+        """
 
         # Retrieve bragg angle.
         angle_bragg = diffraction_setup.angleBragg(energy)
@@ -124,6 +180,29 @@ class Diffraction(object):
                                              is_thick=0,
                                              use_transfer_matrix=0,
                                              ):
+        """Calculates the diffracted complex amplitude
+
+        Parameters
+        ----------
+        diffraction_setup :
+            
+        incoming_photon :
+            
+        calculation_method : int, optional
+             0: Zachariasen, 1: Guigay (Default value = 0)
+
+        is_thick : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        use_transfer_matrix : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        Returns
+        -------
+        dict
+            the complex amplitudes for sigma and pi polarizations:  {"S": float, "P": float}
+
+        """
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
@@ -144,6 +223,29 @@ class Diffraction(object):
                                                   is_thick=0,
                                                   use_transfer_matrix=0,
                                                   ):
+        """
+
+        Parameters
+        ----------
+        diffraction_setup :
+            
+        photon :
+            
+        calculation_method : int, optional
+             0: Zachariasen, 1: Guigay (Default value = 0)
+
+        is_thick : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        use_transfer_matrix : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+
+        Returns
+        -------
+        ComplexAmplitudePhoton instance
+
+        """
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, photon)
@@ -168,6 +270,19 @@ class Diffraction(object):
 
     @classmethod
     def _perfectCrystalForPhoton(cls, diffraction_setup, polarized_photon):
+        """
+
+        Parameters
+        ----------
+        diffraction_setup :
+            
+        polarized_photon :
+
+        Returns
+        -------
+        PerfectCrystalDiffraction instance
+
+        """
 
         energy = polarized_photon.energy()
 
@@ -205,6 +320,20 @@ class Diffraction(object):
 
     @classmethod
     def _perfectCrystalForPhotonBunch(cls, diffraction_setup, incoming_bunch):
+        """
+
+        Parameters
+        ----------
+        diffraction_setup :
+            
+        incoming_bunch :
+            
+
+        Returns
+        -------
+        PerfectCrystalDiffraction instance
+
+        """
 
         energies = incoming_bunch.energies()
 
@@ -239,14 +368,35 @@ class Diffraction(object):
         return perfect_crystal
 
     @classmethod
-    def calculateDiffractedComplexAmplitudePhotonBunch(cls, diffraction_setup, incoming_bunch,
+    def calculateDiffractedComplexAmplitudePhotonBunch(cls,
+                                                       diffraction_setup,
+                                                       incoming_bunch,
                                                        calculation_method=0,
                                                        is_thick=0,
                                                        use_transfer_matrix=0):
-        """
-        Calculates the diffraction/transmission given by the setup.
-        :param diffraction_setup: The diffraction setup.
-        :return: PhotonBunch object made up of diffracted/transmitted photons.
+        """Calculates the diffraction/transmission given by the setup.
+
+        Parameters
+        ----------
+        diffraction_setup : DiffractionSetup instance
+            The diffraction setup.
+
+        incoming_bunch : ComplexAmplitudePhotonBeam instance
+            
+        calculation_method : int, optional
+             0: Zachariasen, 1: Guigay (Default value = 0)
+
+        is_thick : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        use_transfer_matrix : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        Returns
+        -------
+        ComplexAmplitudePhotonBeam instance
+            Bunch made of diffracted/transmitted photons.
+
         """
         # Create PhotonBunch instance.
         outgoing_bunch = ComplexAmplitudePhotonBunch([])
@@ -298,14 +448,38 @@ class Diffraction(object):
 
 
     @classmethod
-    def calculateDiffractedPolarizedPhoton(cls, diffraction_setup, incoming_polarized_photon, inclination_angle,
+    def calculateDiffractedPolarizedPhoton(cls, diffraction_setup,
+                                           incoming_polarized_photon,
+                                           inclination_angle,
                                            calculation_method=0,
                                            is_thick=0,
                                            use_transfer_matrix=0):
-        """
-        Calculates the diffraction/transmission given by the setup.
-        :param diffraction_setup: The diffraction setup.
-        :return: PhotonBunch object made up of diffracted/transmitted photons.
+        """Calculates the diffraction/transmission given by the setup.
+
+        Parameters
+        ----------
+        diffraction_setup : DiffractionSetup instance
+            The diffraction setup.
+
+        incoming_polarized_photon : ComplexAmplitudePhoton instance
+            
+        inclination_angle : float
+            The inclination angle in rad.
+            
+        calculation_method : int, optional
+             0: Zachariasen, 1: Guigay (Default value = 0)
+
+        is_thick : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        use_transfer_matrix : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        Returns
+        -------
+        ComplexAmplitudePhoton instance
+            Photon diffracted/transmitted.
+
         """
         # Retrieve the incoming Stokes vector.
         incoming_stokes_vector = incoming_polarized_photon.stokesVector()
@@ -347,14 +521,39 @@ class Diffraction(object):
         return outgoing_polarized_photon
 
     @classmethod
-    def calculateDiffractedPolarizedPhotonBunch(cls, diffraction_setup, incoming_bunch, inclination_angle,
+    def calculateDiffractedPolarizedPhotonBunch(cls,
+                                                diffraction_setup,
+                                                incoming_bunch,
+                                                inclination_angle,
                                                 calculation_method=0,
                                                 is_thick=0,
                                                 use_transfer_matrix=0):
-        """
-        Calculates the diffraction/transmission given by the setup.
-        :param diffraction_setup: The diffraction setup.
-        :return: PhotonBunch object made up of diffracted/transmitted photons.
+        """Calculates the diffraction/transmission bunch given by the crystal in the setup.
+
+        Parameters
+        ----------
+        diffraction_setup : DiffractionSetup instance
+            The diffraction setup.
+
+        incoming_bunch : ComplexAmplitudePhotonBunch instance
+            
+        inclination_angle : float
+            The inclination angle in rad.
+            
+        calculation_method : int, optional
+             0: Zachariasen, 1: Guigay (Default value = 0)
+
+        is_thick : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        use_transfer_matrix : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        Returns
+        -------
+        ComplexAmplitudePhotonBunch
+            PhotonBunch object made up of diffracted/transmitted photons.
+
         """
         # Create PhotonBunch instance.
         outgoing_bunch = PolarizedPhotonBunch([])
@@ -380,14 +579,38 @@ class Diffraction(object):
     # these methods use DiffractionSetupSweeps (for scans)
     # ##################################################################################################
     @classmethod
-    def _calculateDiffractionForEnergy(cls, diffraction_setup, energy, result,
+    def _calculateDiffractionForEnergy(cls,
+                                       diffraction_setup,
+                                       energy,
+                                       result,
                                        calculation_method=0,
                                        is_thick=0,
                                        use_transfer_matrix=0):
-        """
-        Calculates the diffraction/transmission given by the setup.
-        :param diffraction_setup: The diffraction setup.
-        :return: DiffractionResult representing this setup.
+        """Calculates the diffraction/transmission given by the setup.
+
+        Parameters
+        ----------
+        diffraction_setup : DiffractionSetup instance
+            The diffraction setup.
+
+        energy : float
+            
+        result :  DiffractionResult instance, where results are added.
+            
+        calculation_method : int, optional
+             0: Zachariasen, 1: Guigay (Default value = 0)
+
+        is_thick : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        use_transfer_matrix : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        Returns
+        -------
+        DiffractionResult instance
+            DiffractionResult with the calculation for the input energy added.
+
         """
         # Get PerfectCrystal instance for the current energy.
         if not isinstance(diffraction_setup, DiffractionSetupSweeps):
@@ -422,11 +645,26 @@ class Diffraction(object):
 
     @classmethod
     def calculateDiffraction(cls, diffraction_setup, calculation_method=0, is_thick=0, use_transfer_matrix=0):
-        """
-        Calculates the diffraction/transmission given by the setup.
-        :param diffraction_setup: The diffraction setup.
-        :calculation_method: 0=Zachariasen, 1=Guigay
-        :return: DiffractionResult representing this setup.
+        """Calculates the diffraction/transmission given by the setup.
+
+        Parameters
+        ----------
+        diffraction_setup : DiffractionSetup instance
+
+        calculation_method : int, optional
+             0: Zachariasen, 1: Guigay (Default value = 0)
+
+        is_thick : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        use_transfer_matrix : int, optional
+             0: No, 1: Yes (Default value = 0)
+
+        Returns
+        -------
+        DiffractionResult instance
+            DiffractionResult with the input setup.
+
         """
 
         if not isinstance(diffraction_setup, DiffractionSetupSweeps):
@@ -445,41 +683,42 @@ class Diffraction(object):
         return result
 
 if __name__ == "__main__":
-    import numpy
-    from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
-    from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction
-    from crystalpy.diffraction.Diffraction import Diffraction
-    from crystalpy.util.Vector import Vector
+    if False:
+        import numpy
+        from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
+        from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction
+        from crystalpy.diffraction.Diffraction import Diffraction
+        from crystalpy.util.Vector import Vector
 
 
-    diffraction_setup_r = DiffractionSetupXraylib(geometry_type=BraggDiffraction(),  # GeometryType object
-                                           crystal_name="Si",  # string
-                                           thickness=100e-6,  # meters
-                                           miller_h=1,  # int
-                                           miller_k=1,  # int
-                                           miller_l=1,  # int
-                                           asymmetry_angle=0,  # 10.0*numpy.pi/180.,            # radians
-                                           azimuthal_angle=0.0)  # radians                            # int
+        diffraction_setup_r = DiffractionSetupXraylib(geometry_type=BraggDiffraction(),  # GeometryType object
+                                               crystal_name="Si",  # string
+                                               thickness=100e-6,  # meters
+                                               miller_h=1,  # int
+                                               miller_k=1,  # int
+                                               miller_l=1,  # int
+                                               asymmetry_angle=0,  # 10.0*numpy.pi/180.,            # radians
+                                               azimuthal_angle=0.0)  # radians                            # int
 
-    energy_setup = 8000.0
-    bragg_angle = diffraction_setup_r.angleBragg(energy_setup)
-    print("Bragg angle for E=%f eV is %f deg" % (energy_setup, bragg_angle * 180.0 / numpy.pi))
+        energy_setup = 8000.0
+        bragg_angle = diffraction_setup_r.angleBragg(energy_setup)
+        print("Bragg angle for E=%f eV is %f deg" % (energy_setup, bragg_angle * 180.0 / numpy.pi))
 
-    deviation = 3e-6  # angle_deviation_min + ia * angle_step
-    angle = deviation + bragg_angle
+        deviation = 3e-6  # angle_deviation_min + ia * angle_step
+        angle = deviation + bragg_angle
 
-    # calculate the components of the unitary vector of the incident photon scan. Note that diffraction plane is YZ
-    photon = Photon(energy_in_ev=energy_setup, direction_vector=Vector(0.0,
-                                                                       numpy.cos(angle),
-                                                                       - numpy.abs(numpy.sin(angle))))
-
-
-    diffraction = Diffraction()
-    coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
-    print(coeffs_r['S'], coeffs_r['P'])
+        # calculate the components of the unitary vector of the incident photon scan. Note that diffraction plane is YZ
+        photon = Photon(energy_in_ev=energy_setup, direction_vector=Vector(0.0,
+                                                                           numpy.cos(angle),
+                                                                           - numpy.abs(numpy.sin(angle))))
 
 
-    diffraction1 = Diffraction()
-    coeffs_r = diffraction1.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
-    print(coeffs_r['S'], coeffs_r['P'])
+        diffraction = Diffraction()
+        coeffs_r = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
+        print(coeffs_r['S'], coeffs_r['P'])
+
+
+        diffraction1 = Diffraction()
+        coeffs_r = diffraction1.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon)
+        print(coeffs_r['S'], coeffs_r['P'])
 

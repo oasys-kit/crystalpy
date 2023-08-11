@@ -29,55 +29,91 @@ else:
 
 
 class CalculationStrategy(object):
-    """
-    Abstract strategy for calculation. Can be plain python or arbitrary precision like mpmath.
-    """
+    """Abstract strategy for calculation. Can be plain python or arbitrary precision like mpmath."""
     def createVariable(self, initial_value):
-        """
-        Factory method for calculation variable.
-        :param initial_value: Initial value of the variable.
-        :return: Calculation variable.
+        """Factory method for calculation variable.
+
+        Parameters
+        ----------
+        initial_value :
+            Initial value of the variable.
+
+        Returns
+        -------
+        type
+            Calculation variable.
+
         """
         raise Exception("Must override this method.")
 
     def exponentiate(self, power):
-        """
-        Exponentiates to the power.
-        :param power: The power to raise to.
-        :return: Exponential.
+        """Exponentiates to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Exponential.
+
         """
         raise Exception("Must override this method.")
 
     def sin(self, power):
-        """
-        Sin to the power.
-        :param power: The power to raise to.
-        :return: Sin.
+        """Sin to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Sin.
+
         """
         raise Exception("Must override this method.")
 
     def cos(self, power):
-        """
-        Cos to the power.
-        :param power: The power to raise to.
-        :return: Cos.
+        """Cos to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Cos.
+
         """
         raise Exception("Must override this method.")
 
 
     def toComplex(self, variable):
-        """
-        Converts calculation variable to native python complex.
-        :param variable: Calculation variable to convert.
-        :return: Native python complex variable.
+        """Converts calculation variable to native python complex.
+
+        Parameters
+        ----------
+        variable :
+            Calculation variable to convert.
+
+        Returns
+        -------
+        type
+            Native python complex variable.
+
         """
         raise Exception("Must override this method.")
 
 
 class CalculationStrategyMPMath(CalculationStrategy):
-    """
-    Use mpmath for calculation.
-    """
+    """Use mpmath for calculation."""
     def __init__(self):
         """
         Constructor.
@@ -86,10 +122,18 @@ class CalculationStrategyMPMath(CalculationStrategy):
         mpmath.mp.dps = 32
 
     def createVariable(self, initial_value):
-        """
-        Factory method for calculation variable.
-        :param initial_value: Initial value of the variable.
-        :return: mpmath variable.
+        """Factory method for calculation variable.
+
+        Parameters
+        ----------
+        initial_value :
+            Initial value of the variable.
+
+        Returns
+        -------
+        type
+            mpmath variable.
+
         """
 
         if initial_value.size == 1:
@@ -100,34 +144,66 @@ class CalculationStrategyMPMath(CalculationStrategy):
         return mpc
 
     def exponentiate(self, power):
-        """
-        Exponentiates to the power.
-        :param power: The power to raise to.
-        :return: Exponential.
+        """Exponentiates to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Exponential.
+
         """
         return mpmath_exp(power)
 
     def sin(self, power):
-        """
-        Sin to the power.
-        :param power: The power to raise to.
-        :return: Sin.
+        """Sin to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Sin.
+
         """
         return mpmath_sin(power)
 
     def cos(self, power):
-        """
-        Cos to the power.
-        :param power: The power to raise to.
-        :return: Cos.
+        """Cos to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Cos.
+
         """
         return mpmath_cos(power)
 
     def toComplex(self, variable):
-        """
-        Converts calculation variable to native python complex.
-        :param variable: Calculation variable to convert.
-        :return: Native python complex variable.
+        """Converts calculation variable to native python complex.
+
+        Parameters
+        ----------
+        variable :
+            Calculation variable to convert.
+
+        Returns
+        -------
+        type
+            Native python complex variable.
+
         """
         # return complex(variable)
 
@@ -135,22 +211,36 @@ class CalculationStrategyMPMath(CalculationStrategy):
 
 
 class CalculationStrategyMath(CalculationStrategy):
-    """
-    Use plain python for calculation.
-    """
+    """Use plain python for calculation."""
     def createVariable(self, initial_value):
-        """
-        Factory method for calculation variable.
-        :param initial_value: Initial value of the variable.
-        :return: mpmath variable.
+        """Factory method for calculation variable.
+
+        Parameters
+        ----------
+        initial_value :
+            Initial value of the variable.
+
+        Returns
+        -------
+        type
+            mpmath variable.
+
         """
         return initial_value + 0j # complex(initial_value)
 
     def exponentiate(self, power):
-        """
-        Exponentiates to the power.
-        :param power: The power to raise to.
-        :return: Exponential.
+        """Exponentiates to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Exponential.
+
         """
         try:
             ans =  numpy.exp(power)
@@ -159,32 +249,57 @@ class CalculationStrategyMath(CalculationStrategy):
         return ans
 
     def sin(self, power):
-        """
-        Sin to the power.
-        :param power: The power to raise to.
-        :return: Sin.
+        """Sin to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Sin.
+
         """
         return numpy.sin(power)
 
     def cos(self, power):
-        """
-        Cos to the power.
-        :param power: The power to raise to.
-        :return: Cos.
+        """Cos to the power.
+
+        Parameters
+        ----------
+        power :
+            The power to raise to.
+
+        Returns
+        -------
+        type
+            Cos.
+
         """
         return numpy.cos(power)
 
 
     def toComplex(self, variable):
-        """
-        Converts calculation variable to native python complex.
-        :param variable: Calculation variable to convert.
-        :return: Native python complex variable.
+        """Converts calculation variable to native python complex.
+
+        Parameters
+        ----------
+        variable :
+            Calculation variable to convert.
+
+        Returns
+        -------
+        type
+            Native python complex variable.
+
         """
         return complex(variable)
 
 
 class PerfectCrystalDiffraction(object):
+    """ """
     isDebug = False
 
     def __init__(self, geometry_type, bragg_normal, surface_normal, bragg_angle, psi_0, psi_H, psi_H_bar, thickness, d_spacing):
@@ -217,87 +332,163 @@ class PerfectCrystalDiffraction(object):
             self._calculation_strategy = CalculationStrategyMath()
 
     def braggNormal(self):
-        """
-        Returns the Bragg normal, i.e. normal on the reflection planes.
+        """Returns the Bragg normal, i.e. normal on the reflection planes.
         :return: Bragg normal.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._bragg_normal
 
     def surface_normal(self):
-        """
-        Returns the surface normal that points outwards the crystal.
+        """Returns the surface normal that points outwards the crystal.
         :return: Surface normal.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._surface_normal
 
     def braggAngle(self):
-        """
-        Returns the Bragg angle.
+        """Returns the Bragg angle.
         :return: The Bragg angle.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._bragg_angle
 
     def Psi0(self):
-        """
-        Returns Psi0 as defined in Zachariasen [3-95].
+        """Returns Psi0 as defined in Zachariasen [3-95].
         :return: Psi0.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._psi_0
 
     def PsiH(self):
-        """
-        Returns Psi0 as defined in Zachariasen [3-95].
+        """Returns Psi0 as defined in Zachariasen [3-95].
         :return: PsiH.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._psi_H
 
     def PsiHBar(self):
-        """
-        Returns Psi0 as defined in Zachariasen [3-95].
+        """Returns Psi0 as defined in Zachariasen [3-95].
         :return: PsiHBar.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._psi_H_bar
 
     def thickness(self):
-        """
-        Returns crystal thickness.
+        """Returns crystal thickness.
         :return: Thickness of the crystal.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._thickness
 
     def dSpacing(self):
-        """
-        Returns distance between the reflection planes.
+        """Returns distance between the reflection planes.
         :return: Distance between the reflection planes.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._d_spacing
 
     def geometryType(self):
-        """
-        Returns the geometry types, i.e. BraggTransmission, LaueDiffraction,...
+        """Returns the geometry types, i.e. BraggTransmission, LaueDiffraction,...
         :return: Geometry type.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._geometryType
 
     def log(self, string):
-        """
-        Logs a string.
-        :param string: String to log.
+        """Logs a string.
+
+        Parameters
+        ----------
+        string :
+            String to log.
+
+        Returns
+        -------
+
         """
         print(string)
 
     def logDebug(self, string):
-        """
-        Logs a debug string.
-        :param string: String to log.
+        """Logs a debug string.
+
+        Parameters
+        ----------
+        string :
+            String to log.
+
+        Returns
+        -------
+
         """
         self.log("<DEBUG>: " + string)
 
     def _calculateGamma(self, photon):
-        """
-        Calculates the projection cosine gamma as defined in Zachariasen [3-115].
-        :param photon: Photon that is projected onto the surface normal.
-        :return: Projection cosine gamma.
+        """Calculates the projection cosine gamma as defined in Zachariasen [3-115].
+
+        Parameters
+        ----------
+        photon :
+            Photon that is projected onto the surface normal.
+
+        Returns
+        -------
+        type
+            Projection cosine gamma.
+
         """
         gamma = photon.unitDirectionVector().scalarProduct(self.surface_normal().getNormalizedVector())
         # Our crystal normal is pointing outside the crystal medium. Zachariasen's normal points
@@ -306,10 +497,18 @@ class PerfectCrystalDiffraction(object):
         return gamma
 
     def _calculatePhotonOut(self, photon_in):
-        """
-        Solves the Laue equation to calculates the outgoing photon from the incoming photon and the Bragg normal.
-        :param photon_in: Incoming photon or photon bunch.
-        :return: Outgoing photon or photon bunch
+        """Solves the Laue equation to calculates the outgoing photon from the incoming photon and the Bragg normal.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon or photon bunch.
+
+        Returns
+        -------
+        type
+            Outgoing photon or photon bunch
+
         """
         # # Retrieve k_0.
         # k_in = photon_in.wavevector()
@@ -395,10 +594,18 @@ class PerfectCrystalDiffraction(object):
 
 
     def _calculateAlphaZac(self, photon_in):
-        """
-        Calculates alpha ("refraction index difference between waves in the crystal") as defined in Zachariasen [3-114b].
-        :param photon_in: Incoming photon.
-        :return: alpha.
+        """Calculates alpha ("refraction index difference between waves in the crystal") as defined in Zachariasen [3-114b].
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+
+        Returns
+        -------
+        type
+            alpha.
+
         """
         # Calculate scalar product k_0 and B_H.
         k_0_times_B_h = photon_in.wavevector().scalarProduct(self.braggNormal())
@@ -416,10 +623,18 @@ class PerfectCrystalDiffraction(object):
         return zac_alpha
 
     def _calculateGuigayAlpha(self, photon_in):
-        """
-        Calculates alpha ("refraction index difference between waves in the crystal") as defined in Zachariasen [3-114b].
-        :param photon_in: Incoming photon.
-        :return: alpha.
+        """Calculates alpha ("refraction index difference between waves in the crystal") as defined in Zachariasen [3-114b].
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+
+        Returns
+        -------
+        type
+            alpha.
+
         """
         k0_dot_H = photon_in.wavevector().scalarProduct(self.braggNormal()) # scalar product k0 and H.
         wavenumber = photon_in.wavenumber() #  norm of k0.
@@ -428,11 +643,20 @@ class PerfectCrystalDiffraction(object):
 
 
     def _calculateZacB(self, photon_in, photon_out):
-        """
-        Calculates asymmetry ratio b as defined in Zachariasen [3-115].
-        :param photon_in: Incoming photon.
-        :param photon_out: Outgoing photon.
-        :return: Asymmetry ratio b.
+        """Calculates asymmetry ratio b as defined in Zachariasen [3-115].
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+        photon_out :
+            Outgoing photon.
+
+        Returns
+        -------
+        type
+            Asymmetry ratio b.
+
         """
         # TODO: revise this algorithm, it is not exactly as in Zachariasen [3-115]
         numerator   = self.surface_normal().scalarProduct(photon_in.wavevector())
@@ -443,11 +667,19 @@ class PerfectCrystalDiffraction(object):
 
 
     def _calculateGuigayB(self, photon_in):
-        """
-        Calculates asymmetry ratio b as defined in Guigay.
-        :param photon_in: Incoming photon.
-        :return: Asymmetry ratio b.
-        Note that this b changes when K0 (photon_in.wavevector()) changes
+        """Calculates asymmetry ratio b as defined in Guigay.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+
+        Returns
+        -------
+        type
+            Asymmetry ratio b.
+            Note that this b changes when K0 (photon_in.wavevector()) changes
+
         """
         KH = photon_in.wavevector().addVector(self.braggNormal())
         if isinstance(photon_in, Photon):
@@ -459,73 +691,144 @@ class PerfectCrystalDiffraction(object):
 
 
     def _calculateZacQ(self, zac_b, effective_psi_h, effective_psi_h_bar):
-        """
-        Calculates q as defined in Zachariasen [3-123].
-        :param zac_b: Asymmetry ratio b as defined in Zachariasen [3-115].
-        :param effective_psi_h: Effective PsiH (depending of polarisation. See text following [3.-139]).
-        :param effective_psi_h_bar: Effective PsiHBar (depending of polarisation. See text following [3.-139]).
-        :return: q.
+        """Calculates q as defined in Zachariasen [3-123].
+
+        Parameters
+        ----------
+        zac_b :
+            Asymmetry ratio b as defined in Zachariasen [3-115].
+        effective_psi_h :
+            Effective PsiH (depending of polarisation. See text following [3.-139]).
+        effective_psi_h_bar :
+            Effective PsiHBar (depending of polarisation. See text following [3.-139]).
+
+        Returns
+        -------
+        type
+            q.
+
         """
         return zac_b * effective_psi_h * effective_psi_h_bar
 
     def _calculateZacZ(self, zac_b, zac_alpha):
-        """
-        Calcualtes z as defined in Zachariasen [3-123].
-        :param zac_b: Asymmetry ratio b as defined in Zachariasen [3-115].
-        :param zac_alpha: Diffraction index difference of crystal fields.
-        :return: z.
+        """Calcualtes z as defined in Zachariasen [3-123].
+
+        Parameters
+        ----------
+        zac_b :
+            Asymmetry ratio b as defined in Zachariasen [3-115].
+        zac_alpha :
+            Diffraction index difference of crystal fields.
+
+        Returns
+        -------
+        type
+            z.
+
         """
         return (1.0e0 - zac_b) * 0.5e0 * self.Psi0() + zac_b * 0.5e0 * zac_alpha
 
     def _createVariable(self, initial_value):
-        """
-        Factory method for calculation variable. Delegates to active calculation strategy.
-        :param initial_value: Inital value of the variable.
-        :return: Variable to use for the calculation.
+        """Factory method for calculation variable. Delegates to active calculation strategy.
+
+        Parameters
+        ----------
+        initial_value :
+            Inital value of the variable.
+
+        Returns
+        -------
+        type
+            Variable to use for the calculation.
+
         """
         return self._calculation_strategy.createVariable(initial_value)
 
     def _exponentiate(self, power):
-        """
-        Exponentiates to the power using active calculation strategy. (plain python or arbitrary precision)
-        :param power: Calculation variable.
-        :return: Exponential.
+        """Exponentiates to the power using active calculation strategy. (plain python or arbitrary precision)
+
+        Parameters
+        ----------
+        power :
+            Calculation variable.
+
+        Returns
+        -------
+        type
+            Exponential.
+
         """
         return self._calculation_strategy.exponentiate(self._createVariable(power))
 
     def _sin(self, power):
-        """
-        Sin to the power using active calculation strategy. (plain python or arbitrary precision)
-        :param power: Calculation variable.
-        :return: Sin.
+        """Sin to the power using active calculation strategy. (plain python or arbitrary precision)
+
+        Parameters
+        ----------
+        power :
+            Calculation variable.
+
+        Returns
+        -------
+        type
+            Sin.
+
         """
         return self._calculation_strategy.sin(self._createVariable(power))
 
     def _cos(self, power):
-        """
-        Cos to the power using active calculation strategy. (plain python or arbitrary precision)
-        :param power: Calculation variable.
-        :return: Cos.
+        """Cos to the power using active calculation strategy. (plain python or arbitrary precision)
+
+        Parameters
+        ----------
+        power :
+            Calculation variable.
+
+        Returns
+        -------
+        type
+            Cos.
+
         """
         return self._calculation_strategy.cos(self._createVariable(power))
 
     def _toComplex(self, variable):
-        """
-        Converts calculation variable to complex. Delegates to active calculation strategy.
-        :param variable: Calculation variable.
-        :return: Calculation variable as complex.
+        """Converts calculation variable to complex. Delegates to active calculation strategy.
+
+        Parameters
+        ----------
+        variable :
+            Calculation variable.
+
+        Returns
+        -------
+        type
+            Calculation variable as complex.
+
         """
         return self._calculation_strategy.toComplex(variable)
 
     def _calculateComplexAmplitude(self, photon_in, zac_q, zac_z, gamma_0, effective_psi_h_bar):
-        """
-        Calculates the complex amplitude of the questioned wave: diffracted or transmission.
-        :param photon_in: Incoming photon.
-        :param zac_q: q as defined in Zachariasen [3-123].
-        :param zac_z: z as defined in Zachariasen [3-123].
-        :param gamma_0: Projection cosine as defined in Zachariasen [3-115].
-        :param effective_psi_h_bar: Effective PsiHBar (depending of polarisation. See text following [3.-139]).
-        :return: Complex amplitude.
+        """Calculates the complex amplitude of the questioned wave: diffracted or transmission.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+        zac_q :
+            q as defined in Zachariasen [3-123].
+        zac_z :
+            z as defined in Zachariasen [3-123].
+        gamma_0 :
+            Projection cosine as defined in Zachariasen [3-115].
+        effective_psi_h_bar :
+            Effective PsiHBar (depending of polarisation. See text following [3.-139]).
+
+        Returns
+        -------
+        type
+            Complex amplitude.
+
         """
         # Calculate geometry independent parts.
         tmp_root = (zac_q + zac_z * zac_z) ** 0.5
@@ -585,12 +888,24 @@ class PerfectCrystalDiffraction(object):
         return complex_amplitude # ComplexAmplitude(complex_amplitude)
 
     def _calculatePolarizationS(self, photon_in, zac_b, zac_z, gamma_0):
-        """
-        Calculates complex amplitude for the S polarization.
-        :param photon_in: Incoming photon.
-        :param zac_z: z as defined in Zachariasen [3-123].
-        :param gamma_0: Projection cosine as defined in Zachariasen [3-115].
-        :return: Complex amplitude of S polarization.
+        """Calculates complex amplitude for the S polarization.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+        zac_z :
+            z as defined in Zachariasen [3-123].
+        gamma_0 :
+            Projection cosine as defined in Zachariasen [3-115].
+        zac_b :
+            
+
+        Returns
+        -------
+        type
+            Complex amplitude of S polarization.
+
         """
         zac_q = self._calculateZacQ(zac_b, self.PsiH(), self.PsiHBar())
 
@@ -598,13 +913,24 @@ class PerfectCrystalDiffraction(object):
                                                self.PsiHBar())
 
     def _calculatePolarizationP(self, photon_in, zac_b, zac_z, gamma_0):
-        """
-        Calculates complex amplitude for the P polarization.
-        :param photon_in: Incoming photon.
-        :param zac_b: Asymmetry ratio b as defined in Zachariasen [3-115].
-        :param zac_z: z as defined in Zachariasen [3-123].
-        :param gamma_0: Projection cosine as defined in Zachariasen [3-115].
-        :return: Complex amplitude of P polarization.
+        """Calculates complex amplitude for the P polarization.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+        zac_b :
+            Asymmetry ratio b as defined in Zachariasen [3-115].
+        zac_z :
+            z as defined in Zachariasen [3-123].
+        gamma_0 :
+            Projection cosine as defined in Zachariasen [3-115].
+
+        Returns
+        -------
+        type
+            Complex amplitude of P polarization.
+
         """
         effective_psi_h = self.PsiH() * numpy.cos(2 * self.braggAngle())
         effective_psi_h_bar = self.PsiHBar() * numpy.cos(2 * self.braggAngle())
@@ -620,10 +946,28 @@ class PerfectCrystalDiffraction(object):
                              is_thick=0, # for Guigay only
                              use_transfer_matrix=0, # for Guigay only
                              ):
-        """
-        Calculate diffraction for incoming photon.
-        :param photon_in: Incoming photon or Photon bunch.
-        :return: Complex amplitude of the diffraction.
+        """Calculate diffraction for incoming photon.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon or Photon bunch.
+        calculation_method :
+             (Default value = 0)
+        # 0 :
+             (Default value = Zachariasen)
+        1 :
+             (Default value = Guigayis_thick=0)
+        # for Guigay onlyuse_transfer_matrix :
+             (Default value = 0)
+        # for Guigay only :
+            
+
+        Returns
+        -------
+        type
+            Complex amplitude of the diffraction.
+
         """
 
         if calculation_method == 0:
@@ -635,10 +979,18 @@ class PerfectCrystalDiffraction(object):
 
 
     def calculateDiffractionZachariasen(self, photon_in):
-        """
-        Calculate diffraction for incoming photon.
-        :param photon_in: Incoming photon.
-        :return: Complex amplitude of the diffraction.
+        """Calculate diffraction for incoming photon.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+
+        Returns
+        -------
+        type
+            Complex amplitude of the diffraction.
+
         """
         # Initialize return variable.
 
@@ -689,10 +1041,28 @@ class PerfectCrystalDiffraction(object):
                                    is_thick=0,
                                    use_transfer_matrix=0, # is faster to use use_transfer_matrix=0
                                    ):
-        """
-        Calculate diffraction for incoming photon.
-        :param photon_in: Incoming photon.
-        :return: Complex amplitude of the diffraction.
+        """Calculate diffraction for incoming photon.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+        debug :
+             (Default value = 0)
+        s_ratio :
+             (Default value = None)
+        is_thick :
+             (Default value = 0)
+        use_transfer_matrix :
+             (Default value = 0)
+        # is faster to use use_transfer_matrix :
+             (Default value = 0)
+
+        Returns
+        -------
+        type
+            Complex amplitude of the diffraction.
+
         """
         # Initialize return variable.
 
@@ -1021,6 +1391,21 @@ class PerfectCrystalDiffraction(object):
         return result
 
     def calculateTransferMatrix(self, photon_in, polarization=0, is_thick=0):
+        """
+
+        Parameters
+        ----------
+        photon_in :
+            
+        polarization :
+             (Default value = 0)
+        is_thick :
+             (Default value = 0)
+
+        Returns
+        -------
+
+        """
 
         photon_out = self._calculatePhotonOut(photon_in)
         alpha = self._calculateGuigayAlpha(photon_in)
@@ -1087,6 +1472,17 @@ class PerfectCrystalDiffraction(object):
 
     @classmethod
     def calculateScatteringMatrixFromTransferMatrix(self, transfer_matrix):
+        """
+
+        Parameters
+        ----------
+        transfer_matrix :
+            
+
+        Returns
+        -------
+
+        """
         m11, m12, m21, m22 = transfer_matrix
         s11 = m11 - m12 * m21 / m22
         s12 = m12 / m22
@@ -1095,17 +1491,42 @@ class PerfectCrystalDiffraction(object):
         return s11, s12, s21, s22
 
     def calculateScatteringMatrix(self, photon_in, polarization=0):
+        """
+
+        Parameters
+        ----------
+        photon_in :
+            
+        polarization :
+             (Default value = 0)
+
+        Returns
+        -------
+
+        """
         transfer_matrix = self.calculateTransferMatrix(photon_in, polarization=polarization)
         return self.calculateScatteringMatrixFromTransferMatrix(transfer_matrix)
 
 
     def _logMembers(self, zac_b, zac_alpha, photon_in, photon_out, result):
-        """
-        Debug logs the member variables and other relevant partial results.
-        :param zac_b: Asymmetry ratio b
-        :param zac_alpha: Diffraction index difference of crystal fields.
-        :param photon_in: Incoming photon.
-        :param result: Resulting complex amplitudes of the diffraction/transmission.
+        """Debug logs the member variables and other relevant partial results.
+
+        Parameters
+        ----------
+        zac_b :
+            Asymmetry ratio b
+        zac_alpha :
+            Diffraction index difference of crystal fields.
+        photon_in :
+            Incoming photon.
+        result :
+            Resulting complex amplitudes of the diffraction/transmission.
+        photon_out :
+            
+
+        Returns
+        -------
+
         """
         self.logDebug("Bragg angle: %f degrees \n" % (self.braggAngle() * 180 / pi))
         self.logDebug("psi0: (%.14f , %.14f)" % (self.Psi0().real, self.Psi0().imag))

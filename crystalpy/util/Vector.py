@@ -313,6 +313,7 @@ class Vector(object):
         ----------
         rotation_axis : Vector instance
             Vector specifying the rotation axis (not necessarily unit vector).
+
         angle : float
             Rotation angle in radiants.
 

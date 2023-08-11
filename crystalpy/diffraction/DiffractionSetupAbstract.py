@@ -1,7 +1,6 @@
 """
 Represents a diffraction setup abstract class.
 The super class should implement the methods to calculate structure factors
-Except for energy, all units are in SI.
 """
 
 from collections import OrderedDict
@@ -13,7 +12,38 @@ from crystalpy.util.Vector import Vector
 
 
 class DiffractionSetupAbstract(object):
+    """
+    Constructor.
 
+    Parameters
+    ----------
+    geometry_type: instance of BraggDiffraction, LaueDiffraction, BraggTransmission, or LaueTransmission
+
+    crystal_name: str
+        The name of the crystal, e.g. "Si".
+
+    thickness: float
+        The crystal thickness in m.
+
+    miller_h: int
+        Miller index H.
+
+    miller_k: int
+        Miller index K.
+
+    miller_l: int
+        Miller index L.
+
+    asymmetry_angle: float
+        The asymmetry angle between surface normal and Bragg normal (radians).
+
+    azimuthal_angle: float
+        The angle between the projection of the Bragg normal on the crystal surface plane and the x axis (radians).
+
+    debye_waller: float
+        The Debye-Waller factor exp(-M).
+
+    """
     def __init__(self,
                  geometry_type=None,
                  crystal_name="",
@@ -24,18 +54,7 @@ class DiffractionSetupAbstract(object):
                  asymmetry_angle=0.0,
                  azimuthal_angle=0.0,
                  debye_waller=1.0):
-        """
-        Constructor.
-        :param geometry_type: GeometryType (BraggDiffraction,...).
-        :param crystal_name: The name of the crystal, e.g. Si.
-        :param thickness: The crystal thickness.
-        :param miller_h: Miller index H.
-        :param miller_k: Miller index K.
-        :param miller_l: Miller index L.
-        :param asymmetry_angle: The asymmetry angle between surface normal and Bragg normal (radians).
-        :param azimuthal_angle: The angle between the projection of the Bragg normal
-                                on the crystal surface plane and the x axis (radians).
-        """
+
         self._geometry_type = geometry_type
         self._crystal_name = crystal_name
         self._thickness = thickness
@@ -50,58 +69,92 @@ class DiffractionSetupAbstract(object):
     # setters and getters
     #
     def geometryType(self):
-        """
-        Returns the GeometryType, e.g. BraggDiffraction, LaueTransmission,...
-        :return: The GeometryType.
+        """Returns the GeometryType, e.g. BraggDiffraction, LaueTransmission,...
+
+        Returns
+        -------
+        instance of BraggDiffraction, LaueDiffraction, BraggTransmission, or LaueTransmission.
+            The GeometryType.
+
+
         """
         return self._geometry_type
 
     def crystalName(self):
-        """
-        Return the crystal name, e.g. Si.
-        :return: Crystal name.
+        """Returs the crystal name
+
+        Returns
+        -------
+        str
+            Crystal name.
+
         """
         return self._crystal_name
 
     def thickness(self):
-        """
-        Returns the crystal thickness,
-        :return: The crystal thickness.
+        """Returns the crystal thickness in meters
+
+        Returns
+        -------
+        float
+            he crystal thickness.
+
         """
         return self._thickness
 
     def millerH(self):
-        """
-        Returns the Miller H index.
-        :return: Miller H index.
+        """Returns the Miller H index.
+
+        Returns
+        -------
+        int
+            Miller H index.
+
         """
         return self._miller_h
 
     def millerK(self):
-        """
-        Returns the Miller K index.
-        :return: Miller K index.
+        """Returns the Miller K index.
+
+        Returns
+        -------
+        int
+            Miller K index.
+
         """
         return self._miller_k
 
     def millerL(self):
-        """
-        Returns the Miller L index.
-        :return: Miller L index.
+        """Returns the Miller L index.
+
+        Returns
+        -------
+        int
+            Miller L index.
+
         """
         return self._miller_l
 
     def asymmetryAngle(self):
-        """
-        Returns the asymmetry angle between surface normal and Bragg normal.
-        :return: Asymmetry angle.
+        """Returns the asymmetry angle between surface normal and Bragg normal in degrees.
+
+        Returns
+        -------
+        float
+            Asymmetry angle.
+
+
         """
         return self._asymmetry_angle
 
     def azimuthalAngle(self):
-        """
-        Returns the angle between the Bragg normal projection on the crystal surface plane and the x axis.
-        :return: Azimuthal angle.
+        """Returns the angle between the Bragg normal projection on the crystal surface plane and the x axis in degrees.
+
+        Returns
+        -------
+        float
+            Azimuthal angle.
+
         """
         return self._azimuthal_angle
 
@@ -109,54 +162,110 @@ class DiffractionSetupAbstract(object):
     # abstract methods to be implemented by the super class
     #
     def angleBragg(self, energy=8000.0):
-        """
-        Returns the Bragg angle for a given energy.
-        :param energy: Energy to calculate the Bragg angle for.
-        :return: Bragg angle.
+        """Returns the Bragg angle for a given energy in radians.
+
+        Parameters
+        ----------
+        energy :
+            Energy to calculate the Bragg angle for. (Default value = 8000.0)
+
+        Returns
+        -------
+        float
+            Bragg angle in radians.
+
         """
         raise NotImplementedError()
 
     def F0(self, energy=8000.0):
-        """
-        Calculate F0 from Zachariasen.
-        :param energy: photon energy in eV.
-        :return: F0
+        """Calculate the structure factor F0.
+
+        Parameters
+        ----------
+        energy : float
+            photon energy in eV. (Default value = 8000.0)
+
+        Returns
+        -------
+        complex
+            F0
+
         """
         raise NotImplementedError()
 
 
     def FH(self, energy=8000.0):
-        """
-        Calculate FH from Zachariasen.
-        :param energy: photon energy in eV.
-        :return: FH
+        """Calculate the structure factor FH.
+
+        Parameters
+        ----------
+        energy :
+            photon energy in eV. (Default value = 8000.0)
+
+        Returns
+        -------
+        complex
+            FH
+
         """
 
         raise NotImplementedError()
 
     def FH_bar(self, energy=8000.0):
+        """Calculate the structure factor  FH_bar.
+
+        Parameters
+        ----------
+        energy :
+            photon energy in eV. (Default value = 8000.0)
+
+        Returns
+        -------
+        complex
+            FH_bar
+
         """
-        Calculate FH_bar from Zachariasen.
-        :param energy: photon energy in eV.
-        :return: FH_bar
+
+        raise NotImplementedError()
+
+    def Fall(self, energy=8000.0):
+        """Calculate the all structure factor  (F0, FH, FH_bar).
+
+        Parameters
+        ----------
+        energy :
+            photon energy in eV. (Default value = 8000.0)
+
+        Returns
+        -------
+        tuple
+            (F0, FH, FH_bar).
+
         """
 
         raise NotImplementedError()
 
     def dSpacing(self):
-        """
-        Returns the lattice spacing d.
-        :return: Lattice spacing. in A
+        """Returns the lattice spacing d in A.
+
+        Returns
+        -------
+        float
+            Lattice spacing. in A
+
         """
 
         raise NotImplementedError()
 
 
     def unitcellVolume(self):
-        """
-        Returns the unit cell volume i A^3
+        """Returns the unit cell volume in A^3
 
-        :return: Unit cell volume
+        Returns
+        -------
+        float
+            Unit cell volume in A^3.
+
         """
         raise NotImplementedError()
 
@@ -165,29 +274,106 @@ class DiffractionSetupAbstract(object):
     #
 
     def dSpacingSI(self):
+        """Returns the lattice spacing d in SI units (meters).
+
+        Returns
+        -------
+        float
+            Lattice spacing. in m
+
+        """
         return 1e-10 * self.dSpacing()
 
     def unitcellVolumeSI(self):
+        """Returns the unit cell volume in SI units (m^3)
+
+        Returns
+        -------
+        float
+            Unit cell volume in m^3.
+
+        """
         return 1e-30 * self.unitcellVolume()
     #
     # structure factors
     #
     def psi0(self, energy):
+        """Calculate the structure factor  psi0.
+
+        Parameters
+        ----------
+        energy :
+            photon energy in eV. (Default value = 8000.0)
+
+        Returns
+        -------
+        complex
+            psi0
+
+        """
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
         return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.F0(energy)
 
     def psiH(self, energy, rel_angle=1.0):
+        """Calculate the structure factor  psiH.
+
+        Parameters
+        ----------
+        energy :
+            photon energy in eV. (Default value = 8000.0)
+
+        rel_angle : float, optional
+            (Default = 1.0)
+
+        Returns
+        -------
+        complex
+            psiH
+
+        """
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
         return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH(energy, rel_angle=rel_angle)
 
     def psiH_bar(self, energy, rel_angle=1.0):
+        """Calculate the structure factor  psiH_bar.
+
+        Parameters
+        ----------
+        energy :
+            photon energy in eV. (Default value = 8000.0)
+
+        rel_angle : float, optional
+            (Default = 1.0)
+
+        Returns
+        -------
+        complex
+            psiH_bar
+
+        """
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
         return (-classical_electron_radius * wavelength ** 2 / (numpy.pi * self.unitcellVolumeSI())) * self.FH_bar(energy, rel_angle=rel_angle)
 
     def psiAll(self, energy1, rel_angle=1.0):
+        """Calculate the psi structure factors (psi0, psiH, psiH_bar).
+
+        Parameters
+        ----------
+        energy :
+            photon energy in eV. (Default value = 8000.0)
+
+        rel_angle : float, optional
+            (Default = 1.0)
+
+        Returns
+        -------
+        tuple
+            (psi0, psiH, psiH_bar).
+
+        """
         energy = numpy.array(energy1)
         classical_electron_radius = codata.codata.physical_constants["classical electron radius"][0]
         wavelength = codata.h * codata.c / codata.e / energy
@@ -198,11 +384,24 @@ class DiffractionSetupAbstract(object):
 
     # useful for scans...
     def incomingPhotonDirection(self, energy, deviation, angle_center_flag=2):
-        """
-        Calculates the direction of the incoming photon. Parallel to k_0.
-        :param energy: Energy to calculate the Bragg angle for.
-        :param deviation: Deviation from the uncorrected Bragg angle.
-        :return: Direction of the incoming photon.
+        """Calculates the direction of the incoming photon (or photon stack). Parallel to k_0.
+
+        Parameters
+        ----------
+        energy : float of numpy array/
+            Energy in eV.
+
+        deviation : float or array.
+            Deviation from the uncorrected Bragg angle.
+
+        angle_center_flag : int, optional
+             (Default value = 2)
+
+        Returns
+        -------
+        Vector instance
+            Direction(s) of the incoming photon(s).
+
         """
         # Edoardo: I use the geometrical convention from
         # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
@@ -228,8 +427,6 @@ class DiffractionSetupAbstract(object):
         elif angle_center_flag == 2:
             photon_direction = minusBH.rotateAroundAxis(axis, (numpy.pi / 2) - self.angleBragg(energy) - deviation)
 
-
-
         # print("PHOTON DIRECTION ",photon_direction_old.components(),photon_direction.components())
         # Let's now rotate this vector of an angle phi around the z axis (following the ISO standard 80000-2:2009).
         # photon_direction = photon_direction.rotateAroundAxis(Vector(0, 0, 1), self.azimuthalAngle() )
@@ -244,9 +441,13 @@ class DiffractionSetupAbstract(object):
     # new vector interface (srio)
     #
     def vectorNormalSurface(self):
-        """
-        Returns the normal to the surface. (0,0,1) by definition.
-        :return: Vector instance with Surface normal Vnor.
+        """Returns the normal to the surface. (0,0,1) by definition.
+
+        Returns
+        -------
+        Vector instance
+            Vector instance with Surface normal Vnor.
+
         """
         # Edoardo: I use the geometrical convention from
         # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
@@ -254,9 +455,13 @@ class DiffractionSetupAbstract(object):
         return normal_surface
 
     def vectorParallelSurface(self):
-        """
-        Returns the direction parallel to the crystal surface. (0,1,0) by definition.
-        :return: Vector instance with Surface normal Vtan.
+        """Returns the direction parallel to the crystal surface. (0,1,0) by definition.
+
+        Returns
+        -------
+        vector instance
+            Vector instance with Surface normal Vtan.
+
         """
         # Edoardo: I use the geometrical convention from
         # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
@@ -264,15 +469,18 @@ class DiffractionSetupAbstract(object):
         return parallel_surface
 
     def vectorH(self):
-        """
-        Calculates the H vector, normal on the reflection lattice plane, with modulus 2 pi / d_spacing (SI).
-
-        normal to Bragg planes obtained by rotating vnor an angle equal to minuns asymmetry angle (-alphaXOP)
+        """Calculates the H vector, normal on the reflection lattice plane, with modulus 2 pi / d_spacing (SI).
+        
+        The normal to Bragg planes is obtained by rotating vnor an angle equal to minuns asymmetry angle (-alphaXOP)
         around X using rodrigues rotation (in the screw direction (cw) when looking in the axis direction),
         and then an angle phi (azimuthal angle) around Z
 
-        :param return_normalized: if True the returned vector is normalized.
-        :return: B_H vector
+
+        Returns
+        -------
+        vector instance
+            H vector
+
         """
         # Edoardo: I use the geometrical convention from
         # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
@@ -294,9 +502,35 @@ class DiffractionSetupAbstract(object):
         return normal_bragg
 
     def vectorHdirection(self):
+        """Calculates the unitary vector parallel to the H vector (normal on the reflection lattice plane, with modulus 2 pi / d_spacing (SI)).
+
+        The normal to the Bragg planes is obtained by rotating vnor an angle equal to minuns asymmetry angle (-alphaXOP)
+        around X using rodrigues rotation (in the screw direction (cw) when looking in the axis direction),
+        and then an angle phi (azimuthal angle) around Z
+
+        Returns
+        -------
+        Vector instance
+            normal vector in direction of H.
+
+        """
         return self.vectorH().getNormalizedVector()
 
     def vectorK0direction(self, energy):
+        """Calculates the unitary vector parallel to the K0 vector (along the Bragg position)
+
+        Parameters
+        ----------
+        energy : float or numpy array.
+            The photon energy in eV.
+            
+
+        Returns
+        -------
+        Vector instance
+            The normalized vector (or stack of vectors) with the directions of K0.
+
+        """
         # return self.vectorIncomingPhotonDirection(energy, 0.0)
         minusBH = self.vectorHdirection().scalarMultiplication(-1.0) # -BH of an angle (90-BraggAngle) around the x axis
         axis = self.vectorParallelSurface().crossProduct(self.vectorNormalSurface())  # should be Vector(1, 0, 0)
@@ -304,6 +538,20 @@ class DiffractionSetupAbstract(object):
         return photon_direction
 
     def vectorK0directionCorrected(self, energy):
+        """Calculates the unitary vector parallel to the K0correcter vector (along the Bragg position corrected for refraction)
+
+        Parameters
+        ----------
+        energy : float or numpy array.
+            The photon energy in eV.
+
+
+        Returns
+        -------
+        Vector instance
+            The normalized vector (or stack of vectors) with the directions of K0corrected.
+
+        """
         # return self.vectorIncomingPhotonDirection(energy, 0.0)
         minusBH = self.vectorHdirection().scalarMultiplication(-1.0) # -BH of an angle (90-BraggAngle) around the x axis
         axis = self.vectorParallelSurface().crossProduct(self.vectorNormalSurface())  # should be Vector(1, 0, 0)
@@ -311,28 +559,72 @@ class DiffractionSetupAbstract(object):
         return photon_direction
 
     def vectorK0(self, energy):
+        """Calculates the vector K0(along the Bragg position)
+
+        Parameters
+        ----------
+        energy : float or numpy array.
+            The photon energy in eV.
+
+
+        Returns
+        -------
+        Vector instance
+            The K0.
+
+        """
         wavelength = codata.h * codata.c / codata.e / energy
         return self.vectorK0direction(energy).scalarMultiplication(2*numpy.pi/wavelength)
 
-    def vectorLattice(self):
-        return self.vectorH().scalarMultiplication(2 * numpy.pi /self.dSpacingSI())
-
     def vectorKh(self, energy):
-        """
-        returns Kh verifying Laue equation
+        """returns KH that verifies Laue equation with K0
+
+        Parameters
+        ----------
+        energy : float or numpy array
+            The energy or energy array
+
+        Returns
+        -------
+        Vector instance
+            The KH vector or vector stack
+
         """
         return Vector.addVector(self.vectorK0(energy), self.vectorH())
 
     def vectorKhdirection(self, energy):
+        """returns an unitary vector along the KH direction.
+
+        Parameters
+        ----------
+        energy : float or numpy array
+            The energy or energy array
+
+        Returns
+        -------
+        Vector instance
+            The unitary vector(s) along the KH direction(s).
+
+        """
         return self.vectorKh(energy).getNormalizedVector()
 
     # useful for scans...
     def vectorIncomingPhotonDirection(self, energy, deviation):
-        """
-        Calculates the direction of the incoming photon. Parallel to k_0.
-        :param energy: Energy to calculate the Bragg angle for.
-        :param deviation: Deviation from the Bragg angle.
-        :return: Direction of the incoming photon.
+        """Calculates the direction of the incoming photon. Parallel to K0.
+
+        Parameters
+        ----------
+        energy : float or numpy array
+            Energy in eV.
+
+        deviation : float or numpy array
+            Deviation from the Bragg angle in radians.
+
+        Returns
+        -------
+        Vector instance
+            Direction(s) of the incoming photon(s).
+
         """
         # Edoardo: I use the geometrical convention from
         # M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
@@ -362,23 +654,35 @@ class DiffractionSetupAbstract(object):
     # tools
     #
     def clone(self):
-        """
-        Returns a copy of this instance.
-        :return: A copy of this instance.
+        """Returns a copy of this instance.
+
+        Returns
+        -------
+        DiffractionSetup instance
+            A copy of this instance.
+
         """
         return deepcopy(self)
 
     def duplicate(self):
-        """
-        Returns a copy of this instance.
-        :return: A copy of this instance.
+        """Returns a copy of this instance.
+
+        Returns
+        -------
+        DiffractionSetup instance
+            A copy of this instance.
+
         """
         return deepcopy(self)
 
     def toDictionary(self):
-        """
-        Returns this setup in InfoDictionary form.
-        :return: InfoDictionary form of this setup.
+        """Returns info of this setup in a dictionary.
+
+        Returns
+        -------
+        dict
+            Info dictionary form of this setup.
+
         """
         info_dict = OrderedDict()
         info_dict["Geometry Type"] = self.geometryType().description()
@@ -394,10 +698,18 @@ class DiffractionSetupAbstract(object):
 
 
     def deviationOfIncomingPhoton(self, photon_in):
-        """
-        Given an incoming photon its deviation from the Bragg angle is returned.
-        :param photon_in: Incoming photon.
-        :return: Deviation from Bragg angle.
+        """Calculates deviation from the Bragg angle of an incoming photon in radians.
+
+        Parameters
+        ----------
+        photon_in :
+            Incoming photon.
+
+        Returns
+        -------
+        float
+            Deviation from Bragg angle in radians.
+
         """
         # this holds for every incoming photon-surface normal plane.
         total_angle = photon_in.unitDirectionVector().angle(self.vectorH())
@@ -414,6 +726,21 @@ class DiffractionSetupAbstract(object):
     # """
 
     def asymmetryFactor(self, energy, vector_k_in=None):
+        """Returns asymmetric factor.
+
+        Parameters
+        ----------
+        energy : float or numpy array
+            The photon energy in eV.
+            
+        vector_k_in : Vector instance, optional
+             The incident K0 (Default value = None, meaning that K0 is used.)
+
+        Returns
+        -------
+        float or numpy array
+
+        """
         if vector_k_in is None:
             vector_k_in = self.vectorK0(energy)
 
@@ -426,10 +753,18 @@ class DiffractionSetupAbstract(object):
         return numerator / denominator
 
     def angleBraggCorrected(self, energy=8000.0):
-        """
-        Returns the Bragg angle corrected for refraction for a given energy.
-        :param energy: Energy to calculate the Bragg angle for.
-        :return: Bragg angle corrected.
+        """Returns the Bragg angle corrected for refraction for a given energy.
+
+        Parameters
+        ----------
+        energy : float or numpy array
+            Energy in eV for calculating the Bragg angle. (Default value = 8000.0)
+
+        Returns
+        -------
+        float or numpy array
+            Bragg angle(s) corrected.
+
         """
         # equation 3.145a in Zachariasen's book
         numerator = (1 - self.asymmetryFactor(energy)) * self.psi0(energy).real
@@ -440,13 +775,48 @@ class DiffractionSetupAbstract(object):
     # Darwin width
     #
 
-    def darwinHalfwidthS(self, energy):
+    def darwinHalfwidthS(self, energy=8000.0):
+        """
+
+        energy : float or numpy array
+            Energy in eV for calculating the Bragg angle. (Default value = 8000.0)
+            
+
+        Returns
+        -------
+        float or numpy array
+            1/2 of the Darwin width(s) for sigma polarization in radians.
+
+        """
         return self.darwinHalfwidth(energy)[0]
 
     def darwinHalfwidthP(self, energy):
+        """
+
+        energy : float or numpy array
+            Energy in eV for calculating the Bragg angle. (Default value = 8000.0)
+
+
+        Returns
+        -------
+        float or numpy array
+            1/2 of the Darwin width(s) for pi polarization in radians.
+
+        """
         return self.darwinHalfwidth(energy)[1]
 
     def darwinHalfwidth(self, energy):
+        """
+
+        Parameters
+        ----------
+        energy :
+            
+
+        Returns
+        -------
+
+        """
         if isinstance(energy, int): energy = float(energy)
 
         codata_e2_mc2 = codata.hbar * codata.alpha / codata.m_e / codata.c * 1e2 # in cm
@@ -466,11 +836,6 @@ class DiffractionSetupAbstract(object):
     # operators
     #
     def __eq__(self, candidate):
-        """
-        Determines if two setups are equal.
-        :param candidate: Instance to compare to.
-        :return: True if the two instances are equal. False otherwise.
-        """
         if self._geometry_type != candidate.geometryType():
             return False
 
@@ -499,17 +864,13 @@ class DiffractionSetupAbstract(object):
         return True
 
     def __ne__(self, candidate):
-        """
-        Determines if two setups are not equal.
-        :param candidate: Instance to compare to.
-        :return: True if the two instances are not equal. False otherwise.
-        """
         return not self == candidate
 
 
 
 if __name__ == "__main__":
-    a = DiffractionSetupAbstract(geometry_type=0, crystal_name="Si", thickness=1e-5,
-                 miller_h=1, miller_k=1, miller_l=1,
-                 asymmetry_angle=0.0,
-                 azimuthal_angle=0.0,)
+    if False:
+        a = DiffractionSetupAbstract(geometry_type=0, crystal_name="Si", thickness=1e-5,
+                     miller_h=1, miller_k=1, miller_l=1,
+                     asymmetry_angle=0.0,
+                     azimuthal_angle=0.0,)

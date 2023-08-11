@@ -241,7 +241,7 @@ class MuellerMatrix(object):
 
     def set_general_linear_polarizer(self, theta):
 
-        """Sets the Muller matrix as a linear polarizer. See [rf].
+        """Sets the Muller matrix as a linear polarizer. See [rt].
 
         Parameters
         ----------
@@ -251,7 +251,7 @@ class MuellerMatrix(object):
 
         References
         ----------
-        .. [rf] https://en.wikipedia.org/wiki/Mueller_calculus
+        .. [rt] https://en.wikipedia.org/wiki/Mueller_calculus
 
         """
 
@@ -282,7 +282,7 @@ class MuellerMatrix(object):
 
     def set_general_linear_retarder(self, theta, delta=0.0):
 
-        """Sets the Muller matrix as a generic line retarder. See [rf].
+        """Sets the Muller matrix as a generic line retarder. See [rg].
 
         Parameters
         ----------
@@ -293,7 +293,7 @@ class MuellerMatrix(object):
 
         References
         ----------
-        .. [rf] https://en.wikipedia.org/wiki/Mueller_calculus
+        .. [rg] https://en.wikipedia.org/wiki/Mueller_calculus
 
         """
 

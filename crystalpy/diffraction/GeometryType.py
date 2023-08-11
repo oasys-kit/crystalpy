@@ -4,17 +4,31 @@ Represents geometry types/setups: Bragg diffraction, BraggTransmission, Laue dif
 
 
 class GeometryType(object):
+    """Constructor.
+
+    Parameters
+    ----------
+    description :
+        Description of the geometry type, e.g. "Bragg transmission"
+
+    Returns
+    -------
+
+    """
+
     def __init__(self, description):
-        """
-        Constructor.
-        :param description: Description of the geometry type, e.g. "Bragg transmission"
-        """
         self._description = description
 
     def description(self):
-        """
-        Returns the description of this geometry type.
+        """Returns the description of this geometry type.
         :return: Description of this geometry type.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return self._description
 
@@ -44,9 +58,15 @@ class GeometryType(object):
 
     @staticmethod
     def allGeometryTypes():
-        """
-        Returns all possible geometry types.
+        """Returns all possible geometry types.
         :return: All possible geometry types.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
         """
         return [BraggDiffraction(),
                 LaueDiffraction(),
@@ -55,32 +75,24 @@ class GeometryType(object):
 
 
 class LaueDiffraction(GeometryType):
-    """
-    Represents Laue diffraction.
-    """
+    """Represents Laue diffraction."""
     def __init__(self):
         super(LaueDiffraction, self).__init__("Laue diffraction")
 
 
 class BraggDiffraction(GeometryType):
-    """
-    Represents Bragg diffraction.
-    """
+    """Represents Bragg diffraction."""
     def __init__(self):
         super(BraggDiffraction, self).__init__("Bragg diffraction")
 
 
 class LaueTransmission(GeometryType):
-    """
-    Represents Laue transmission.
-    """
+    """Represents Laue transmission."""
     def __init__(self):
         super(LaueTransmission, self).__init__("Laue transmission")
 
 
 class BraggTransmission(GeometryType):
-    """
-    Represents Bragg transmission.
-    """
+    """Represents Bragg transmission."""
     def __init__(self):
         super(BraggTransmission, self).__init__("Bragg transmission")

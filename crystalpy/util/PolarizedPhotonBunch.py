@@ -10,10 +10,11 @@ class PolarizedPhotonBunch(PhotonBunch):
     """The PolarizadPhotonBunch is is a collection of PolarizedPhoton objects, making up the polarized photon beam.
 
     Constructor.
-        Parameters
-        ----------
-        polarized_photons : list, optional
-            List of PolarizedPhoton instances.
+
+    Parameters
+    ----------
+    polarized_photons : list, optional
+        List of PolarizedPhoton instances.
 
     """
 
