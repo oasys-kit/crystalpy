@@ -6,15 +6,22 @@
 Welcome to crystalpy's documentation!
 =====================================
 
+Python tools for X-ray diffraction in perfect crystals.
+
+Contains code to calculate diffraction for perfect crystals using dynamical diffraction theory. It uses the Zachariasen formalism. It contain tools to simulate polarization of crystals by Mueller/Stokes optics.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Introduction
 
+   readme
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Users
+   :includehidden:
 
-Indices and tables
-==================
+   installation
+   api
+   indicesandtables
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

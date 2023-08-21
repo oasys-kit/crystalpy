@@ -10,7 +10,6 @@ Subpackages
    crystalpy.diffraction
    crystalpy.examples
    crystalpy.polarization
-   crystalpy.tests
    crystalpy.util
 
 Module contents
