@@ -1,7 +1,7 @@
 
 __authors__ = ["E Cappelli, M Glass, M Sanchez del Rio - ESRF ISDD Advanced Analysis and Modelling"]
 __license__ = "MIT"
-__date__ = "23/11/2016"
+__date__ = "2016-2023"
 
 from setuptools import setup
 #
@@ -28,7 +28,7 @@ from setuptools import setup
 
 
 setup(name='crystalpy',
-      version='0.0.12',
+      version='0.0.13',
       description='Python crystal polarization calcution',
       author='Manuel Sanchez del Rio, Edoardo Cappelli, Mark Glass',
       author_email='srio@esrf.eu',

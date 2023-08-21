@@ -1,5 +1,5 @@
 import numpy
-
+import time
 # used in get_diffraction_setup
 from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueTransmission, LaueDiffraction, BraggTransmission
 from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
@@ -466,7 +466,6 @@ def calc_xcrystal_double_scan(
 if __name__ == "__main__":
     from srxraylib.plot.gol import set_qt
     set_qt()
-    import time
 
     calculation_method = 1
     is_thick = 0
