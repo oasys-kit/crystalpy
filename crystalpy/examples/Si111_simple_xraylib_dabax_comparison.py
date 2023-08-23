@@ -1,27 +1,25 @@
+#
+#
+# This example shows the diffraction by a Si 111 crystal calculated in its simplest implementation
+# and compares the results using xrayly and dabax.
+# It also compares the calculation time.
+# Note the differences in computing time using dabax:
+#    it is very slow if using it in an iterative way
+#    it is much faster when using the vector capabilities (accelerated).
+#
+#  Xraylib is always faster than dabax.
+#
 
-#
-#
-# This example shows the diffraction by a Si 111 crystal calculated in its simplest implementation:
-#
-#
-#    - calculate_simple_diffraction()
-#      Uses a crystal setup and calculates the complex transmitivity and reflectivity
-#
-#
 import numpy
-
-
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction
 from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
 from crystalpy.diffraction.DiffractionSetupDabax import DiffractionSetupDabax
 from crystalpy.diffraction.Diffraction import Diffraction
 
-
 from crystalpy.util.Vector import Vector
 from crystalpy.util.Photon import Photon
 from crystalpy.diffraction.PerfectCrystalDiffraction import PerfectCrystalDiffraction
-
 
 from dabax.dabax_xraylib import DabaxXraylib
 
@@ -79,6 +77,7 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
     intensityS_dabax = numpy.zeros(angle_deviation_points)
     intensityP_dabax = numpy.zeros(angle_deviation_points)
 
+    t0 = time.time()
     for ia in range(angle_deviation_points):
         deviation = angle_deviation_min + ia * angle_step
         angle = deviation  + bragg_angle
@@ -91,14 +90,32 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
 
         # perform the calculation
         coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon)
-        coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon, method=calculation_method)
 
         # store results
         deviations[ia] = deviation
         intensityS[ia] = numpy.abs(coeffs['S'])**2 # coeffs['S'].intensity()
         intensityP[ia] = numpy.abs(coeffs['P'])**2 # coeffs['P'].intensity()
+    t1 = time.time()
+
+    for ia in range(angle_deviation_points):
+        deviation = angle_deviation_min + ia * angle_step
+        angle = deviation  + bragg_angle
+
+        # calculate the components of the unitary vector of the incident photon scan
+        # Note that diffraction plane is YZ
+        yy = numpy.cos(angle)
+        zz = - numpy.abs(numpy.sin(angle))
+        photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
+
+        # perform the calculation
+        coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax,
+                                    photon, calculation_method=calculation_method)
+
+        # store results
+        deviations[ia] = deviation
         intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2 # coeffs_dabax['S'].intensity()
         intensityP_dabax[ia] = numpy.abs(coeffs_dabax['P'])**2 # coeffs_dabax['P'].intensity()
+    t2 = time.time()
 
     # plot results
     import matplotlib.pylab as plt
@@ -110,6 +127,8 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
     plt.ylabel("Reflectivity")
     plt.legend(["Sigma-polarization XRAYLIB","Pi-polarization XRAYLIB","Sigma-polarization DABAX","Pi-polarization DABAX"])
     plt.show()
+    print("Total time, Time per point XRAYLIB: ", t1-t0, (t1-t0) / angle_deviation_points)
+    print("Total time, Time per point DABAX: ", t2-t1, (t2-t1) / angle_deviation_points)
 
 
 def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
@@ -164,6 +183,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
     intensityS_dabax = numpy.zeros(angle_deviation_points)
     intensityP_dabax = numpy.zeros(angle_deviation_points)
 
+    t0 = time.time()
     for ia in range(angle_deviation_points):
         deviation = angle_deviation_min + ia * angle_step
         angle = deviation  + bragg_angle
@@ -175,7 +195,8 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                            calculation_method=calculation_method)
 
         # store results
         deviations[ia] = deviation
@@ -183,6 +204,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         intensityP[ia] = numpy.abs(coeffs['P']) ** 2
 
     psi_0, psi_H, psi_H_bar = diffraction_setup_dabax.psiAll(energy)
+    t1 = time.time()
 
     for ia in range(angle_deviation_points):
         deviation = angle_deviation_min + ia * angle_step
@@ -219,14 +241,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         deviations[ia] = deviation
         intensityS_dabax[ia] = numpy.abs(complex_amplitudes['S']) ** 2  # 0.0 # coeffs_dabax['S'].intensity()
         intensityP_dabax[ia] = numpy.abs(complex_amplitudes['P']) ** 2  # 0.0 # coeffs_dabax['P'].intensity()
-
-
-
-
-
-
-
-
+    t2 = time.time()
 
     # plot results
     import matplotlib.pylab as plt
@@ -238,7 +253,8 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
     plt.ylabel("Reflectivity")
     plt.legend(["Sigma-polarization XRAYLIB","Pi-polarization XRAYLIB","Sigma-polarization DABAX","Pi-polarization DABAX"])
     plt.show()
-
+    print("Total time, Time per point XRAYLIB: ", t1-t0, (t1-t0) / angle_deviation_points)
+    print("Total time, Time per point DABAX: ", t2-t1, (t2-t1) / angle_deviation_points)
 
 def calculate_simple_diffraction_energy_scan(calculation_method=0):
 
@@ -254,11 +270,6 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0)                              # radians                            # int
 
-    import socket
-    if socket.getfqdn().find("esrf") >= 0:
-        dx = DabaxXraylib(dabax_repository="http://ftp.esrf.fr/pub/scisoft/DabaxFiles/")
-    else:
-        dx = DabaxXraylib()
 
     diffraction_setup_dabax = DiffractionSetupDabax(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
@@ -268,7 +279,7 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
                                                miller_l               = 1,                                # int
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0,
-                                               dabax=dx)                              # radians
+                                               dabax=DabaxXraylib())                              # radians
 
 
     energy                 = 8000.0                           # eV
@@ -314,7 +325,8 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
         photon = Photon(energy_in_ev=energies[ia],direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=calculation_method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                  calculation_method=calculation_method)
 
         # store results
         intensityS[ia] = numpy.abs(coeffs['S'])**2 # coeffs['S'].intensity()
@@ -331,7 +343,8 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
         photon = Photon(energy_in_ev=energies[ia],direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon, method=calculation_method)
+        coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax,
+                                                    photon, calculation_method=calculation_method)
 
         # store results
         intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2 # coeffs_dabax['S'].intensity()
@@ -350,8 +363,8 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
     plt.legend(["Sigma-polarization XRAYLIB","Pi-polarization XRAYLIB","Sigma-polarization DABAX","Pi-polarization DABAX"])
     plt.show()
 
-    print("Total time, Time per points XRAYLIB: ", t1-t0, (t1-t0) / npoints)
-    print("Total time, Time per points DABAX: ", t2-t1, (t2-t1) / npoints)
+    print("Total time, Time per point XRAYLIB: ", t1-t0, (t1-t0) / npoints)
+    print("Total time, Time per point DABAX: ", t2-t1, (t2-t1) / npoints)
 
 def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
 
@@ -367,11 +380,6 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0)                              # radians                            # int
 
-    import socket
-    if socket.getfqdn().find("esrf") >= 0:
-        dx = DabaxXraylib(dabax_repository="http://ftp.esrf.fr/pub/scisoft/DabaxFiles/")
-    else:
-        dx = DabaxXraylib()
 
     diffraction_setup_dabax = DiffractionSetupDabax(geometry_type          = BraggDiffraction(),  # GeometryType object
                                                crystal_name           = "Si",                             # string
@@ -381,7 +389,7 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
                                                miller_l               = 1,                                # int
                                                asymmetry_angle        = 0,#10.0*numpy.pi/180.,                              # radians
                                                azimuthal_angle        = 0.0,
-                                               dabax=dx)                              # radians
+                                               dabax=DabaxXraylib())                              # radians
 
 
     energy                 = 8000.0                           # eV
@@ -489,8 +497,8 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
     plt.legend(["Sigma-polarization XRAYLIB","Pi-polarization XRAYLIB","Sigma-polarization DABAX","Pi-polarization DABAX"])
     plt.show()
 
-    print("Total time, Time per points XRAYLIB: ", t1-t0, (t1-t0) / npoints)
-    print("Total time, Time per points DABAX: ", t2-t1, (t2-t1) / npoints)
+    print("Total time, Time per point XRAYLIB: ", t1-t0, (t1-t0) / npoints)
+    print("Total time, Time per point DABAX: ", t2-t1, (t2-t1) / npoints)
 
 
 #
@@ -500,9 +508,9 @@ if __name__ == "__main__":
 
     calculation_method = 0 # 0=Zachariasen, 1=Guigay
 
-    # calculate_simple_diffraction_angular_scan(calculation_method=calculation_method)
-    # calculate_simple_diffraction_energy_scan(calculation_method=calculation_method)
-
+    calculate_simple_diffraction_angular_scan(calculation_method=calculation_method)
     calculate_simple_diffraction_angular_scan_accelerated(calculation_method=calculation_method)
+
+    calculate_simple_diffraction_energy_scan(calculation_method=calculation_method)
     calculate_simple_diffraction_energy_scan_accelerated(calculation_method=calculation_method)
 

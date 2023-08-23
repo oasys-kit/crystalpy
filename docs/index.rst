@@ -23,11 +23,5 @@ Contains code to calculate diffraction for perfect crystals using dynamical diff
 
    installation
    api
-   indicesandtables
-
-.. toctree::
-   :maxdepth: 3
-   :caption: Examples
-
-   installation
    examples
+   indicesandtables

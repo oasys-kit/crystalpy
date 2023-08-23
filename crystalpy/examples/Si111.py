@@ -1,4 +1,3 @@
-
 #
 #
 # This example shows the diffraction by a Si 111 crystal calculated in a variety of modes (see main):
@@ -16,10 +15,10 @@
 #      PolarizedPhoton, so photons with info on the Stokes parameters.
 #
 #
+
 import numpy
 # for plots
 from srxraylib.plot.gol import plot
-
 
 from crystalpy.diffraction.GeometryType import BraggDiffraction
 from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
@@ -195,8 +194,7 @@ def calculate_with_complex_amplitude_photon(method=0, calculation_method=0):
             photon = ComplexAmplitudePhoton(energy_in_ev=energy,direction_vector=Vin)
 
             photon_out = diffraction.calculateDiffractedComplexAmplitudePhoton(diffraction_setup,
-                                                                               photon,
-                                                                               method=calculation_method)
+                             photon, calculation_method=calculation_method)
             bunch_out.addPhoton(photon_out)
             ZZ[ia] = deviation
 
@@ -218,8 +216,7 @@ def calculate_with_complex_amplitude_photon(method=0, calculation_method=0):
             ZZ[ia] = angle_deviation_min + ia * angle_step
 
         bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
-                                                                               bunch_in,
-                                                                               method=calculation_method)
+                          bunch_in,calculation_method=calculation_method)
 
     bunch_out_dict = bunch_out.toDictionary()
     print(bunch_out_dict.keys())
@@ -297,9 +294,9 @@ def calculate_with_polarized_photon(method=0, calculation_method=0):
                                      stokes_vector=StokesVector([1,0,1,0]))
 
             photon_out = diffraction.calculateDiffractedPolarizedPhoton(diffraction_setup,
-                                                                        incoming_polarized_photon=photon,
-                                                                        inclination_angle=0.0,
-                                                                        method=calculation_method)
+                             incoming_polarized_photon=photon,
+                             inclination_angle=0.0,
+                             calculation_method=calculation_method)
             bunch_out.addPhoton( photon_out )
             ZZ[ia] = angle_deviation_min + ia * angle_step
 
@@ -323,7 +320,8 @@ def calculate_with_polarized_photon(method=0, calculation_method=0):
             bunch_in.addPhoton( photon )
             ZZ[ia] = angle_deviation_min + ia * angle_step
 
-        bunch_out = diffraction.calculateDiffractedPolarizedPhotonBunch(diffraction_setup,bunch_in,0.0, method=calculation_method)
+        bunch_out = diffraction.calculateDiffractedPolarizedPhotonBunch(diffraction_setup,bunch_in,0.0,
+                                calculation_method=calculation_method)
 
 
     bunch_out_dict = bunch_out.toDictionary()

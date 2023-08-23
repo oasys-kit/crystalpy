@@ -58,3 +58,12 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['sphinx_rtd_theme']
+
+# replace "view page source" with "edit on github" in Read The Docs theme
+#  * https://github.com/readthedocs/sphinx_rtd_theme/issues/529
+html_context = {
+	'display_github': True,
+  'github_user': 'oasys-kit',
+  'github_repo': 'crystalpy',
+  'github_version': 'master/docs/',
+}
