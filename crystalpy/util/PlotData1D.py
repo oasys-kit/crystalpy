@@ -6,7 +6,46 @@ import copy
 
 import numpy as np
 
-from Values import Interval
+class Interval(object):
+
+    def __init__(self, inf, sup):
+        """
+        Constructor.
+        """
+        self.inf = inf
+        self.sup = sup
+
+    def print(self):
+        """
+        Prints the interval to video.
+        """
+        print("\nInterval[{0}, {1}]\n".format(self.inf, self.sup))
+
+    def check_extrema(self):
+        """
+        Returns True if inf <= sup. False if inf > sup.
+        :return: bool
+        """
+        if self.inf > self.sup:
+            return False
+
+        return True
+
+    def __eq__(self, candidate):
+        """
+        Returns True if self == candidate.
+        """
+        if (self.inf == candidate.inf and
+                self.sup == candidate.sup):
+            return True
+
+        return False
+
+    def __ne__(self, candidate):
+        """
+        Returns True if self != candidate.
+        """
+        return not self == candidate
 
 
 class PlotData1D(object):

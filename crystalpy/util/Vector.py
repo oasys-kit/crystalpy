@@ -307,7 +307,7 @@ class Vector(object):
         return self.scalarMultiplication(self.norm() ** -1.0)
 
     def rotateAroundAxis(self, rotation_axis, angle):
-        """Rotates the vector around an axis. It uses the Rodrigues formula [rf]
+        """Rotates the vector around an axis. It uses the Rodrigues formula [rf]_
 
         Parameters
         ----------

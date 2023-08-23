@@ -1,4 +1,5 @@
 .. currentmodule:: crystalpy
+
 ===========
 Package API
 ===========
@@ -37,7 +38,7 @@ polarization
    polarization.CrystalPhasePlate
    polarization.MuellerDiffraction
    polarization.MuellerMatrix
-   polarization.Muellerresults
+   polarization.MuellerResult
 
 util
 ----
