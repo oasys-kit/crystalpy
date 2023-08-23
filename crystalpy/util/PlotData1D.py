@@ -6,7 +6,7 @@ import copy
 
 import numpy as np
 
-from crystalpy.examples.main_example.Values import Interval
+from Values import Interval
 
 
 class PlotData1D(object):

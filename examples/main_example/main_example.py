@@ -5,7 +5,7 @@ from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps
 from crystalpy.diffraction.Diffraction import Diffraction
 from crystalpy.polarization.MuellerDiffraction import MuellerDiffraction
 
-from crystalpy.examples.main_example.Values import Values
+from Values import Values
 from crystalpy.util.PlotData1D import PlotData1D
 
 def intensity_phase_plot(plot_1d, values):

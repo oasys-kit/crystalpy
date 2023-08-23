@@ -1,11 +1,19 @@
 
-__authors__ = ["E Cappelli, M Glass, M Sanchez del Rio - ESRF ISDD Advanced Analysis and Modelling"]
+__authors__ = ["M Sanchez del Rio, E Cappelli, M Glass  - ESRF ISDD MEG Modelling group"]
 __license__ = "MIT"
 __date__ = "2016-2023"
 
 from setuptools import setup
+
 #
-# memorandum (for pypi)
+# memorandum (for developer installation)
+#
+# git clone https://github.com/oasys-kit/crystalpy
+# cd crystalpy
+# python -m pip install -e . --no-deps --no-binary :all:
+
+#
+# memorandum (for updating pypi)
 #
 # python setup.py sdist
 # python -m twine upload dist/crystalpy....
@@ -35,16 +43,15 @@ from setuptools import setup
 
 
 setup(name='crystalpy',
-      version='0.0.13',
-      description='Python crystal polarization calcution',
+      version='0.0.14',
+      description='Python crystal polarization calculation',
       author='Manuel Sanchez del Rio, Edoardo Cappelli, Mark Glass',
       author_email='srio@esrf.eu',
       url='https://github.com/oasys-kit/crystalpy/',
       packages=['crystalpy',
                 'crystalpy.util',
                 'crystalpy.diffraction',
-                'crystalpy.polarization',
-                'crystalpy.examples'],
+                'crystalpy.polarization'],
       install_requires=[
                         'numpy',
                         'scipy',
