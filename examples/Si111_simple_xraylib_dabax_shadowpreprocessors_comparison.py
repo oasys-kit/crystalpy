@@ -130,7 +130,10 @@ if __name__ == "__main__":
     if create_preprocessor_files:
         from xoppylib.crystals.create_bragg_preprocessor_file_v1 import create_bragg_preprocessor_file_v1
         from xoppylib.crystals.create_bragg_preprocessor_file_v2 import create_bragg_preprocessor_file_v2
-        import xraylib
+        try:
+            import xraylib
+        except:
+            print("xraylib not available")
         preprocessor_file = "bragg_v1_backup.dat"
         create_bragg_preprocessor_file_v1(interactive=False,
                                               DESCRIPTOR="Si", H_MILLER_INDEX=1, K_MILLER_INDEX=1, L_MILLER_INDEX=1,

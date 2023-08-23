@@ -4,7 +4,10 @@ photon energy in eV
 dSpacing returns A
 units are in SI.
 """
-import xraylib
+try:
+    import xraylib
+except:
+    print("xraylib not available")
 import numpy
 from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
 # from crystalpy.util.vector import Vector

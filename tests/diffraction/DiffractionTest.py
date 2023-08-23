@@ -6,7 +6,11 @@ import unittest
 
 import numpy as np
 import numpy
-import xraylib
+
+try:
+    import xraylib
+except:
+    print("xraylib not available")
 
 from crystalpy.diffraction.Diffraction import Diffraction
 from crystalpy.diffraction.DiffractionSetupSweeps import DiffractionSetupSweeps

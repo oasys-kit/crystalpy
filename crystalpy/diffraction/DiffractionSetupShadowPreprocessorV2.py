@@ -492,7 +492,10 @@ if __name__ == "__main__":
         print("shadow preprocessor file uses f0_xop() for the coefficients and this is different")
         print("than xraylib.FF_Rayl() by a factor: ")
         ratio = 0.15946847244512372
-        import xraylib
+        try:
+            import xraylib
+        except:
+            print("xraylib not available")
         from dabax.dabax_xraylib import DabaxXraylib
         print(DabaxXraylib(file_f0='f0_xop.dat').FF_Rayl(14, 0.15946847244512372) / \
               xraylib.FF_Rayl(14, 0.15946847244512372) )
