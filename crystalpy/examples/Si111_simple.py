@@ -18,8 +18,6 @@ from crystalpy.diffraction.Diffraction import Diffraction
 
 
 from crystalpy.util.Vector import Vector
-
-
 from crystalpy.util.Photon import Photon
 
 

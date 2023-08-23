@@ -13,14 +13,21 @@ from setuptools import setup
 #
 # memorandum (for documentation with numpydoc style)
 #
+# ** install sphinx:
+# pip install sphinx
+# pip install sphinxcontrib-apidoc
+# pip install sphinx-rtd-theme
+# pip install nbsphinx
 # install payment (https://stackoverflow.com/questions/24555327/how-can-i-produce-a-numpy-like-documentation)
+# ** create embeded doc
 # pyment -o numpydoc Vector.py  # apply to all files,
 #   complete/edit by hand, see https://numpydoc.readthedocs.io/en/latest/format.html ...
 # patch Vector.py < Vector.py.patch
 # cd docs
+# ** some initialization
 # sphinx-quickstart  # needed only once...
 # cd ..
-# iterate:
+# ** iterate
 # rm docs/crystalpy*.rst docs/modules.rst
 # sphinx-apidoc -o docs crystalpy
 # cd docs
