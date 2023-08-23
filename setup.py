@@ -43,7 +43,7 @@ from setuptools import setup
 
 
 setup(name='crystalpy',
-      version='0.0.14',
+      version='0.0.15',
       description='Python crystal polarization calculation',
       author='Manuel Sanchez del Rio, Edoardo Cappelli, Mark Glass',
       author_email='srio@esrf.eu',
