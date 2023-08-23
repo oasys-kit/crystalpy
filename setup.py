@@ -57,7 +57,6 @@ setup(name='crystalpy',
                         'scipy',
                         'mpmath',
                         'dabax',
-                        'nbsphinx',
                        ],
       test_suite='tests'
       )
