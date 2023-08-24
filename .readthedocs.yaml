@@ -17,8 +17,8 @@ build:
   jobs:
     pre_build:
       - pwd
-      - ls ../crystalpy
-      - sphinx-apidoc -o ./ ../crystalpy
+      - ls
+      - sphinx-apidoc -o docs crystalpy
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
