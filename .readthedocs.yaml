@@ -16,8 +16,6 @@ build:
     # golang: "1.19"
   jobs:
     pre_build:
-      - pwd
-      - ls
       - sphinx-apidoc -o docs crystalpy
 
 # Build documentation in the "docs/" directory with Sphinx

@@ -1,6 +1,8 @@
 # Defining the exact version will make sure things don't break
 numpy==1.22.4
 scipy==1.9.1
+mpmath==1.2.1
+dabax==1.0.6
 sphinx==7.1.2
 sphinx_rtd_theme==1.3.0
 sphinxcontrib-apidoc==0.3.0
