@@ -12,7 +12,7 @@ Use pip to install crystalpy: run this command in your terminal
 
 .. code-block:: console
 
-    $ pip install crystalpy
+    $ python -m pip install crystalpy
 
 
 
@@ -25,7 +25,7 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/oasys-kit/crystalpy
+    $ git clone https://github.com/oasys-kit/crystalpy
 
 
 Once you have a copy of the source, you can install it with:

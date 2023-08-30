@@ -9,6 +9,16 @@ Python tools for X-ray diffraction in perfect crystals.
 
 Contains code to calculate diffraction for perfect crystals using dynamical diffraction theory. It uses the Zachariasen formalism. It contain tools to simulate polarization of crystals by Mueller/Stokes optics.
 
+
+Documentation
+-------------
+https://crystalpy.readthedocs.io/
+
+
+Source repository
+-----------------
+https://github.com/oasys-kit/crystalpy
+
 Quick-installation
 ------------------
 
@@ -16,7 +26,7 @@ Crystalpy can be installed with Python 3.x:
 
 .. code-block:: console
 
-    $ pip install crystalpy
+    $ python -m pip install crystalpy
 
 Reference
 ---------
