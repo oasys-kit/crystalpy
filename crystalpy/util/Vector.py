@@ -427,6 +427,36 @@ class Vector(object):
 
         return angle
 
+    def scattering_on_surface(self, NORMAL, H):
+        """Returns K_OUT vector following the scattering equation at a surface:
+            K_OUT_parallel = K_IN_parallel + H_parallel
+            |K_OUT| = |K_IN|
+
+        Parameters
+        ----------
+        NORMAL : instance of Vector
+            The vector normal to the surface.
+        H : instance of Vector
+            The scattering vector.
+
+        Returns
+        -------
+        Vector instance
+            Vector with K_OUT.
+
+        """
+        H_perp = NORMAL.scalarMultiplication(H.scalarProduct(NORMAL))
+        H_par = H.subtractVector(H_perp)
+
+        K_IN_perp = NORMAL.scalarMultiplication(self.scalarProduct(NORMAL))
+        K_IN_par = self.subtractVector(K_IN_perp)
+
+        K_OUT_par = K_IN_par.addVector(H_par)
+        K_OUT_perp = NORMAL.scalarMultiplication(
+            numpy.sqrt(self.norm() ** 2 - K_OUT_par.norm() ** 2))
+        K_OUT = K_OUT_par.addVector(K_OUT_perp)
+        return K_OUT
+
     def getVectorWithAngle(self, angle):
         """Returns one arbitrary vector with the vector rotated with a given angle.
 
@@ -498,32 +528,36 @@ if __name__ == "__main__":
     x1 = numpy.linspace(1, 2, 11)
     y1 = numpy.linspace(2, 3, 11)
     z1 = numpy.linspace(3, 4, 11)
-    vector = Vector(x1, y1, z1)
-    print("shape", vector.components().shape)
-    print("components: ", vector.components())
+    # vector = Vector(x1, y1, z1)
+    vector = Vector(x1*0, x1*0, z1*0+1)
+    # print("shape", vector.components().shape)
+    # print("components: ", vector.components())
+    #
+    # vector = Vector.initializeFromComponents( [x1, y1, z1] )
+    # print("shape", vector.components().shape)
+    # print("components: ", vector.components())
+    # print("3 v : ", vector.scalarMultiplication(3).components(), (vector * 3).components())
+    #
+    # print("components[0]: ", vector.components()[0])
+    # print("dot: ", (vector.scalarProduct(vector)))
+    #
+    # print("v+v: ", (vector.addVector(vector)).components())
+    # print("v+v: ", ( vector + vector).components())
+    #
+    # print("v/|v|: ", vector.getNormalizedVector().components())
+    # print("v == v?: ", vector == vector * 2)
+    # print("v == 2v?: ", vector == vector * 2)
+    # print("v =", vector.toString(), vector.getX())
+    #
+    # print("v points=", vector.nStack(), vector.isArray())
+    #
+    # print("perp v", vector.getOnePerpendicularVector().components())
+    #
+    # print("v x v =", vector.crossProduct(vector).components())
+    # print("|v| =", vector.norm())
 
-    vector = Vector.initializeFromComponents( [x1, y1, z1] )
-    print("shape", vector.components().shape)
-    print("components: ", vector.components())
-    print("3 v : ", vector.scalarMultiplication(3).components(), (vector * 3).components())
-
-    print("components[0]: ", vector.components()[0])
-    print("dot: ", (vector.scalarProduct(vector)))
-
-    print("v+v: ", (vector.addVector(vector)).components())
-    print("v+v: ", ( vector + vector).components())
-
-    print("v/|v|: ", vector.getNormalizedVector().components())
-    print("v == v?: ", vector == vector * 2)
-    print("v == 2v?: ", vector == vector * 2)
-    print("v =", vector.toString(), vector.getX())
-
-    print("v points=", vector.nStack(), vector.isArray())
-
-    print("perp v", vector.getOnePerpendicularVector().components())
-
-    print("v x v =", vector.crossProduct(vector).components())
-    print("|v| =", vector.norm())
+    print("Rot(v)_{x,10deg} =", vector.rotateAroundAxis(Vector(1,0,0), -numpy.radians(10)).components())
 
 
     print("angle: ", vector.angle(vector))
+

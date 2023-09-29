@@ -538,7 +538,7 @@ class DiffractionSetupAbstract(object):
         return photon_direction
 
     def vectorK0directionCorrected(self, energy):
-        """Calculates the unitary vector parallel to the K0correcter vector (along the Bragg position corrected for refraction)
+        """Calculates the unitary vector parallel to the K0corrected vector (along the Bragg position corrected for refraction)
 
         Parameters
         ----------
@@ -576,6 +576,24 @@ class DiffractionSetupAbstract(object):
         wavelength = codata.h * codata.c / codata.e / energy
         return self.vectorK0direction(energy).scalarMultiplication(2*numpy.pi/wavelength)
 
+    def vectorK0corrected(self, energy):
+        """Calculates the vector K0corrected (along the corrected Bragg position)
+
+        Parameters
+        ----------
+        energy : float or numpy array.
+            The photon energy in eV.
+
+
+        Returns
+        -------
+        Vector instance
+            The K0corrected.
+
+        """
+        wavelength = codata.h * codata.c / codata.e / energy
+        return self.vectorK0directionCorrected(energy).scalarMultiplication(2*numpy.pi/wavelength)
+
     def vectorKh(self, energy):
         """returns KH that verifies Laue equation with K0
 
@@ -593,7 +611,7 @@ class DiffractionSetupAbstract(object):
         return Vector.addVector(self.vectorK0(energy), self.vectorH())
 
     def vectorKhdirection(self, energy):
-        """returns an unitary vector along the KH direction.
+        """returns an unitary vector along the KH direction (that that verifies Laue equation with K0).
 
         Parameters
         ----------
@@ -607,6 +625,44 @@ class DiffractionSetupAbstract(object):
 
         """
         return self.vectorKh(energy).getNormalizedVector()
+
+    def vectorKscattered(self, K_IN=None, energy=8000.0):
+        """
+        returns the scattered K vector following the scattering equation at a surface:
+            K_parallel = K_IN_parallel + H_parallel
+            |K| = |K_IN|
+
+        Parameters
+        ----------
+        K_IN : instance of Vector, optional
+            The K vector. If None, used the vectorK0corrected(energy)
+        energy : float, optional
+            The energy value in eV (used only if K_IN=None)
+
+        Returns
+        -------
+        Vector instance
+            Vector with the scattered K.
+
+        """
+        if K_IN is None:
+            K_IN = self.vectorK0corrected(energy)
+
+        H = self.vectorH()
+        NORMAL = self.vectorNormalSurface()
+        K_OUT = K_IN.scattering_on_surface(NORMAL, H)
+        #
+        # H_perp = NORMAL.scalarMultiplication(H.scalarProduct(NORMAL))
+        # H_par = H.subtractVector(H_perp)
+        #
+        # K_IN_perp = NORMAL.scalarMultiplication( K_IN.scalarProduct(NORMAL))
+        # K_IN_par = K_IN.subtractVector(K_IN_perp)
+        #
+        # K_OUT_par = K_IN_par.addVector(H_par)
+        # K_OUT_perp = NORMAL.scalarMultiplication(
+        #                                     numpy.sqrt(K_IN.norm()**2 - K_OUT_par.norm()**2))
+        # K_OUT = K_OUT_par.addVector(K_OUT_perp)
+        return K_OUT
 
     # useful for scans...
     def vectorIncomingPhotonDirection(self, energy, deviation):
