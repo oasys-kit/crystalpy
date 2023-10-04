@@ -284,3 +284,8 @@ class VectorTest(unittest.TestCase):
         numpy.testing.assert_array_almost_equal(vector.angle(vector), numpy.zeros_like(x1))
 
 
+    def testAppend(self):
+        v1 = Vector(1,2,3)
+        v2 = Vector(4,5,6)
+
+        v1.append(v2)

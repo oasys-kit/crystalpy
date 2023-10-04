@@ -399,8 +399,7 @@ class Diffraction(object):
             Bunch made of diffracted/transmitted photons.
 
         """
-        # Create PhotonBunch instance.
-        outgoing_bunch = ComplexAmplitudePhotonBunch([])
+
 
         # Retrieve the photon bunch from the diffraction setup.
         # incoming_bunch = diffraction_setup.incomingPhotons()
@@ -422,6 +421,9 @@ class Diffraction(object):
             outgoing_bunch.rescaleEpi(coeffs["P"])
 
         else:
+            # Create PhotonBunch instance.
+            outgoing_bunch = ComplexAmplitudePhotonBunch([])
+
             perfect_crystal_bunch = cls._perfectCrystalForPhotonBunch(diffraction_setup, incoming_bunch)
             outgoing_bunch2 = perfect_crystal_bunch._calculatePhotonOut(incoming_bunch)
 

@@ -81,7 +81,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon, method=calculation_method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon, calculation_method=calculation_method)
 
         # store results
         deviations[ia] = deviation
@@ -120,7 +120,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
                                                     thickness=diffraction_setup_dabax.thickness(),
                                                     d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10)
 
-        complex_amplitudes = perfect_crystal.calculateDiffraction(photon, method=calculation_method)
+        complex_amplitudes = perfect_crystal.calculateDiffraction(photon, calculation_method=calculation_method)
 
         deviations[ia] = deviation
         intensityS_dabax[ia] = numpy.abs(complex_amplitudes['S'])**2 # complex_amplitudes['S'].intensity()  # 0.0 # coeffs_dabax['S'].intensity()

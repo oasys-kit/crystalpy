@@ -23,20 +23,20 @@ class ComplexAmplitudePhoton(Photon):
         The pi-amplitude.
 
     """
-    def __init__(self, energy_in_ev, direction_vector, Esigma=None,Epi=None):
+    def __init__(self, energy_in_ev, direction_vector, Esigma=None, Epi=None):
         # Call base constructor.
         Photon.__init__(self, energy_in_ev, direction_vector)
 
-        if Esigma == None:
-            self._Esigma = (1/numpy.sqrt(2)+0j)
+        if Esigma is None:
+            self._Esigma = numpy.array(1/numpy.sqrt(2)+0j)
         else:
 
-            self._Esigma = Esigma
+            self._Esigma = numpy.array(Esigma, dtype=complex)
 
-        if Epi == None:
-            self._Epi = (1/numpy.sqrt(2)+0j)
+        if Epi is None:
+            self._Epi = numpy.array(1/numpy.sqrt(2)+0j)
         else:
-            self._Epi = Epi
+            self._Epi = numpy.array(Epi, dtype=complex)
 
     def rescaleEsigma(self, factor):
         """Multiply the sigma complex amplitude by a factor.
@@ -47,7 +47,7 @@ class ComplexAmplitudePhoton(Photon):
             The multiplying factor.
 
         """
-        self._Esigma *= factor
+        self._Esigma *= numpy.array(factor, dtype=complex) # TODO: this cast may lose resolution
 
 
     def rescaleEpi(self, factor):
@@ -59,7 +59,7 @@ class ComplexAmplitudePhoton(Photon):
             The multiplying factor.
 
         """
-        self._Epi *= factor
+        self._Epi *= numpy.array(factor, dtype=complex)  # TODO: this cast may lose resolution
 
     def getIntensityS(self):
         """Gets the sigma intensity.
@@ -138,19 +138,27 @@ class ComplexAmplitudePhoton(Photon):
         """
         return self._Epi
 
-    def duplicate(self):
-        """Duplicates a complex-amplitude photon.
+    def setComplexAmplitudeS(self, value):
+        """Sets the sigma complex amplitude.
 
-        Returns
-        -------
-        Photon instance
-            New ComplexAmplitudePhoton instance with an identical photon.
+        Parameters
+        ----------
+        value : complex, numpy array
+            the value (complex) or numpy array (dtype=complex)
 
         """
-        return ComplexAmplitudePhoton(self._energy_in_ev,
-                               self._unit_direction_vector.duplicate(),
-                               self._Esigma,
-                               self._Epi)
+        self._Esigma = value
+
+    def setComplexAmplitudeP(self, value):
+        """Sets the pi complex amplitude.
+
+        Parameters
+        ----------
+        value : complex, numpy array
+            the value (complex) or numpy array (dtype=complex)
+
+        """
+        self._Epi = value
 
     def __eq__(self, candidate):
         if ((self.energy() == candidate.energy() and

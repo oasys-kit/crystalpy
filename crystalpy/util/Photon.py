@@ -5,6 +5,7 @@ Represents a photon defined by its energy and direction vector
 from crystalpy.util.Vector import Vector
 import scipy.constants as codata
 import numpy
+import copy
 
 
 class Photon(object):
@@ -20,19 +21,21 @@ class Photon(object):
 
     """
     def __init__(self, energy_in_ev=1000.0, direction_vector=Vector(0.0,1.0,0.0)):
-        self._energy_in_ev = float(energy_in_ev)
+        self._energy_in_ev = numpy.array(energy_in_ev)
         self._unit_direction_vector = direction_vector.getNormalizedVector()
 
+        if self._unit_direction_vector.nStack() != self._energy_in_ev.size:
+            raise Exception("Energy array must be of the same dimension of the vector stack.")
+
     def duplicate(self):
-        """Duplicates a photon.
+        """Return a clone of the Photon instance.
 
         Returns
         -------
         Photon instance
-            New Photon instance with an identical photon.
 
         """
-        return Photon( self.energy(), self.unitDirectionVector() )
+        return copy.deepcopy(self)
 
     def energy(self):
         """Get the photon energy in eV.

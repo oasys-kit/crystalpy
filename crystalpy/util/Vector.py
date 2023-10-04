@@ -48,6 +48,17 @@ class Vector(object):
         """
         return Vector(self.components()[0],self.components()[1],self.components()[2])
 
+    def append(self, vector):
+        x = self.components()[0]
+        y = self.components()[1]
+        z = self.components()[2]
+        xx = numpy.append(self.components()[0], vector.components()[0])
+        yy = numpy.append(self.components()[1], vector.components()[1])
+        zz = numpy.append(self.components()[2], vector.components()[2])
+        return Vector(xx, yy, zz)
+        # self.setComponents(xx, yy, zz)
+
+
     def setComponents(self, x, y, z):
         """Sets vector components.
 
@@ -561,3 +572,13 @@ if __name__ == "__main__":
 
     print("angle: ", vector.angle(vector))
 
+if __name__ == "__main__":
+    v1 = Vector(1,2,3)
+    v2 = Vector([4,4],[5,5],[6,6])
+
+    print(">>>>>", v1.components()[0], v1.components()[1], v1.components()[2])
+    print(">>>>>", v2.components()[0], v2.components()[1], v2.components()[2])
+
+
+    v1.append(v2)
+    print(">>>>>", v1.components()[0], v1.components()[1], v1.components()[2])

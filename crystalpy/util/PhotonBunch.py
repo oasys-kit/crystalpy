@@ -365,3 +365,300 @@ class PhotonBunch(object):
 
     def __getitem__(self, key):
         return self.polarized_photon_bunch[key]
+
+
+#
+# NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+#
+
+class PhotonBunchNew(Photon):
+    """The PhotonBunchNew is is a collection of Photon instances, making up the photon bunch or beam.
+
+    New version that inheritates from Photon and uses stacks for more effcient stockage.
+
+    Constructor.
+
+    Parameters
+    ----------
+    photons : list
+        List of Photon instances.
+
+    """
+
+    def __init__(self, photons=None):
+        if photons == None:
+            super().__init__(energy_in_ev=[], direction_vector=Vector([],[],[]))
+        else:
+            n = len(photons)
+            energy = numpy.zeros(n)
+            for el,i in enumerate(photons):
+                energy[i] = el.energy()
+                el.unitDirectionVector()
+                if i == 0:
+                    v = Vector(
+                        el.components()[0],
+                        el.components()[1],
+                        el.components()[2],
+                    )
+                else:
+                    v.append(el)
+            self.setEnergy(energy)
+            self.setUnitDirectionVector(v)
+            super().__init__(energy_in_ev=energy, direction_vector=v)
+
+    @classmethod
+    def initialize_from_energies_and_directions(cls, energies, V):
+        """Construct a bunch from arrays with photon energies and directions
+
+        Parameters
+        ----------
+
+        energies : list, numpy array
+
+        V : Vector instance (with a tack of vectors)
+
+        Returns
+        -------
+        PhotonBunch instance
+
+
+        """
+        bunch = PhotonBunchNew()
+        bunch.setEnergy(energies)
+        bunch.setUnitDirectionVector(V)
+        return bunch
+
+    def energies(self):
+        """Return the energies of the photons.
+
+
+        Returns
+        -------
+        numpy array
+            The energies of the photons (copied, not referenced).
+
+        """
+        return self.energy()
+
+
+    def toDictionary(self):
+        """Created a dictionary containing information about the bunch.
+
+        Returns
+        -------
+        dict
+            Information in tags: "number of photons", "energies", "deviations", "vx", "vy" and "vz".
+
+        """
+        array_dict = dict()
+        e = self.energy()
+        v = self.unitDirectionVector()
+        n = v.nStack()
+
+        array_dict["number of photons"] = n
+        array_dict["energies"] = e
+        array_dict["deviations"] = self.deviation()
+        array_dict["vx"] = v.components()[0]
+        array_dict["vy"] = v.components()[1]
+        array_dict["vz"] = v.components()[2]
+
+        return array_dict
+
+    def toString(self):
+        """Returns a string containing the parameters characterizing each photon in the bunch."""
+        bunch_string = str()
+        for photon in self:
+            string_to_attach = str(photon.energy()) + " " + \
+                               photon.unitDirectionVector().toString() + "\n"
+            bunch_string += string_to_attach
+        return bunch_string
+
+    def addPhoton(self, to_be_added):
+        """Adds a photon to the bunch.
+
+        Parameters
+        ----------
+        to_be_added : Photon instance
+
+        """
+        self.setEnergy(numpy.append(self.energy(), to_be_added.energy()))
+        self.setUnitDirectionVector(self.unitDirectionVector().append(to_be_added.unitDirectionVector()))
+
+    def addPhotonsFromList(self, to_be_added):
+        """Adds a list of photons to the bunch.
+
+        Parameters
+        ----------
+        to_be_added : list
+            The photons to be added
+
+        """
+        for el in to_be_added:
+            self.addPhoton(el)
+
+    def addBunch(self, to_be_added):
+        """Adds photons in a PhotonBunch instance.
+
+        Parameters
+        ----------
+        to_be_added : PhotonBunch instance
+            Photons to be added.
+
+
+        """
+        self.addPhoton(to_be_added)
+
+    def getNumberOfPhotons(self):
+        """Returns the number of photons in the bunch.
+
+        Returns
+        -------
+        int
+            Number of photons.
+        """
+        return self.unitDirectionVector().nStack()
+
+    def getListOfPhotons(self):
+        """Returns a list with the photons in the bunch.
+
+        Returns
+        -------
+        list
+            List with photons.
+        """
+        out = []
+        v = self.unitDirectionVector()
+        vx = v.components()[0]
+        vy = v.components()[1]
+        vz = v.components()[2]
+        for i in range(self.getNumberOfPhotons()):
+            out.append(Photon(energy_in_ev=self.energy()[i], direction_vector=Vector(
+                vx[i], vy[i], vz[i],
+            )))
+        return out
+
+    def getPhotonIndex(self, index):
+        """Returns the photon in the bunch with a given index.
+
+        Parameters
+        ----------
+        index : int
+            The photon index to be referenced.
+
+        Returns
+        -------
+        Photon instance
+            The photon (referenced, not copied).
+
+        """
+        v = self.unitDirectionVector()
+        vx = v.components()[0]
+        vy = v.components()[1]
+        vz = v.components()[2]
+        return Photon(energy_in_ev=self.energy()[index], direction_vector=Vector(vx[index], vy[index], vz[index]))
+
+    def setPhotonIndex(self, index, polarized_photon):
+        """Sets the photon in the bunch with a given index.
+
+        Parameters
+        ----------
+        index : int
+            The photon index to be modified.
+
+        polarized_photon : Photon instance
+            The photon to be stored.
+
+        """
+        energy = self.energy()
+        v = self.unitDirectionVector()
+        vx = v.components()[0]
+        vy = v.components()[1]
+        vz = v.components()[2]
+
+        energy[index] = polarized_photon.energy()
+        vx[index] = polarized_photon.unitDirectionVector().components()[0]
+        vy[index] = polarized_photon.unitDirectionVector().components()[1]
+        vz[index] = polarized_photon.unitDirectionVector().components()[2]
+        self.setEnergy(energy)
+        self.setUnitDirectionVector(Vector(vx, vy, vz))
+
+    def keys(self):
+        """return the keys of the dictionary resulting from toDictionary method"""
+        return self.toDictionary().keys()
+
+    def getArrayByKey(self, key):
+        """Returns the array of a givem key in from toDictionary method
+
+        Parameters
+        ----------
+        key :
+            deviations', 's0', 's1', 's2', 's3'.
+
+        Returns
+        -------
+        numpy array
+
+
+        """
+        return self.toDictionary()[key]
+
+    def isMonochromatic(self, places):
+        """Inquires about bunch monochromaticity.
+
+        Parameters
+        ----------
+        places :
+            number of decimal places to be taken into account for comparing energies.
+
+        Returns
+        -------
+        bool
+            True if all photons in the bunch have the same energy.
+
+        """
+        return self.energy().allEqual(self.energy()[0])
+
+    def isUnidirectional(self):
+        """Inquires if all photons in the bunch have the same direction.
+
+
+        Returns
+        -------
+        bool
+            True if all photons have the same direction.
+
+        """
+        first_direction = self.getPhotonIndex(0).unitDirectionVector()  # Vector object.
+
+        # if the first element goes the same direction as all others, then all others share the same direction.
+        for i in range(self.getNumberOfPhotons()):
+            if first_direction != self.getPhotonIndex(i).unitDirectionVector():  # the precision is set to 7 decimal places.
+                return False
+
+        return True
+
+    def __len__(self):
+        return self.getNumberOfPhotons()
+
+    def __iter__(self):
+        return iter(self.getListOfPhotons())
+
+if __name__ == "__main__":
+    npoint = 1000
+    vx = numpy.zeros(npoint) + 0.0
+    vy = numpy.zeros(npoint) + 1.0
+    vz = numpy.zeros(npoint) + 0.0
+
+    energy = numpy.zeros(npoint) + 3000.0
+
+    photon_bunch1 = PhotonBunchNew()
+    photon_bunch2 = PhotonBunchNew()
+
+    photons_list = list()
+
+    for i in range(npoint):
+        photon = Photon(energy_in_ev=energy[i],
+                        direction_vector=Vector(vx[i], vy[i], vz[i]))
+
+        photon_bunch1.addPhoton(photon)
+        photons_list.append(photon)

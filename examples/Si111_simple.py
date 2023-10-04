@@ -95,6 +95,6 @@ def calculate_simple_diffraction(calculation_method=0):
 #
 if __name__ == "__main__":
 
-    calculation_method = 0 # 0=Zachariasen, 1=Guigay
+    calculation_method = 1 # 0=Zachariasen, 1=Guigay
     calculate_simple_diffraction(calculation_method=calculation_method)
 

@@ -254,7 +254,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
 
 
 if __name__ == "__main__":
-    if False:
+    if True:
         from crystalpy.diffraction.GeometryType import BraggDiffraction
         import numpy
 

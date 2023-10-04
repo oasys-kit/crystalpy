@@ -9,7 +9,7 @@ import numpy
 
 from crystalpy.util.Vector import Vector
 from crystalpy.util.Photon import Photon
-from crystalpy.util.PhotonBunch import PhotonBunch
+from crystalpy.util.PhotonBunch import PhotonBunchNew as PhotonBunch
 
 from numpy.testing import assert_array_almost_equal
 
@@ -42,9 +42,14 @@ class PhotonBunchTest(unittest.TestCase):
 
         photon_bunch2.addPhotonsFromList(photons_list)
 
+        print(photon_bunch1.getNumberOfPhotons(), photon_bunch2.getNumberOfPhotons())
         energies = photon_bunch1.getArrayByKey("energies")
-        for energy in energies:
-            self.assertAlmostEqual(  energy, 3000.0)
+        print(energies.shape)
+        energies = photon_bunch2.getArrayByKey("energies")
+        print(energies.shape)
+
+        for i in range(energies.size):
+            self.assertAlmostEqual(  energies[i], 3000.0)
 
         for i in range(len(photon_bunch1)):
             # print("checking photon %d "%i)
