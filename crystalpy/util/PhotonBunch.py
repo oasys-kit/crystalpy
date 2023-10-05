@@ -475,7 +475,7 @@ class PhotonBunchDecorator(object):
             True if all photons in the bunch have the same energy.
 
         """
-        return self.energy().allEqual(self.energy()[0])
+        return numpy.all(self.energy() == self.energy()[0])
 
     def isUnidirectional(self):
         """Inquires if all photons in the bunch have the same direction.
@@ -607,7 +607,7 @@ class PhotonBunch(Photon, PhotonBunchDecorator):
         else:
             n = len(photons)
             energy = numpy.zeros(n)
-            for el,i in enumerate(photons):
+            for i,el in enumerate(photons):
                 energy[i] = el.energy()
                 el.unitDirectionVector()
                 if i == 0:

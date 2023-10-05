@@ -216,7 +216,7 @@ class PolarizedPhotonBunch(PolarizedPhoton, PolarizedPhotonBunchDecorator):
                 s1 = numpy.zeros(n)
                 s2 = numpy.zeros(n)
                 s3 = numpy.zeros(n)
-                for el,i in enumerate(polarized_photons):
+                for i,el in enumerate(polarized_photons):
                     energy[i] = el.energy()
                     vv = el.unitDirectionVector()
                     ss = el.stokesVector()

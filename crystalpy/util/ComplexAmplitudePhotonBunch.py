@@ -233,7 +233,7 @@ class ComplexAmplitudePhotonBunch(ComplexAmplitudePhoton, ComplexAmplitudePhoton
                 energy = numpy.zeros(n)
                 Esigma = numpy.zeros(n)
                 Epi    = numpy.zeros(n)
-                for el,i in enumerate(complex_amplitude_photons):
+                for i,el in enumerate(complex_amplitude_photons):
                     energy[i] = el.energy()
                     Esigma[i] = el.getComplexAmplitudeS()
                     Epi[i] = el.getComplexAmplitudeP()
