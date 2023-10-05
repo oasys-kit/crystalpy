@@ -184,8 +184,8 @@ class DiffractionResultTest(unittest.TestCase):
 
         for energy in (10000, 10001):
             for deviation in (-100e-6, -2.040816e-06, 2.040816e-06, 100e-6):
-                s_complex_amplitude = ComplexAmplitude(energy+deviation * 1e+4)
-                p_complex_amplitude = ComplexAmplitude(energy+2.0*deviation * 1e+4)
+                s_complex_amplitude = (energy+deviation * 1e+4)
+                p_complex_amplitude = (energy+2.0*deviation * 1e+4)
                 difference_complex_amplitude = s_complex_amplitude / p_complex_amplitude
 
                 diffraction_result.add(energy,

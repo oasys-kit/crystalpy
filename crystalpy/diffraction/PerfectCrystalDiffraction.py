@@ -1,5 +1,5 @@
 """
-Calculates crystal diffraction according to Zachariasen's representation of the dynamic theory of crystal diffraction
+Calculates crystal diffraction according to Guigay and Zachariasen formalism of the dynamic theory of crystal diffraction
 for perfect crystals.
 Except for energy all units are in SI. Energy is in eV.
 """
@@ -135,6 +135,9 @@ class CalculationStrategyMPMath(CalculationStrategy):
             mpmath variable.
 
         """
+
+        if not(isinstance(initial_value, numpy.ndarray)):
+            initial_value = numpy.array(initial_value)
 
         if initial_value.size == 1:
             mpc = mpmath.mpc(complex(initial_value.real) + 1j * complex(initial_value.imag))

@@ -240,19 +240,19 @@ class DiffractionSetupSweepsTest(unittest.TestCase):
         diffraction = diffractionSetup()
 
         f_0 = diffraction.F0(energy=8000)
-        self.assertAlmostEqual(f_0, 114.08416+2.7188j)
+        self.assertAlmostEqual(f_0, 114.0671599778+2.7210611299816887j)
 
     def testFH(self):
         diffraction = diffractionSetup()
 
         f_h = diffraction.FH(energy=8000)
-        self.assertAlmostEqual(f_h, 44.54356349760925-41.82476349760927j)
+        self.assertAlmostEqual(f_h, 44.5361940515001-41.81513292151844j)
 
     def testFH_bar(self):
         diffraction = diffractionSetup()
 
         f_h_bar = diffraction.FH_bar(energy=8000)
-        self.assertAlmostEqual(f_h_bar, 41.82476349760923+44.54356349760926j)
+        self.assertAlmostEqual(f_h_bar, 41.81513292151842+44.536194051500125j)
 
     def testDSpacing(self):
         diffraction = diffractionSetup()
@@ -262,7 +262,7 @@ class DiffractionSetupSweepsTest(unittest.TestCase):
 
     def testNormalBragg(self):
         diffraction = diffractionSetup()
-        bragg_normal = diffraction.normalBragg()
+        bragg_normal = diffraction.vectorHdirection()
         self.assertAlmostEqual(bragg_normal.getNormalizedVector().components()[0] , 0.0)
         self.assertAlmostEqual(bragg_normal.getNormalizedVector().components()[1] , numpy.sin(10*numpy.pi/180))
         self.assertAlmostEqual(bragg_normal.getNormalizedVector().components()[2] , numpy.cos(10*numpy.pi/180))
@@ -270,7 +270,7 @@ class DiffractionSetupSweepsTest(unittest.TestCase):
     def testNormalSurface(self):
         diffraction = diffractionSetup()
 
-        surface_normal = diffraction.normalSurface()
+        surface_normal = diffraction.vectorNormalSurface()
         self.assertAlmostEqual(surface_normal.getNormalizedVector().components()[0] , 0.0)
         self.assertAlmostEqual(surface_normal.getNormalizedVector().components()[1] , 0.0)
         self.assertAlmostEqual(surface_normal.getNormalizedVector().components()[2] , 1.0)

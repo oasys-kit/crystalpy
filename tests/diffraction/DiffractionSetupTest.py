@@ -6,7 +6,8 @@ import unittest
 
 import numpy
 
-from crystalpy.diffraction.DiffractionSetup import DiffractionSetup
+from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
+
 from crystalpy.diffraction.GeometryType import BraggDiffraction
 from crystalpy.util.Vector import Vector
 from crystalpy.util.Photon import Photon
@@ -15,7 +16,7 @@ from crystalpy.util.Photon import Photon
 def diffractionSetup():
     directions = [Vector(0,0,1.0/float(n)) for n in range(1,176)]
     photons = [Photon(10000, direction) for direction in directions]
-    diffraction_setup = DiffractionSetup(BraggDiffraction(),
+    diffraction_setup = DiffractionSetupXraylib(BraggDiffraction(),
                                          "Si",
                                          thickness=0.0001,
                                          miller_h=1,
@@ -30,7 +31,7 @@ def diffractionSetup():
 class DiffractionSetupTest(unittest.TestCase):
     def testConstructor(self):
         diffraction_setup = diffractionSetup()
-        self.assertIsInstance(diffraction_setup, DiffractionSetup)
+        self.assertIsInstance(diffraction_setup, DiffractionSetupXraylib)
 
         self.assertEqual(diffraction_setup._geometry_type,
                          BraggDiffraction())
@@ -134,19 +135,19 @@ class DiffractionSetupTest(unittest.TestCase):
         diffraction = diffractionSetup()
 
         f_0 = diffraction.F0(energy=8000)
-        self.assertAlmostEqual(f_0, 114.08416+2.7188j)
+        self.assertAlmostEqual(f_0, 114.0671599778+2.7210611299816887j)
 
     def testFH(self):
         diffraction = diffractionSetup()
 
         f_h = diffraction.FH(energy=8000)
-        self.assertAlmostEqual(f_h, 44.54356349760925-41.82476349760927j)
+        self.assertAlmostEqual(f_h, 44.5361940515001-41.81513292151844j)
 
     def testFH_bar(self):
         diffraction = diffractionSetup()
 
         f_h_bar = diffraction.FH_bar(energy=8000)
-        self.assertAlmostEqual(f_h_bar, 41.82476349760923+44.54356349760926j)
+        self.assertAlmostEqual(f_h_bar, 41.81513292151842+44.536194051500125j)
 
     def testDSpacing(self):
         diffraction = diffractionSetup()
@@ -157,13 +158,13 @@ class DiffractionSetupTest(unittest.TestCase):
     def testNormalBragg(self):
         diffraction = diffractionSetup()
 
-        bragg_normal = diffraction.vectorH(return_normalized=True)
+        bragg_normal = diffraction.vectorH()
         # print("<><>",bragg_normal.components())
         # [ 0.          0.17364818  0.98480775]
 
         self.assertAlmostEqual (bragg_normal.components()[0],0.)
-        self.assertAlmostEqual (bragg_normal.components()[1],0.17364818)
-        self.assertAlmostEqual (bragg_normal.components()[2],0.98480775)
+        self.assertAlmostEqual (bragg_normal.components()[1],3.47980484e+09, -3)
+        self.assertAlmostEqual (bragg_normal.components()[2],1.97349539e+10, -3)
 
     def testNormalSurface(self):
         diffraction = diffractionSetup()
@@ -238,7 +239,7 @@ class DiffractionSetupTest(unittest.TestCase):
     # @unittest.expectedFailure
     def testOperatorEqual(self):
         diffraction_setup_one = diffractionSetup()
-        diffraction_setup_two = DiffractionSetup(BraggDiffraction(),
+        diffraction_setup_two = DiffractionSetupXraylib(BraggDiffraction(),
                                                  "Diamond",
                                                  thickness=0.001,
                                                  miller_h=1,
@@ -255,7 +256,7 @@ class DiffractionSetupTest(unittest.TestCase):
     # @unittest.expectedFailure
     def testOperatorNotEqual(self):
         diffraction_setup_one = diffractionSetup()
-        diffraction_setup_two = DiffractionSetup(BraggDiffraction(),
+        diffraction_setup_two = DiffractionSetupXraylib(BraggDiffraction(),
                                                  "Diamond",
                                                  thickness=0.001,
                                                  miller_h=1,

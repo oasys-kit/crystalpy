@@ -4,6 +4,7 @@ Unittest for PerfectCrystalDiffraction class.
 
 import unittest
 
+import numpy
 from numpy import pi
 
 from crystalpy.diffraction.PerfectCrystalDiffraction import PerfectCrystalDiffraction
@@ -160,17 +161,15 @@ class PerfectCrystalDiffractionTest(unittest.TestCase):
         photon_in = generatePhotonIn()
         photon_out = perfect_crystal_diffraction._calculatePhotonOut(photon_in)
 
-        # TODO check this
-        # print("<><>",photon_in.unitDirectionVector().components())
-        # print("<><>",photon_out.unitDirectionVector().components())
-        #
-        # self.assertEqual(photon_out,
-        #                  generatePhotonOut())
+        assert(photon_out.unitDirectionVector().components()[0] - generatePhotonOut().unitDirectionVector().components()[0] < 1e-4)
+        assert(photon_out.unitDirectionVector().components()[1] - generatePhotonOut().unitDirectionVector().components()[1] < 1e-4)
+        assert(photon_out.unitDirectionVector().components()[2] - generatePhotonOut().unitDirectionVector().components()[2] < 1e-4)
+        assert (photon_out.energy() == generatePhotonOut().energy())
 
     def testCalculateZacAlpha(self):
         perfect_crystal_diffraction = generatePerfectCrystalDiffraction()
 
-        zac_alpha = perfect_crystal_diffraction._calculateZacAlpha(generatePhotonIn())
+        zac_alpha = perfect_crystal_diffraction._calculateAlphaZac(generatePhotonIn())
         self.assertAlmostEqual(zac_alpha,
                                1.81e-07)
 
@@ -196,10 +195,9 @@ class PerfectCrystalDiffractionTest(unittest.TestCase):
         perfect_crystal_diffraction = generatePerfectCrystalDiffraction()
 
         zac_b = perfect_crystal_diffraction._calculateZacB(generatePhotonIn(), generatePhotonOut())
-        zac_alpha = perfect_crystal_diffraction._calculateZacAlpha(generatePhotonIn())
+        zac_alpha = perfect_crystal_diffraction._calculateAlphaZac(generatePhotonIn())
         zac_z=perfect_crystal_diffraction._calculateZacZ(zac_b, zac_alpha)
-
-        self.assertAlmostEqual(zac_z.real, 1.0215407658857729e-07, 14)
+        self.assertAlmostEqual(zac_z.real, 1.0885317113884994e-07, 14)
         self.assertAlmostEqual(zac_z.imag, 1.09617725e-13, 18)
 
     def testCalculateReflectivity(self):
@@ -207,7 +205,7 @@ class PerfectCrystalDiffractionTest(unittest.TestCase):
         photon_in=generatePhotonIn()
 
         zac_b = perfect_crystal_diffraction._calculateZacB(generatePhotonIn(), generatePhotonOut())
-        zac_alpha = perfect_crystal_diffraction._calculateZacAlpha(photon_in)
+        zac_alpha = perfect_crystal_diffraction._calculateAlphaZac(photon_in)
         zac_q = perfect_crystal_diffraction._calculateZacQ(zac_b,
                                                            perfect_crystal_diffraction.PsiH(),
                                                            perfect_crystal_diffraction.PsiHBar())
@@ -217,36 +215,35 @@ class PerfectCrystalDiffractionTest(unittest.TestCase):
 
         reflectivity = perfect_crystal_diffraction._calculateComplexAmplitude(photon_in, zac_q, zac_z, gamma_0, psi_h_bar)
 
-        self.assertAlmostEqual(reflectivity.intensity(),1.2644064887815396e-05,10)
-        self.assertAlmostEqual(reflectivity.phase(), -1.561900959018073)
+        self.assertAlmostEqual(reflectivity.real, 0.000062674337500944665693323157599181,10)
+        self.assertAlmostEqual(reflectivity.imag, - 0.00355571703170472979992995)
 
     def testCalculatePolarizationS(self):
         perfect_crystal_diffraction = generatePerfectCrystalDiffraction()
         photon_in=generatePhotonIn()
 
         zac_b = perfect_crystal_diffraction._calculateZacB(generatePhotonIn(), generatePhotonOut())
-        zac_alpha = perfect_crystal_diffraction._calculateZacAlpha(photon_in)
+        zac_alpha = perfect_crystal_diffraction._calculateAlphaZac(photon_in)
         zac_z=perfect_crystal_diffraction._calculateZacZ(zac_b, zac_alpha)
         gamma_0=perfect_crystal_diffraction._calculateGamma(photon_in)
 
         reflectivity = perfect_crystal_diffraction._calculatePolarizationS(photon_in, zac_b, zac_z, gamma_0)
 
-        self.assertAlmostEqual(reflectivity.intensity(), 1.2644064887815396e-05, 10)
-        self.assertAlmostEqual(reflectivity.phase(), -1.561900959018073)
+        self.assertAlmostEqual(reflectivity.real, 0.000062674337500944665693323157599181,10)
+        self.assertAlmostEqual(reflectivity.imag, - 0.00355571703170472979992995)
 
     def testCalculatePolarizationP(self):
         perfect_crystal_diffraction = generatePerfectCrystalDiffraction()
         photon_in=generatePhotonIn()
 
         zac_b = perfect_crystal_diffraction._calculateZacB(generatePhotonIn(), generatePhotonOut())
-        zac_alpha = perfect_crystal_diffraction._calculateZacAlpha(photon_in)
+        zac_alpha = perfect_crystal_diffraction._calculateAlphaZac(photon_in)
         zac_z=perfect_crystal_diffraction._calculateZacZ(zac_b, zac_alpha)
         gamma_0=perfect_crystal_diffraction._calculateGamma(photon_in)
 
         reflectivity = perfect_crystal_diffraction._calculatePolarizationP(photon_in, zac_b, zac_z, gamma_0)
-
-        self.assertAlmostEqual(reflectivity.intensity(), 6.156661299381604e-14, 19)
-        self.assertAlmostEqual(reflectivity.phase(), -1.7487635714783434)
+        self.assertAlmostEqual(reflectivity.real, -0.000000041855084095565847478074035120048,10)
+        self.assertAlmostEqual(reflectivity.imag, - 0.00000024472114207113634190)
 
     def testCalculateDiffraction(self):
         perfect_crystal_diffraction = generatePerfectCrystalDiffraction()
@@ -254,7 +251,5 @@ class PerfectCrystalDiffractionTest(unittest.TestCase):
 
         reflectivity = perfect_crystal_diffraction.calculateDiffraction(photon_in)
 
-        self.assertAlmostEqual(reflectivity["S"].intensity(), 537732505.2538414     ,4  )
-        self.assertAlmostEqual(reflectivity["S"].phase(),     -1.3701895491121583     )
-        self.assertAlmostEqual(reflectivity["P"].intensity(), 2857952712.482391     , 2)
-        self.assertAlmostEqual(reflectivity["P"].phase(),     -2.1266501727883536     )
+        self.assertAlmostEqual(reflectivity["S"].real, 0.000062684305065944788668167454150374     ,6  )
+        self.assertAlmostEqual(reflectivity["S"].imag, -0.00355571634886292112409538891  , 6)

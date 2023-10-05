@@ -9,7 +9,7 @@ import numpy
 
 from crystalpy.util.Vector import Vector
 from crystalpy.util.Photon import Photon
-from crystalpy.util.PhotonBunch import PhotonBunchNew as PhotonBunch
+from crystalpy.util.PhotonBunch import PhotonBunch
 
 from numpy.testing import assert_array_almost_equal
 
