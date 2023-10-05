@@ -1,7 +1,5 @@
 """
-Represents a Stokes vector.
-
-Except for energy all units are in SI. Energy is in eV.
+Represents a Stokes vector (four components s0, s1, s2, s3). It accepts a stack (s0, etc. are arrays).
 """
 import numpy
 
@@ -15,10 +13,10 @@ class StokesVector(object):
 
     """
     def __init__(self, element_list=[0.0,0.0,0.0,0.0]):
-        self.s0 = float(element_list[0])
-        self.s1 = float(element_list[1])
-        self.s2 = float(element_list[2])
-        self.s3 = float(element_list[3])
+        self._s0 = numpy.array(element_list[0])
+        self._s1 = numpy.array(element_list[1])
+        self._s2 = numpy.array(element_list[2])
+        self._s3 = numpy.array(element_list[3])
 
     def duplicate(self):
         """Duplicates a StokesVector.
@@ -29,7 +27,7 @@ class StokesVector(object):
             New StokesVector instance with identical x,y,z components.
 
         """
-        return StokesVector(self.components())
+        return StokesVector(element_list=self.getList())
 
 
     def components(self):
@@ -43,6 +41,89 @@ class StokesVector(object):
         """
         return numpy.array(self.getList())
 
+    @property
+    def s0(self):
+        """
+        Gets s0 (first stokes parameter).
+
+        Returns
+        -------
+        float or numpy array
+
+        """
+        return(self._s0)
+
+    @property
+    def s1(self):
+        """
+        Gets s1 (second stokes parameter).
+
+        Returns
+        -------
+        float or numpy array
+
+        """
+        return(self._s1)
+
+    @property
+    def s2(self):
+        """
+        Gets s2 (first stokes parameter).
+
+        Returns
+        -------
+        float or numpy array
+
+        """
+        return(self._s2)
+
+    @property
+    def s3(self):
+        """
+        Gets s3 (first stokes parameter).
+
+        Returns
+        -------
+        float or numpy array
+
+        """
+        return(self._s3)
+
+    def append(self, vector):
+        """
+        Appends a stoked-vector to the stack.
+
+        Parameters
+        ----------
+        vector : instance of StokesVector
+
+        """
+        s00 = numpy.append(self.s0, vector.s0)
+        s11 = numpy.append(self.s1, vector.s1)
+        s22 = numpy.append(self.s2, vector.s2)
+        s33 = numpy.append(self.s3, vector.s3)
+        self.setFromArray([s00,s11,s22,s33])
+
+    def concatenate(self, vector):
+        """
+        Concatenates a vector to the stack.
+
+        Parameters
+        ----------
+        vector : instance of StokesVector
+
+        Returns
+        -------
+        instance of StokesVector
+            The resulting vector with the concatenation.
+
+        """
+        s00 = numpy.append(self.s0, vector.s0)
+        s11 = numpy.append(self.s1, vector.s1)
+        s22 = numpy.append(self.s2, vector.s2)
+        s33 = numpy.append(self.s3, vector.s3)
+        return StokesVector([s00,s11,s22,s33])
+
     def getS0(self):
         """Returns the S0 component.
 
@@ -53,7 +134,7 @@ class StokesVector(object):
             The S0 component.
 
         """
-        return self.components()[0]
+        return self.s0
 
     def getS1(self):
         """Returns the S1 component.
@@ -65,7 +146,7 @@ class StokesVector(object):
             The S1 component.
 
         """
-        return self.components()[1]
+        return self.s1
 
     def getS2(self):
         """Returns the S2 component.
@@ -77,7 +158,7 @@ class StokesVector(object):
             The S2 component.
 
         """
-        return self.components()[2]
+        return self.s2
 
     def getS3(self):
         """Returns the S3 component.
@@ -89,7 +170,7 @@ class StokesVector(object):
             The S3 component.
 
         """
-        return self.components()[3]
+        return self.s3
 
     def getList(self):
         """Generates a 1x4 list with the four Stokes components.
@@ -101,10 +182,10 @@ class StokesVector(object):
 
         """
         result = list()
-        result.append(self.s0)
-        result.append(self.s1)
-        result.append(self.s2)
-        result.append(self.s3)
+        result.append(self._s0)
+        result.append(self._s1)
+        result.append(self._s2)
+        result.append(self._s3)
 
         return result
 
@@ -118,12 +199,12 @@ class StokesVector(object):
 
         """
 
-        self.s0 = float(array[0])
-        self.s1 = float(array[1])
-        self.s2 = float(array[2])
-        self.s3 = float(array[3])
+        self._s0 = numpy.array(array[0])
+        self._s1 = numpy.array(array[1])
+        self._s2 = numpy.array(array[2])
+        self._s3 = numpy.array(array[3])
 
-    def setFromValues(self, s0,s1,s2,s3):
+    def setFromValues(self, s0, s1, s2, s3):
         """Set stokes components from given values
 
         Parameters
@@ -138,10 +219,10 @@ class StokesVector(object):
 
         """
 
-        self.s0 = float(s0)
-        self.s1 = float(s1)
-        self.s2 = float(s2)
-        self.s3 = float(s3)
+        self._s0 = numpy.array(s0)
+        self._s1 = numpy.array(s1)
+        self._s2 = numpy.array(s2)
+        self._s3 = numpy.array(s3)
 
     def circularPolarizationDegree(self):
         """Calculates the degree of circular polarization of the radiation described by the Stokes parameter.
@@ -156,7 +237,7 @@ class StokesVector(object):
 
         """
         try:
-            return self.s3 / self.s0
+            return self._s3 / self._s0
         except:
             return 0.0
 
@@ -172,20 +253,50 @@ class StokesVector(object):
         """
 
         """:return: a string object containing the four components of the Stokes vector."""
-        return "{S0} {S1} {S2} {S3}".format(S0=self.s0, S1=self.s1, S2=self.s2, S3=self.s3)
+        return "{S0} {S1} {S2} {S3}".format(S0=self._s0, S1=self._s1, S2=self._s2, S3=self._s3)
 
     def __eq__(self, candidate):
-        if self.s0 != candidate.s0:
+        if (self._s0 != candidate._s0).any():
             return False
 
-        if self.s1 != candidate.s1:
+        if (self._s1 != candidate._s1).any():
             return False
 
-        if self.s2 != candidate.s2:
+        if (self._s2 != candidate._s2).any():
             return False
 
-        if self.s3 != candidate.s3:
+        if (self._s3 != candidate._s3).any():
             return False
 
         return True
 
+if __name__ == "__main__":
+    element_list = [0.78177969457877930,
+                         0.22595711869558588,
+                         0.28797567756487550,
+                         0.58551861060989900]
+    stokes_vector = StokesVector(element_list)
+
+    assert(stokes_vector.s0 == 0.78177969457877930)
+    assert(stokes_vector.s1 == 0.22595711869558588)
+    assert(stokes_vector.s2 == 0.28797567756487550)
+    assert(stokes_vector.s3 == 0.58551861060989900)
+
+    array1 = stokes_vector.components()
+    array2 = stokes_vector.getList()
+
+    assert( isinstance(array1, numpy.ndarray))
+    assert( isinstance(array2, list))
+    numpy.testing.assert_array_equal(array1, numpy.asarray(element_list))
+    assert(array2 == element_list)
+
+    pol_deg = stokes_vector.circularPolarizationDegree()
+    assert( (isinstance(pol_deg, float) or (isinstance(pol_deg, numpy.ndarray))))
+    assert( pol_deg ==  0.7489560226111716 )
+
+
+    stokes_vector1 = StokesVector([[1, 1], [2, 2], [3, 3], [4, 4]])  # without final zeros
+    stokes_vector2 = StokesVector([[1, 1], [2, 2], [3, 3], [4, 4]])  # without final zeros
+    print(stokes_vector2.s0)
+    assert(stokes_vector1 == stokes_vector1)
+    assert(not(stokes_vector1 != stokes_vector2))

@@ -23,10 +23,8 @@ class PolarizedPhoton(Photon):
 
     """
     def __init__(self, energy_in_ev, direction_vector, stokes_vector):
-
-
-        self._stokes_vector = stokes_vector
         super(PolarizedPhoton, self).__init__(energy_in_ev, direction_vector)
+        self._stokes_vector = stokes_vector
 
     def duplicate(self):
         """Duplicates a stokes photon.

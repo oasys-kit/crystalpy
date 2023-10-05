@@ -10,7 +10,7 @@ from crystalpy.util.Photon import Photon
 from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
 from crystalpy.util.PolarizedPhoton import PolarizedPhoton
 
-class PhotonBunch(object):
+class PhotonBunchOld(object):
     """The PhotonBunch is is a collection of Photon instances, making up the photon bunch or beam.
 
     Constructor.
@@ -48,7 +48,7 @@ class PhotonBunch(object):
         if V.nStack() != energies.size:
             raise Exception("incompatible inputs")
 
-        bunch = PhotonBunch()
+        bunch = PhotonBunchOld()
 
         for i in range(energies.size):
             bunch.addPhoton(Photon(energy_in_ev=energies[i], direction_vector=V.extractStackItem(i)))
@@ -371,7 +371,7 @@ class PhotonBunch(object):
 # NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 #
 
-class PhotonBunchNew(Photon):
+class PhotonBunch(Photon):
     """The PhotonBunchNew is is a collection of Photon instances, making up the photon bunch or beam.
 
     New version that inheritates from Photon and uses stacks for more effcient stockage.
@@ -423,7 +423,7 @@ class PhotonBunchNew(Photon):
 
 
         """
-        bunch = PhotonBunchNew()
+        bunch = PhotonBunch()
         bunch.setEnergy(energies)
         bunch.setUnitDirectionVector(V)
         return bunch
@@ -482,7 +482,7 @@ class PhotonBunchNew(Photon):
 
         """
         self.setEnergy(numpy.append(self.energy(), to_be_added.energy()))
-        self.setUnitDirectionVector(self.unitDirectionVector().append(to_be_added.unitDirectionVector()))
+        self.setUnitDirectionVector(self.unitDirectionVector().concatenate(to_be_added.unitDirectionVector()))
 
     def addPhotonsFromList(self, to_be_added):
         """Adds a list of photons to the bunch.
@@ -651,10 +651,10 @@ if __name__ == "__main__":
 
     energy = numpy.zeros(npoint) + 3000.0
 
-    photon_bunch1 = PhotonBunchNew()
-    photon_bunch2 = PhotonBunchNew()
+    photon_bunch1 = PhotonBunch()
+    photon_bunch2 = PhotonBunch()
 
-    photons_list = list()
+    photons_list = []
 
     for i in range(npoint):
         photon = Photon(energy_in_ev=energy[i],

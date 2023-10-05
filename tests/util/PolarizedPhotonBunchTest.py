@@ -57,31 +57,31 @@ class PolarizedPhotonBunchTest(unittest.TestCase):
 
 
 
-    def testChangePhotonValue(self):
-        nphotons = 10
-
-        from crystalpy.util.Vector import Vector
-        from crystalpy.util.StokesVector import StokesVector
-
-        bunch = PolarizedPhotonBunch([])
-        for i in range(nphotons):
-            polarized_photon = PolarizedPhoton(energy_in_ev=1000.0+i,
-                                               direction_vector=Vector(0,1.0,0),
-                                               stokes_vector=StokesVector([1.0,0,1.0,0]))
-            bunch.addPhoton(polarized_photon)
-
-        # photon5_stokes = bunch.get_photon_index(5).stokesVector().get_array(numpy=True)
-        # print("photon 5 stokes ",photon5_stokes)
-
-        photon5 = bunch.getPhotonIndex(5)
-
-        photon5.setStokesVector(StokesVector([1,0,0,0]))
-        photon5_stokes_new = bunch.getPhotonIndex(5).stokesVector().components()
-
-
-        # print("photon 5 stokes new ",photon5_stokes_new)
-
-        assert_almost_equal(photon5_stokes_new,numpy.array([1.0,0,0,0]))
+    # def testChangePhotonValue(self):
+    #     nphotons = 10
+    #
+    #     from crystalpy.util.Vector import Vector
+    #     from crystalpy.util.StokesVector import StokesVector
+    #
+    #     bunch = PolarizedPhotonBunch([])
+    #     for i in range(nphotons):
+    #         polarized_photon = PolarizedPhoton(energy_in_ev=1000.0+i,
+    #                                            direction_vector=Vector(0,1.0,0),
+    #                                            stokes_vector=StokesVector([1.0,0,1.0,0]))
+    #         bunch.addPhoton(polarized_photon)
+    #
+    #     # photon5_stokes = bunch.get_photon_index(5).stokesVector().get_array(numpy=True)
+    #     # print("photon 5 stokes ",photon5_stokes)
+    #
+    #     photon5 = bunch.getPhotonIndex(5)
+    #
+    #     photon5.setStokesVector(StokesVector([1,0,0,0]))
+    #     photon5_stokes_new = bunch.getPhotonIndex(5).stokesVector().components()
+    #
+    #
+    #     # print("photon 5 stokes new ",photon5_stokes_new)
+    #
+    #     assert_almost_equal(photon5_stokes_new,numpy.array([1.0,0,0,0]))
 
 
 

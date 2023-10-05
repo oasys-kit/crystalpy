@@ -10,7 +10,7 @@ from crystalpy.util.Vector import Vector
 import numpy
 
 #todo: replace name "polarized" by "complex_amplitude"
-class ComplexAmplitudePhotonBunch(PhotonBunch):
+class ComplexAmplitudePhotonBunchOld(PhotonBunch):
     """Constructor.
 
     Parameters
@@ -106,7 +106,7 @@ class ComplexAmplitudePhotonBunch(PhotonBunch):
 # NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 #
 
-class ComplexAmplitudePhotonBunchNew(ComplexAmplitudePhoton):
+class ComplexAmplitudePhotonBunch(ComplexAmplitudePhoton):
     """Constructor.
 
     New version that inheritates from ComplexAmplitudePhoton and uses stacks for more effcient stockage.
@@ -133,15 +133,15 @@ class ComplexAmplitudePhotonBunchNew(ComplexAmplitudePhoton):
                     energy[i] = el.energy()
                     Esigma[i] = el.getComplexAmplitudeS()
                     Epi[i] = el.getComplexAmplitudeP()
-                    el.unitDirectionVector()
+                    vv = el.unitDirectionVector()
                     if i == 0:
                         v = Vector(
-                            el.components()[0],
-                            el.components()[1],
-                            el.components()[2],
+                            vv.components()[0],
+                            vv.components()[1],
+                            vv.components()[2],
                         )
                     else:
-                        v.append(el)
+                        v = v.append(vv)
                 self.setEnergy(energy)
                 self.setUnitDirectionVector(v)
                 super().__init__(energy_in_ev=energy, direction_vector=v, Esigma=Esigma, Epi=Epi)
@@ -210,7 +210,7 @@ class ComplexAmplitudePhotonBunchNew(ComplexAmplitudePhoton):
         self.setEnergy(numpy.append(self.energy(), to_be_added.energy()))
         self.setComplexAmplitudeS(numpy.append(self.getComplexAmplitudeS(), to_be_added.getComplexAmplitudeS()))
         self.setComplexAmplitudeP(numpy.append(self.getComplexAmplitudeP(), to_be_added.getComplexAmplitudeP()))
-        self.setUnitDirectionVector(self.unitDirectionVector().append(to_be_added.unitDirectionVector()))
+        self.setUnitDirectionVector(self.unitDirectionVector().concatenate(to_be_added.unitDirectionVector()))
 
     def addPhotonsFromList(self, to_be_added):
         """Adds a list of photons to the bunch.
