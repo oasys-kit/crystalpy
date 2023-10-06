@@ -976,18 +976,14 @@ class PerfectCrystalDiffraction(object):
 
         Parameters
         ----------
-        photon_in :
+        photon_in : instance of ComplexAmplitudePhoton
             Incoming photon or Photon bunch.
-        calculation_method :
-             (Default value = 0)
-        # 0 :
-             (Default value = Zachariasen)
-        1 :
-             (Default value = Guigayis_thick=0)
-        # for Guigay onlyuse_transfer_matrix :
-             (Default value = 0)
-        # for Guigay only :
-            
+        calculation_method : int
+            0 : Zachariasen, 1 : Guigay 
+        is_thick : int
+            0=No, 1=Yes (for calculation_method=1 only)
+        use_transfer_matrix : int
+            0=No, 1=Yes (for calculation_method=1 only)
 
         Returns
         -------
@@ -1071,18 +1067,16 @@ class PerfectCrystalDiffraction(object):
 
         Parameters
         ----------
-        photon_in :
+        photon_in : instance of ComplexAmplitudePhoton
             Incoming photon.
-        debug :
-             (Default value = 0)
-        s_ratio :
-             (Default value = None)
-        is_thick :
-             (Default value = 0)
-        use_transfer_matrix :
-             (Default value = 0)
-        # is faster to use use_transfer_matrix :
-             (Default value = 0)
+        debug : int
+             0=No, 1=Yes.
+        s_ratio : float
+             the sin(theta)/lambda ratio (Default value = calculated from Bragg law)
+        is_thick : int
+             0=No, 1=Yes.
+        use_transfer_matrix : int
+             0=No, 1=Yes (Default value = 0). It is is faster to use use_transfer_matrix=0
 
         Returns
         -------
