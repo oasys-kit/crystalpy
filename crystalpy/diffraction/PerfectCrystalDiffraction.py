@@ -320,7 +320,7 @@ class PerfectCrystalDiffraction(object):
     ----------
     geometry_type: instance of BraggDiffraction, LaueDiffraction, BraggTransmission, or LaueTransmission
     bragg_normal : instance of Vector
-        The direction (unit) of the H vector.
+        The H vector.
     surface_normal : instance of Vector
         The n vector.
     bragg_angle : float or numpy array
@@ -358,7 +358,7 @@ class PerfectCrystalDiffraction(object):
             self._calculation_strategy = CalculationStrategyMath()
 
     def braggNormal(self):
-        """Returns the Bragg normal, i.e. normal on the reflection planes.
+        """Returns the Bragg normal, i.e. normal on the reflection planes with modulus 2 pi / d_spacing.
         :return: Bragg normal.
 
         Parameters
