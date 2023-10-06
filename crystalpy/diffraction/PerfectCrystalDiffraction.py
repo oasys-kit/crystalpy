@@ -302,22 +302,45 @@ class CalculationStrategyMath(CalculationStrategy):
 
 
 class PerfectCrystalDiffraction(object):
-    """ """
+    """
+    PerfectCrystalDiffraction is the calculator of the perfect crystal.
+
+    Two steps:
+    * create the PerfectCrystalDiffraction instance with the crystal data (usually picked up from DiffractionSetup).
+    * call PerfectCrystalDiffraction.calculateDiffraction( photon(s) )
+
+    Notes:
+    * arrays can be used, but compatible arrays in photons and in bragg_angle, psi_0, psi_H, psi_H, etc.
+    * Both sigma and pi amplitudes can be calculated in the same call, not need to create different
+      instances for sigma and pi.
+
+    Constructor.
+
+    Parameters
+    ----------
+    geometry_type: instance of BraggDiffraction, LaueDiffraction, BraggTransmission, or LaueTransmission
+    bragg_normal : instance of Vector
+        The direction (unit) of the H vector.
+    surface_normal : instance of Vector
+        The n vector.
+    bragg_angle : float or numpy array
+        The Bragg angle(s).
+    psi_0 : complex of numpy array
+        The structire factor Psi0.
+    psi_H: complex of numpy array
+        The structire factor PsiH.
+    psi_H_bar: complex of numpy array
+        The structire factor Psi(-H).
+    thickness : float
+        the crystal thickness in m.
+    d_spacing : float
+        the crystal dSpacing in m.
+
+    """
     isDebug = False
 
     def __init__(self, geometry_type, bragg_normal, surface_normal, bragg_angle, psi_0, psi_H, psi_H_bar, thickness, d_spacing):
-        """
-        Constructor.
-        :param geometry_type: The diffraction geometry, i.e. BraggDiffraction, LaueTransmission,...
-        :param bragg_normal: Normal on the reflection planes.
-        :param surface_normal:Norm on crystal surface pointing outward.
-        :param bragg_angle: Bragg angle.
-        :param psi_0: Psi0 as defined in Zachariasen [3-95].
-        :param psi_H: PsiH as defined in Zachariasen [3-95].
-        :param psi_H_bar: PsiHBar as defined in Zachariasen [3-95].
-        :param thickness: Thickness of the crystal.
-        :param d_spacing: Spacing of parallel planes.
-        """
+
         self._geometryType = geometry_type
         self._bragg_normal = bragg_normal
         self._surface_normal = surface_normal
