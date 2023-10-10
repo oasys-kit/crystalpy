@@ -83,7 +83,7 @@ class DiffractionSetupSweeps(DiffractionSetupXraylib):
         photons = PhotonBunch() # list()
         for energy in energies:
             for deviation in deviations:
-                direction = info_setup.incomingPhotonDirection(energy, deviation)
+                direction = info_setup.vectorIncomingPhotonDirection(energy, deviation)
                 incoming_photon = Photon(energy, direction)
                 # photons.append(incoming_photon)
                 photons.addPhoton(incoming_photon)

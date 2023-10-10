@@ -119,7 +119,7 @@ def calc_xcrystal_angular_scan(
     for ia, deviation in enumerate(deviations):
 
         photon = ComplexAmplitudePhoton(energy_in_ev=energy,
-                                        direction_vector=diffraction_setup.incomingPhotonDirection(
+                                        direction_vector=diffraction_setup.vectorIncomingPhotonDirection(
                                             energy,deviation,
                                             angle_center_flag=angle_center_flag,
                                         ),
@@ -214,7 +214,7 @@ def calc_xcrystal_alphazachariasen_scan(
     for ia, deviation in enumerate(deviations):
 
         photon = ComplexAmplitudePhoton(energy_in_ev=energy,
-                                        direction_vector=diffraction_setup.incomingPhotonDirection(
+                                        direction_vector=diffraction_setup.vectorIncomingPhotonDirection(
                                             energy,
                                             deviation * darwin_half_width[0],
                                             angle_center_flag=1,
@@ -305,7 +305,7 @@ def calc_xcrystal_energy_scan(
         bragg_angle = diffraction_setup.angleBragg(energy)
         deviation = theta - bragg_angle
         photon = ComplexAmplitudePhoton(energy_in_ev=energy,
-                                        direction_vector=diffraction_setup.incomingPhotonDirection(
+                                        direction_vector=diffraction_setup.vectorIncomingPhotonDirection(
                                             energy,
                                             deviation,
                                             angle_center_flag=2,
@@ -415,7 +415,7 @@ def calc_xcrystal_double_scan(
     for ie, energy in enumerate(energies):
         for ia, deviation in enumerate(deviations):
             photon = ComplexAmplitudePhoton(energy_in_ev=energy,
-                                            direction_vector=diffraction_setup.incomingPhotonDirection(
+                                            direction_vector=diffraction_setup.vectorIncomingPhotonDirection(
                                                 energy_mean,
                                                 deviation,
                                                 angle_center_flag=angle_center_flag,

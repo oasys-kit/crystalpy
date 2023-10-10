@@ -198,7 +198,7 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
     intensityS = numpy.zeros(angle_deviation_points)
     intensityP = numpy.zeros(angle_deviation_points)
 
-    # k_0_unitary = diffraction_setup.incomingPhotonDirection(energy, 0.0)
+    # k_0_unitary = diffraction_setup.vectorIncomingPhotonDirection(energy, 0.0)
     # photon_0 = Photon(energy_in_ev=energy,direction_vector=k_0_unitary)
     # k_H_unitary = diffraction_setup._
     # print(">>>>>>>>>>>>>>>>>>>>>>>>k_0: ",k_0_unitary._components )
@@ -216,10 +216,10 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
         # zz = - numpy.abs(numpy.sin(angle))
         # photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
-        k_unitary = diffraction_setup.incomingPhotonDirection(energy, deviation)
+        k_unitary = diffraction_setup.vectorIncomingPhotonDirection(energy, deviation)
 
         # or equivalently
-        # k_0_unitary = diffraction_setup.incomingPhotonDirection(energy, 0.0)
+        # k_0_unitary = diffraction_setup.vectorIncomingPhotonDirection(energy, 0.0)
         # k_unitary = k_0_unitary.rotateAroundAxis( Vector(1.0,0.0,0.0), -deviation)
 
         photon = Photon(energy_in_ev=energy,direction_vector=k_unitary)

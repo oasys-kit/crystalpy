@@ -173,17 +173,17 @@ class DiffractionSetupTest(unittest.TestCase):
         self.assertEqual(surface_normal,
                          Vector(0,0,1))
 
-    def testIncomingPhotonDirection(self):
+    def testVectorIncomingPhotonDirection(self):
         diffraction = diffractionSetup()
 
-        photon_direction = diffraction.incomingPhotonDirection(8000, 0)
+        photon_direction = diffraction.vectorIncomingPhotonDirection(8000, 0)
         self.assertAlmostEqual (photon_direction.components()[0],0.)
         self.assertAlmostEqual (photon_direction.components()[1],0.91134144)
         self.assertAlmostEqual (photon_direction.components()[2],-0.41165129)
 
 
 
-        photon_direction = diffraction.incomingPhotonDirection(8000, 0.01)
+        photon_direction = diffraction.vectorIncomingPhotonDirection(8000, 0.01)
         self.assertAlmostEqual (photon_direction.components()[0],0.)
         self.assertAlmostEqual (photon_direction.components()[1],0.90717943)
         self.assertAlmostEqual (photon_direction.components()[2],-0.42074397)
@@ -194,7 +194,7 @@ class DiffractionSetupTest(unittest.TestCase):
     #
     #     for energy in [2500, 6000, 8000, 15000, 22000, 30000]:
     #         for test_deviation in [0.01, 0.03, 0.5, -0.1, -0.9, 0.00001, -0.0007]:
-    #             photon_direction = diffraction.incomingPhotonDirection(energy, test_deviation)
+    #             photon_direction = diffraction.vectorIncomingPhotonDirection(energy, test_deviation)
     #             photon = Photon(energy, photon_direction)
     #             deviation = diffraction.deviationOfIncomingPhoton(photon)
     #             self.assertAlmostEqual(test_deviation, deviation)

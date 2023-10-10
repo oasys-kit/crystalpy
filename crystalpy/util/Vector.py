@@ -467,7 +467,7 @@ class Vector(object):
 
         return angle
 
-    def scattering_on_surface(self, NORMAL, H):
+    def scattering_on_surface(self, NORMAL, H, use_sign_of=+1):
         """Returns K_OUT vector following the scattering equation at a surface:
             K_OUT_parallel = K_IN_parallel + H_parallel
             |K_OUT| = |K_IN|
@@ -478,6 +478,9 @@ class Vector(object):
             The vector normal to the surface.
         H : instance of Vector
             The scattering vector.
+        use_sign_of: float or numpy array
+            The value to defing the sign of the sqrt that appears when doing |K_OUT| = |K_IN|.
+            The sign used is numpy.sign(use_sign_of).
 
         Returns
         -------
@@ -493,7 +496,7 @@ class Vector(object):
 
         K_OUT_par = K_IN_par.addVector(H_par)
         K_OUT_perp = NORMAL.scalarMultiplication(
-            numpy.sqrt(self.norm() ** 2 - K_OUT_par.norm() ** 2))
+            numpy.sqrt(self.norm() ** 2 - K_OUT_par.norm() ** 2) * numpy.sign(use_sign_of))
         K_OUT = K_OUT_par.addVector(K_OUT_perp)
         return K_OUT
 

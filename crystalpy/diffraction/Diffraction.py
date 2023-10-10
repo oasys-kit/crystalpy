@@ -62,7 +62,7 @@ class Diffraction(object):
             the complex amplitudes for sigma and pi polarizations:  {"S": float, "P": float}
 
         """
-        print(">>>> in calculateDiffractedComplexAmplitudes", use_transfer_matrix)
+        # print(">>>> in calculateDiffractedComplexAmplitudes", use_transfer_matrix)
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
@@ -106,7 +106,7 @@ class Diffraction(object):
 
         """
 
-        print(">>>> in calculateDiffractedComplexAmplitudePhoton")
+        # print(">>>> in calculateDiffractedComplexAmplitudePhoton")
 
         # Get PerfectCrystal instance for the current photon.
         perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, photon)
@@ -156,11 +156,7 @@ class Diffraction(object):
 
         """
 
-        print(">>>> in calculateDiffractedComplexAmplitudePhotonBunch")
-
-
-        # Retrieve the photon bunch from the diffraction setup.
-        # incoming_bunch = diffraction_setup.incomingPhotons()
+        # print(">>>> in calculateDiffractedComplexAmplitudePhotonBunch", calculation_method)
 
         # Check that photon_bunch is indeed a PhotonBunch object.
         if not isinstance(incoming_bunch, ComplexAmplitudePhotonBunch):
@@ -171,7 +167,7 @@ class Diffraction(object):
         if vectorized_method == 2:
             return cls.calculateDiffractedComplexAmplitudePhoton(diffraction_setup,
                                                           incoming_bunch,
-                                                          calculation_method=0,
+                                                          calculation_method=calculation_method,
                                                           is_thick=0,
                                                           use_transfer_matrix=0)
         elif vectorized_method == 1:
@@ -252,7 +248,7 @@ class Diffraction(object):
 
         """
 
-        print(">>>> in calculateDiffractedPolarizedPhoton")
+        # print(">>>> in calculateDiffractedPolarizedPhoton")
 
         # Retrieve the incoming Stokes vector.
         incoming_stokes_vector = incoming_polarized_photon.stokesVector()
@@ -330,7 +326,7 @@ class Diffraction(object):
             PhotonBunch object made up of diffracted/transmitted photons.
 
         """
-        print(">>>> in calculateDiffractedPolarizedPhotonBunch")
+        # print(">>>> in calculateDiffractedPolarizedPhotonBunch")
 
         # Create PhotonBunch instance.
         outgoing_bunch = PolarizedPhotonBunch([])
@@ -374,7 +370,7 @@ class Diffraction(object):
             DiffractionResult with the input setup.
 
         """
-        print(">>>> in calculateDiffraction")
+        # print(">>>> in calculateDiffraction")
         if not isinstance(diffraction_setup, DiffractionSetupSweeps):
             raise Exception("Input object must be of type DiffractionSetupSweeps")
 
@@ -589,10 +585,8 @@ class Diffraction(object):
         return cls._perfectCrystalForPhoton(diffraction_setup, incoming_bunch)
 
 
-
-    # ##################################################################################################
     # these methods use DiffractionSetupSweeps (for scans)
-    # ##################################################################################################
+    # used in Diffraction.calculateDiffraction()
     @classmethod
     def _calculateDiffractionForEnergy(cls,
                                        diffraction_setup,
@@ -609,9 +603,9 @@ class Diffraction(object):
             The diffraction setup.
 
         energy : float
-            
+
         result :  DiffractionResult instance, where results are added.
-            
+
         calculation_method : int, optional
              0: Zachariasen, 1: Guigay (Default value = 0)
 
@@ -636,7 +630,7 @@ class Diffraction(object):
         # For every deviation from Bragg angle ...
         for index, deviation in enumerate(diffraction_setup.angleDeviationGrid()):
             # Calculate deviated incoming photon.
-            photon_direction = diffraction_setup.incomingPhotonDirection(energy, deviation)
+            photon_direction = diffraction_setup.vectorIncomingPhotonDirection(energy, deviation)
             photon_in = Photon(energy, photon_direction)
 
             # Calculate diffraction for current incoming photon.
@@ -657,7 +651,6 @@ class Diffraction(object):
 
         # Return diffraction results.
         return result
-
 
 
 if __name__ == "__main__":
