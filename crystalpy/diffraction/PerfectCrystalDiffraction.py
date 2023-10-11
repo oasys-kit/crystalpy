@@ -38,10 +38,10 @@ class CalculationStrategy(object):
         initial_value :
             Initial value of the variable.
 
-        Returns
-        -------
-        type
-            Calculation variable.
+        Raises
+        ------
+        Exception
+            Must override this method.
 
         """
         raise Exception("Must override this method.")
@@ -54,10 +54,10 @@ class CalculationStrategy(object):
         power :
             The power to raise to.
 
-        Returns
-        -------
-        type
-            Exponential.
+        Raises
+        ------
+        Exception
+            Must override this method.
 
         """
         raise Exception("Must override this method.")
@@ -70,10 +70,10 @@ class CalculationStrategy(object):
         power :
             The power to raise to.
 
-        Returns
-        -------
-        type
-            Sin.
+        Raises
+        ------
+        Exception
+            Must override this method.
 
         """
         raise Exception("Must override this method.")
@@ -86,10 +86,10 @@ class CalculationStrategy(object):
         power :
             The power to raise to.
 
-        Returns
-        -------
-        type
-            Cos.
+        Raises
+        ------
+        Exception
+            Must override this method.
 
         """
         raise Exception("Must override this method.")
@@ -103,10 +103,10 @@ class CalculationStrategy(object):
         variable :
             Calculation variable to convert.
 
-        Returns
-        -------
-        type
-            Native python complex variable.
+        Raises
+        ------
+        Exception
+            Must override this method.
 
         """
         raise Exception("Must override this method.")
@@ -126,13 +126,13 @@ class CalculationStrategyMPMath(CalculationStrategy):
 
         Parameters
         ----------
-        initial_value :
+        initial_value : float, complex or numpy array
             Initial value of the variable.
 
         Returns
         -------
-        type
-            mpmath variable.
+        instance of CalculationStrategyMPMath
+            variable.
 
         """
 
@@ -151,44 +151,44 @@ class CalculationStrategyMPMath(CalculationStrategy):
 
         Parameters
         ----------
-        power :
+        power : float
             The power to raise to.
 
         Returns
         -------
-        type
+        mpmath variable
             Exponential.
 
         """
         return mpmath_exp(power)
 
     def sin(self, power):
-        """Sin to the power.
+        """Sin function.
 
         Parameters
         ----------
-        power :
-            The power to raise to.
+        power : float or numpy array
+            The arg of sin.
 
         Returns
         -------
-        type
+        mpmath variable
             Sin.
 
         """
         return mpmath_sin(power)
 
     def cos(self, power):
-        """Cos to the power.
+        """Cos function.
 
         Parameters
         ----------
-        power :
-            The power to raise to.
+        power : float or numpy array
+            The arg of cos.
 
         Returns
         -------
-        type
+        mpmath variable
             Cos.
 
         """
@@ -200,16 +200,14 @@ class CalculationStrategyMPMath(CalculationStrategy):
         Parameters
         ----------
         variable :
-            Calculation variable to convert.
+            variable to convert.
 
         Returns
         -------
-        type
+        numpy array
             Native python complex variable.
 
         """
-        # return complex(variable)
-
         return numpy.array(variable, dtype=complex)
 
 
@@ -225,8 +223,8 @@ class CalculationStrategyMath(CalculationStrategy):
 
         Returns
         -------
-        type
-            mpmath variable.
+        instance of CalculationStrategyMath
+            variable.
 
         """
         return initial_value + 0j # complex(initial_value)
@@ -236,12 +234,12 @@ class CalculationStrategyMath(CalculationStrategy):
 
         Parameters
         ----------
-        power :
+        power : float
             The power to raise to.
 
         Returns
         -------
-        type
+        numpy array
             Exponential.
 
         """
@@ -252,32 +250,32 @@ class CalculationStrategyMath(CalculationStrategy):
         return ans
 
     def sin(self, power):
-        """Sin to the power.
+        """Sin function.
 
         Parameters
         ----------
         power :
-            The power to raise to.
+            The sin argument.
 
         Returns
         -------
-        type
+        numpy array
             Sin.
 
         """
         return numpy.sin(power)
 
     def cos(self, power):
-        """Cos to the power.
+        """Cos function.
 
         Parameters
         ----------
         power :
-            The power to raise to.
+            The coa argument.
 
         Returns
         -------
-        type
+        numpy array
             Cos.
 
         """
@@ -294,7 +292,7 @@ class CalculationStrategyMath(CalculationStrategy):
 
         Returns
         -------
-        type
+        numpy array (complex)
             Native python complex variable.
 
         """
@@ -1558,6 +1556,7 @@ if __name__ == "__main__":
     a = CalculationStrategyMPMath()
 
     a0 = a.createVariable(numpy.array(0))
+    print(type(a))
     print("cos(0)", a.cos(a0))
 
     api = a.createVariable(numpy.array(numpy.pi))

@@ -145,7 +145,7 @@ def calculate_simple_diffraction(method=0, calculation_method=0):
 #
 if __name__ == "__main__":
 
-    method = 2
+    method = 1
 
 
     calculation_method = 0 # 0=Zachariasen, 1=Guigay

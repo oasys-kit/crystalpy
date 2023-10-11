@@ -61,9 +61,9 @@ html_static_path = ['sphinx_rtd_theme']
 
 # replace "view page source" with "edit on github" in Read The Docs theme
 #  * https://github.com/readthedocs/sphinx_rtd_theme/issues/529
-html_context = {
-	'display_github': True,
-  'github_user': 'oasys-kit',
-  'github_repo': 'crystalpy',
-  'github_version': 'master/docs/',
-}
+# html_context = {
+# 	'display_github': True,
+#   'github_user': 'oasys-kit',
+#   'github_repo': 'crystalpy',
+#   'github_version': 'master/docs/',
+# }
