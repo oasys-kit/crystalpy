@@ -206,6 +206,8 @@ class ComplexAmplitudePhotonBunchDecorator(PhotonBunchDecorator):
         self.setEnergy(energy)
         self.setUnitDirectionVector(Vector(vx, vy, vz))
 
+
+
 class ComplexAmplitudePhotonBunch(ComplexAmplitudePhoton, ComplexAmplitudePhotonBunchDecorator):
     """
     The ComplexAmplitudePhotonBunch is a ComplexAmplitudePhoton stack.
@@ -231,9 +233,9 @@ class ComplexAmplitudePhotonBunch(ComplexAmplitudePhoton, ComplexAmplitudePhoton
                 super().__init__(energy_in_ev=[], direction_vector=Vector([],[],[]), Esigma=[], Epi=[])
             else:
                 energy = numpy.zeros(n)
-                Esigma = numpy.zeros(n)
-                Epi    = numpy.zeros(n)
-                for i,el in enumerate(complex_amplitude_photons):
+                Esigma = numpy.zeros(n, dtype=complex)
+                Epi    = numpy.zeros(n, dtype=complex)
+                for i, el in enumerate(complex_amplitude_photons):
                     energy[i] = el.energy()
                     Esigma[i] = el.getComplexAmplitudeS()
                     Epi[i] = el.getComplexAmplitudeP()
@@ -245,29 +247,83 @@ class ComplexAmplitudePhotonBunch(ComplexAmplitudePhoton, ComplexAmplitudePhoton
                             vv.components()[2],
                         )
                     else:
-                        v = v.append(vv)
+                        v.append(vv)
                 self.setEnergy(energy)
                 self.setUnitDirectionVector(v)
                 super().__init__(energy_in_ev=energy, direction_vector=v, Esigma=Esigma, Epi=Epi)
 
 
+    @classmethod
+    def initializeFromComplexAmplitudePhoton(cls, photon_stack):
+        """Construct a complex amplitude photon bunch from a complex amplitude photon stack.
+
+        Parameters
+        ----------
+        photon_stack : instance of ComplexAmplitudePhoton
+
+        Returns
+        -------
+        ComplexAmplitudePhotonBunch instance
+
+        """
+        out = ComplexAmplitudePhotonBunch()
+        out.setEnergy(photon_stack.energy())
+        out.setUnitDirectionVector(photon_stack.unitDirectionVector())
+        out.setComplexAmplitudeS(photon_stack.getComplexAmplitudeS())
+        out.setComplexAmplitudeP(photon_stack.getComplexAmplitudeP())
+        return out
+
+    @classmethod
+    def initializeFromArrays(cls, energy=[], vx=[], vy=[], vz=[], Esigma=[], Epi=[]):
+        """Construct a complex amplitude photon bunch from arrays with photon energies, directions and amplitudes.
+
+        Parameters
+        ----------
+
+        energies : list, numpy array
+            the array with photon energy in eV.
+        vx : list, numpy array
+            the array with X component of the direction vector.
+        vy : list, numpy array
+            the array with Y component of the direction vector.
+        vz : list, numpy array
+            the array with Z component of the direction vector.
+        Esigma : list, numpy array
+            the array with S complex amplitude.
+        Epi : list, numpy array
+            the array with P complex amplitude.
+
+        Returns
+        -------
+        ComplexAmplitudePhotonBunch instance
 
 
+        """
+        bunch = ComplexAmplitudePhotonBunch()
+        bunch.setEnergy(numpy.array(energy))
+        bunch.setUnitDirectionVector(Vector(numpy.array(vx),
+                                            numpy.array(vy),
+                                            numpy.array(vz)))
+        bunch.setComplexAmplitudeS(numpy.array(Esigma, dtype=complex))
+        bunch.setComplexAmplitudeP(numpy.array(Epi, dtype=complex))
+        return bunch
 
 if __name__ == "__main__":
 
     npoint = 10
     vx = numpy.zeros(npoint) + 0.0
     vy = numpy.zeros(npoint) + 1.0
-    vz = numpy.zeros(npoint) + 0.0
+    vz = numpy.zeros(npoint) + 0.1
 
     energy = numpy.zeros(npoint) + 3000.0
 
     photon_bunch1 = ComplexAmplitudePhotonBunch()
-    photon_bunch2 = ComplexAmplitudePhotonBunch()
 
+
+    #
+    # loop
+    #
     photons_list = list()
-
     for i in range(npoint):
         photon = ComplexAmplitudePhoton(energy_in_ev=energy[i],
                         direction_vector=Vector(vx[i], vy[i], vz[i]),
@@ -276,6 +332,36 @@ if __name__ == "__main__":
         photon_bunch1.addPhoton(photon)
         photons_list.append(photon)
 
+    photon_bunch2 = ComplexAmplitudePhotonBunch(photons_list)
+
+    #
+    # vector
+    #
+    Esigma = numpy.zeros_like(energy, dtype=complex) + 1
+    Epi     = numpy.zeros_like(energy, dtype=complex) + 1
+
+    photon_stack = ComplexAmplitudePhoton(energy, Vector(vx, vy, vz), Esigma=Esigma, Epi=Epi)
+    photon_bunch3 = ComplexAmplitudePhotonBunch().initializeFromComplexAmplitudePhoton(photon_stack)
+
+    photon_bunch4 = ComplexAmplitudePhotonBunch().initializeFromArrays(
+        energy=energy, vx=vx, vy=vy, vz=vz, Esigma=Esigma, Epi=Epi)
+
+    #
+    # check
+    #
+    print(">>>>>>>>>>>>>>>>>> 1")
     print(photon_bunch1.toDictionary()['complexAmplitudeS'].shape)
     print(photon_bunch1.toDictionary()['complexAmplitudeP'].shape)
     print(photon_bunch1.toDictionary())
+    print(">>>>>>>>>>>>>>>>>> 2")
+    print(photon_bunch2.toDictionary()['complexAmplitudeS'].shape)
+    print(photon_bunch2.toDictionary()['complexAmplitudeP'].shape)
+    print(photon_bunch2.toDictionary())
+    print(">>>>>>>>>>>>>>>>>> 3")
+    print(photon_bunch3.toDictionary()['complexAmplitudeS'].shape)
+    print(photon_bunch3.toDictionary()['complexAmplitudeP'].shape)
+    print(photon_bunch3.toDictionary())
+    print(">>>>>>>>>>>>>>>>>> 4")
+    print(photon_bunch4.toDictionary()['complexAmplitudeS'].shape)
+    print(photon_bunch4.toDictionary()['complexAmplitudeP'].shape)
+    print(photon_bunch4.toDictionary())

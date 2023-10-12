@@ -585,6 +585,7 @@ class PhotonBunchDecorator(object):
         self.setEnergy(energy)
         self.setUnitDirectionVector(Vector(vx, vy, vz))
 
+
 class PhotonBunch(Photon, PhotonBunchDecorator):
     """
     The PhotonBunch is a Photon stack.
@@ -609,29 +610,52 @@ class PhotonBunch(Photon, PhotonBunchDecorator):
             energy = numpy.zeros(n)
             for i,el in enumerate(photons):
                 energy[i] = el.energy()
-                el.unitDirectionVector()
+                vv = photons[i].unitDirectionVector()
                 if i == 0:
                     v = Vector(
-                        el.components()[0],
-                        el.components()[1],
-                        el.components()[2],
+                        vv.components()[0],
+                        vv.components()[1],
+                        vv.components()[2],
                     )
                 else:
-                    v.append(el)
+                    v.append(vv)
             self.setEnergy(energy)
             self.setUnitDirectionVector(v)
             super().__init__(energy_in_ev=energy, direction_vector=v)
 
     @classmethod
-    def initialize_from_energies_and_directions(cls, energies, V):
-        """Construct a bunch from arrays with photon energies and directions
+    def initializeFromPhoton(cls, photon_stack):
+        """Construct a bunch from a photon stack.
+
+        Parameters
+        ----------
+        photon_stack : instance of Photon
+
+        Returns
+        -------
+        PhotonBunch instance
+
+        """
+        out = PhotonBunch()
+        out.setEnergy(photon_stack.energy())
+        out.setUnitDirectionVector(photon_stack.unitDirectionVector())
+        return out
+
+    @classmethod
+    def initializeFromArrays(cls, energy=[], vx=[], vy=[], vz=[]):
+        """Construct a bunch from arrays with photon energies and directions.
 
         Parameters
         ----------
 
         energies : list, numpy array
-
-        V : Vector instance (with a tack of vectors)
+            the array with photon energy in eV.
+        vx : list, numpy array
+            the array with X component of the direction vector.
+        vy : list, numpy array
+            the array with Y component of the direction vector.
+        vz : list, numpy array
+            the array with Z component of the direction vector.
 
         Returns
         -------
@@ -640,9 +664,12 @@ class PhotonBunch(Photon, PhotonBunchDecorator):
 
         """
         bunch = PhotonBunch()
-        bunch.setEnergy(energies)
-        bunch.setUnitDirectionVector(V)
+        bunch.setEnergy(numpy.array(energy))
+        bunch.setUnitDirectionVector(Vector(numpy.array(vx),
+                                            numpy.array(vy),
+                                            numpy.array(vz)))
         return bunch
+
 
 
 
@@ -652,13 +679,15 @@ if __name__ == "__main__":
     npoint = 10
     vx = numpy.zeros(npoint) + 0.0
     vy = numpy.zeros(npoint) + 1.0
-    vz = numpy.zeros(npoint) + 0.0
+    vz = numpy.zeros(npoint) + 2.0
 
     energy = numpy.zeros(npoint) + 3000.0
 
     photon_bunch1 = PhotonBunch()
-    photon_bunch2 = PhotonBunch()
 
+    #
+    # loop
+    #
     photons_list = []
 
     for i in range(npoint):
@@ -668,6 +697,23 @@ if __name__ == "__main__":
         photon_bunch1.addPhoton(photon)
         photons_list.append(photon)
 
-    print(photon_bunch1.toDictionary())
+    photon_bunch2 = PhotonBunch(photons_list)
+    #
+    # vector
+    #
 
-    print(photon_bunch1.toString())
+    photon_stack = Photon(energy, Vector(vx, vy, vz))
+    photon_bunch3 = PhotonBunch().initializeFromPhoton(photon_stack)
+
+    photon_bunch4 = PhotonBunch().initializeFromArrays(energy=energy, vx=vx, vy=vy, vz=vz)
+    #
+    # check
+    #
+    print(">>>>>>>>>>>>>>>>>> 1")
+    print(photon_bunch1.toDictionary())
+    print(">>>>>>>>>>>>>>>>>> 2")
+    print(photon_bunch2.toDictionary())
+    print(">>>>>>>>>>>>>>>>>> 3")
+    print(photon_bunch3.toDictionary())
+    print(">>>>>>>>>>>>>>>>>> 4")
+    print(photon_bunch4.toDictionary())

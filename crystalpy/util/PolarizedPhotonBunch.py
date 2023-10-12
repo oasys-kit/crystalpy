@@ -39,7 +39,6 @@ class PolarizedPhotonBunchOld(PhotonBunch):
 
         """
 
-        """defines a dictionary containing information about the bunch."""
         array_dict = PhotonBunch.toDictionary(self)
 
         stokes = numpy.zeros([4, len(self)])
@@ -233,3 +232,99 @@ class PolarizedPhotonBunch(PolarizedPhoton, PolarizedPhotonBunchDecorator):
                 self.setEnergy(energy)
                 self.setUnitDirectionVector(v)
                 super().__init__(energy_in_ev=energy, direction_vector=v, stokes_vector=s)
+
+    @classmethod
+    def initializeFromPolarizedPhoton(cls, photon_stack):
+        """Construct a polarized photon bunch from a polarized photon stack.
+
+        Parameters
+        ----------
+        photon_stack : instance of PolarizedPhoton
+
+        Returns
+        -------
+        PolarizedPhotonBunch instance
+
+        """
+        out = PolarizedPhotonBunch()
+        out.setEnergy(photon_stack.energy())
+        out.setUnitDirectionVector(photon_stack.unitDirectionVector())
+        out.setStokesVector(photon_stack.stokesVector())
+        return out
+
+    @classmethod
+    def initializeFromArrays(cls, energy=[], vx=[], vy=[], vz=[], s0=[], s1=[], s2=[], s3=[]):
+        """Construct a polarized photon bunch from arrays with photon energies, directions and stokes components.
+
+        Parameters
+        ----------
+
+        energies : list, numpy array
+            the array with photon energy in eV.
+        vx : list, numpy array
+            the array with X component of the direction vector.
+        vy : list, numpy array
+            the array with Y component of the direction vector.
+        vz : list, numpy array
+            the array with Z component of the direction vector.
+        s0 : list, numpy array
+            the array with S0 stokes vector.
+        s1 : list, numpy array
+            the array with S1 stokes vector.
+        s2 : list, numpy array
+            the array with S2 stokes vector.
+        s3 : list, numpy array
+            the array with S4 stokes vector.
+
+        Returns
+        -------
+        PolarizedPhotonBunch instance
+
+
+        """
+        bunch = PolarizedPhotonBunch()
+        bunch.setEnergy(numpy.array(energy))
+        bunch.setUnitDirectionVector(Vector(numpy.array(vx),
+                                            numpy.array(vy),
+                                            numpy.array(vz)))
+        bunch.setStokesVector( StokesVector(element_list=
+            [numpy.array(s0, dtype=float),
+             numpy.array(s1, dtype=float),
+             numpy.array(s2, dtype=float),
+             numpy.array(s3, dtype=float)]))
+
+        return bunch
+
+if __name__ == "__main__":
+
+    npoint = 10
+    vx = numpy.zeros(npoint) + 0.0
+    vy = numpy.zeros(npoint) + 1.0
+    vz = numpy.zeros(npoint) + 0.1
+
+    energy = numpy.zeros(npoint) + 3000.0
+
+    photon_stack = PolarizedPhoton(energy, Vector(vx, vy, vz), StokesVector([vx,vx,vx,vx]))
+
+
+
+    #
+    # vector
+    #
+
+
+    photon_bunch3 = PolarizedPhotonBunch().initializeFromPolarizedPhoton(photon_stack)
+
+    photon_bunch4 = PolarizedPhotonBunch().initializeFromArrays(
+        energy=energy, vx=vx, vy=vy, vz=vz, s0=vx, s1=vx, s2=vx, s3=vx)
+
+    #
+    # check
+    #
+
+    print(">>>>>>>>>>>>>>>>>> 3")
+    print(photon_bunch3.toDictionary()['s0'].shape)
+    print(photon_bunch3.toDictionary())
+    print(">>>>>>>>>>>>>>>>>> 4")
+    print(photon_bunch4.toDictionary()['s0'].shape)
+    print(photon_bunch4.toDictionary())

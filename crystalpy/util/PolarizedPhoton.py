@@ -26,18 +26,18 @@ class PolarizedPhoton(Photon):
         super(PolarizedPhoton, self).__init__(energy_in_ev, direction_vector)
         self._stokes_vector = stokes_vector
 
-    def duplicate(self):
-        """Duplicates a stokes photon.
-
-        Returns
-        -------
-        PolarizedPhoton instance
-            New PolarizedPhoton instance with identical photon.
-
-        """
-        return PolarizedPhoton(self._energy_in_ev,
-                               self._unit_direction_vector.duplicate(),
-                               self._stokes_vector.duplicate())
+    # def duplicate(self):
+    #     """Duplicates a stokes photon.
+    #
+    #     Returns
+    #     -------
+    #     PolarizedPhoton instance
+    #         New PolarizedPhoton instance with identical photon.
+    #
+    #     """
+    #     return PolarizedPhoton(self._energy_in_ev,
+    #                            self._unit_direction_vector.duplicate(),
+    #                            self._stokes_vector.duplicate())
 
 
     def stokesVector(self):
