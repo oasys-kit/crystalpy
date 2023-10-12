@@ -502,53 +502,91 @@ class Diffraction(object):
     # ##################################################################################################
 
     @classmethod
-    def _perfectCrystalForEnergy(cls, diffraction_setup, energy):
+    def _perfectCrystalForEnergy(cls, diffraction_setup, energy,
+                                 geometry_type=None,
+                                 bragg_normal=None,
+                                 surface_normal=None,
+                                 # bragg_angle=None,
+                                 # psi_0=None,
+                                 # psi_H=None,
+                                 # psi_H_bar=None,
+                                 thickness=None,
+                                 d_spacing=None,
+                                 ):
         """
+        Creates a PerfectCrystalDiffraction instance from parameters in a DiffractionSetupAbstract instance and a
+        photon energy array.
 
         Parameters
         ----------
-        diffraction_setup :
+        diffraction_setup : instance of PerfectCrystalDiffraction
 
-        energy :
+        energy : numpy array
+
+        geometry_type: instance of BraggDiffraction, LaueDiffraction, BraggTransmission, or LaueTransmission
+
+        bragg_normal : instance of Vector, optional
+            if None, retrieve from DiffractionSetup
+
+        surface_normal : instance of Vector, optional
+            if None, retrieve from DiffractionSetup
+
+        thickness : float or numpy array, optional
+            crystal thickness in m. If None, retrieve from DiffractionSetup
+
+
+        d_spacing : float or numpy array
+            d-spacing in m. If None, retrieve from DiffractionSetup
 
 
         Returns
         -------
         PerfectCrystalDiffraction instance
 
-
         """
 
+        return PerfectCrystalDiffraction.initializeFromDiffractionSetupAndEnergy(diffraction_setup, energy,
+                                                    geometry_type=geometry_type,
+                                                    bragg_normal=bragg_normal,
+                                                    surface_normal=surface_normal,
+                                                    # bragg_angle=None,
+                                                    # psi_0=None,
+                                                    # psi_H=None,
+                                                    # psi_H_bar=None,
+                                                    thickness=thickness,
+                                                    d_spacing=d_spacing,
+                                                    )
+
+        # #
+        # # energy-depending variables
+        # #
         #
-        # energy-depending variables
+        # # Retrieve bragg angle.
+        # bragg_angle = diffraction_setup.angleBragg(energy)
         #
-
-        # Retrieve bragg angle.
-        angle_bragg = diffraction_setup.angleBragg(energy)
-
-        # Check if given Bragg/Laue geometry and given miller indices are possible.
-        cls._checkSetupDiffraction(diffraction_setup, angle_bragg)
-
-        psi_0, psi_H, psi_H_bar = diffraction_setup.psiAll(energy)
-
-
-        # Create PerfectCrystalDiffraction instance.
-        perfect_crystal = PerfectCrystalDiffraction(
-            geometry_type   = diffraction_setup.geometryType(),
-            bragg_normal    = diffraction_setup.vectorH(),
-            surface_normal  = diffraction_setup.vectorNormalSurface(),
-            bragg_angle     = angle_bragg,
-            psi_0           = psi_0,
-            psi_H           = psi_H,
-            psi_H_bar       = psi_H_bar,
-            thickness       = diffraction_setup.thickness(),
-            d_spacing       = diffraction_setup.dSpacing() * 1e-10,
-        )
-
-        return perfect_crystal
+        # # Check if given Bragg/Laue geometry and given miller indices are possible.
+        # cls._checkSetupDiffraction(diffraction_setup, bragg_angle)
+        #
+        # psi_0, psi_H, psi_H_bar = diffraction_setup.psiAll(energy)
+        #
+        #
+        # # Create PerfectCrystalDiffraction instance.
+        # perfect_crystal = PerfectCrystalDiffraction(
+        #     geometry_type   = geometry_type  if not geometry_type  is None else diffraction_setup.geometryType(),
+        #     bragg_normal    = bragg_normal   if not bragg_normal   is None else diffraction_setup.vectorH(),
+        #     surface_normal  = surface_normal if not surface_normal is None else diffraction_setup.vectorNormalSurface(),
+        #     bragg_angle     = bragg_angle,
+        #     psi_0           = psi_0,
+        #     psi_H           = psi_H,
+        #     psi_H_bar       = psi_H_bar,
+        #     thickness       = thickness      if not thickness      is None else diffraction_setup.thickness(),
+        #     d_spacing       = d_spacing      if not d_spacing      is None else diffraction_setup.dSpacing() * 1e-10,
+        # )
+        #
+        # return perfect_crystal
 
     @classmethod
-    def _perfectCrystalForPhoton(cls, diffraction_setup, polarized_photon):
+    def _perfectCrystalForPhoton(cls, diffraction_setup, polarized_photon, **kwargs):
         """
 
         Parameters
@@ -563,11 +601,11 @@ class Diffraction(object):
 
         """
 
-        return cls._perfectCrystalForEnergy(diffraction_setup, polarized_photon.energy())
+        return cls._perfectCrystalForEnergy(diffraction_setup, polarized_photon.energy(), **kwargs)
 
 
     @classmethod
-    def _perfectCrystalForPhotonBunch(cls, diffraction_setup, incoming_bunch):
+    def _perfectCrystalForPhotonBunch(cls, diffraction_setup, incoming_bunch, **kwargs):
         """
 
         Parameters
@@ -582,7 +620,7 @@ class Diffraction(object):
         PerfectCrystalDiffraction instance
 
         """
-        return cls._perfectCrystalForPhoton(diffraction_setup, incoming_bunch)
+        return cls._perfectCrystalForPhoton(diffraction_setup, incoming_bunch, **kwargs)
 
 
     # these methods use DiffractionSetupSweeps (for scans)

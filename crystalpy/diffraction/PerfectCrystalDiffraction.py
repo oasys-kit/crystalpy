@@ -355,6 +355,78 @@ class PerfectCrystalDiffraction(object):
         else:
             self._calculation_strategy = CalculationStrategyMath()
 
+
+    @classmethod
+    def initializeFromDiffractionSetupAndEnergy(cls, diffraction_setup, energy,
+                                 geometry_type=None,
+                                 bragg_normal=None,
+                                 surface_normal=None,
+                                 # bragg_angle=None,
+                                 # psi_0=None,
+                                 # psi_H=None,
+                                 # psi_H_bar=None,
+                                 thickness=None,
+                                 d_spacing=None,
+                                 ):
+        """
+        Creates a PerfectCrystalDiffraction instance from parameters in a DiffractionSetupAbstract instance and a
+        photon energy array.
+
+        Parameters
+        ----------
+        diffraction_setup : instance of PerfectCrystalDiffraction
+
+        energy : numpy array
+
+        geometry_type: instance of BraggDiffraction, LaueDiffraction, BraggTransmission, or LaueTransmission
+
+        bragg_normal : instance of Vector, optional
+            if None, retrieve from DiffractionSetup
+
+        surface_normal : instance of Vector, optional
+            if None, retrieve from DiffractionSetup
+
+        thickness : float or numpy array, optional
+            crystal thickness in m. If None, retrieve from DiffractionSetup
+
+        d_spacing : float or numpy array
+            d-spacing in m. If None, retrieve from DiffractionSetup
+
+
+        Returns
+        -------
+        PerfectCrystalDiffraction instance
+
+
+        """
+
+        #
+        # energy-depending variables
+        #
+
+        # Retrieve bragg angle.
+        bragg_angle = diffraction_setup.angleBragg(energy)
+
+        psi_0, psi_H, psi_H_bar = diffraction_setup.psiAll(energy)
+
+        geometry_type = geometry_type if not geometry_type is None else diffraction_setup.geometryType()
+        bragg_normal = bragg_normal if not bragg_normal is None else diffraction_setup.vectorH()
+        surface_normal = surface_normal if not surface_normal is None else diffraction_setup.vectorNormalSurface()
+        thickness = thickness if not thickness is None else diffraction_setup.thickness()
+        d_spacing = d_spacing if not d_spacing is None else diffraction_setup.dSpacingSI()
+
+        return PerfectCrystalDiffraction(
+            geometry_type,
+            bragg_normal,
+            surface_normal,
+            bragg_angle,
+            psi_0,
+            psi_H,
+            psi_H_bar,
+            thickness,
+            d_spacing)
+
+
     #
     # getters
     #
@@ -382,7 +454,6 @@ class PerfectCrystalDiffraction(object):
 
     def surfaceNormalInwards(self):
         """Returns the surface normal that points inwards the crystal.
-        :return: Surface normal.
 
         Returns
         -------
@@ -547,7 +618,13 @@ class PerfectCrystalDiffraction(object):
         """
         return photon.unitDirectionVector().scalarProduct(self.surfaceNormalInwards())
 
-    def _calculatePhotonOut(self, photon_in, method=1):
+    def _calculatePhotonOut(self, photon_in,
+                            method=1,
+                            apply_reflectivity=False,
+                            calculation_method=0,  # 0=Zachariasen, 1=Guigay
+                            is_thick=0,  # for Guigay only
+                            use_transfer_matrix=0,  # for Guigay only
+                            ):
         """
         Solves the scattering equation to calculates the outgoing photon from the incoming photon and the Bragg normal.
 
@@ -642,6 +719,17 @@ class PerfectCrystalDiffraction(object):
                                 numpy.pi * 0.5 - photon_out.unitDirectionVector().angle(self.braggNormal()))))
             self.logDebug("photon_in direction" + str(photon_in.unitDirectionVector().components()))
             self.logDebug("photon_out direction" + str(photon_out.unitDirectionVector().components()))
+
+
+        if apply_reflectivity:
+            coeffs = self.calculateDiffraction(photon_in,
+                                                          calculation_method=calculation_method,
+                                                          is_thick=is_thick,
+                                                          use_transfer_matrix=use_transfer_matrix)
+
+            # apply reflectivities
+            photon_out.rescaleEsigma(coeffs["S"])
+            photon_out.rescaleEpi(coeffs["P"])
 
         # Return outgoing photon.
 
