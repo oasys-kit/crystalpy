@@ -697,13 +697,13 @@ class PerfectCrystalDiffraction(object):
 
         elif method == 1: # new method
             if self.geometryType() == BraggDiffraction():
-                k_out = k_in.scattering_on_surface(self.surfaceNormal(), B_H, use_sign_of=+1)
+                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=+1)
             elif self.geometryType() == LaueDiffraction():
-                k_out = k_in.scattering_on_surface(self.surfaceNormal(), B_H, use_sign_of=-1)
+                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=-1)
             elif self.geometryType() == BraggTransmission():
-                k_out = k_in.scattering_on_surface(self.surfaceNormal(), B_H, use_sign_of=+1) # todo: fix
+                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=+1) # todo: fix
             elif self.geometryType() == LaueTransmission():
-                k_out = k_in.scattering_on_surface(self.surfaceNormal(), B_H, use_sign_of=-1) # todo: fix
+                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=-1) # todo: fix
 
 
         photon_out = photon_in.duplicate()

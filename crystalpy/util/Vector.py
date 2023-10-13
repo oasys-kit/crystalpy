@@ -467,7 +467,7 @@ class Vector(object):
 
         return angle
 
-    def scattering_on_surface(self, NORMAL, H, use_sign_of=+1):
+    def scatteringOnSurface(self, NORMAL, H, use_sign_of=+1):
         """Returns K_OUT vector following the scattering equation at a surface:
             K_OUT_parallel = K_IN_parallel + H_parallel
             |K_OUT| = |K_IN|
@@ -499,6 +499,61 @@ class Vector(object):
             numpy.sqrt(self.norm() ** 2 - K_OUT_par.norm() ** 2) * numpy.sign(use_sign_of))
         K_OUT = K_OUT_par.addVector(K_OUT_perp)
         return K_OUT
+
+    def getVectorH(self,
+                   surface_normal,
+                   d_spacingSI,
+                   asymmetry_angle=0.0,
+                   azimuthal_angle=0.0,
+                   vector_parallel_surface=None):
+        """
+        Returns the vector H.
+        It is obtained from
+        * copy the surface_normal
+        * set its module to 2 pi / d_spacingSI
+        * calculate an axis perpendicular to vector_parallel_surface and surface_normal
+        * rotate it an angle -asymmetry_angle around this axis
+        * rotate it an angle azimuthal_angle around this the surface_normal
+
+        Parameters
+        ----------
+        surface_normal : instance of Vector
+            the (normalized) upwards normal to the surface.
+        d_spacingSI : float or numpy array
+            the d-spacing in m.
+        asymmetry_angle : float or numpy array
+            the asymmetry angle in rad (from the crystal surface to crystal planes, positive if clockwise)
+        azimuthal_angle : float or numpy array
+            the azimuthal angle in rad. It is the angle between the YZ plane and the diffraction plane.
+        vector_parallel_surface : instance of Vector, optional
+            the vector parallel to the surface. If None it uses Vector(0,1,0)
+
+        Returns
+        -------
+        instance of Vector
+
+        """
+        # calculate vector H
+        # Geometrical convention from M.Sanchez del Rio et al., J.Appl.Cryst.(2015). 48, 477-491.
+
+        g_modulus = 2.0 * numpy.pi / d_spacingSI
+
+        # Let's start from a vector parallel to the surface normal (z axis).
+        temp_normal_bragg = surface_normal.scalarMultiplication(g_modulus)
+
+        if (asymmetry_angle==0.0 and azimuthal_angle==0.0):
+            return temp_normal_bragg
+        else:
+            # Let's now rotate this vector of an angle alphaX around the y axis (according to the right-hand-rule).
+            # alpha_x = asymmetry_angle
+            if vector_parallel_surface is None:
+                vector_parallel_surface = Vector(0,1,0) #self._crystalpy_diffraction_setup.vectorParallelSurface() # should near ~(0, 1, 0)
+            axis = vector_parallel_surface.crossProduct(surface_normal)  # should be ~(1, 0, 0)
+            temp_normal_bragg = temp_normal_bragg.rotateAroundAxis(axis, -asymmetry_angle)
+
+            # Let's now rotate this vector of an angle phi around the z axis (following the ISO standard 80000-2:2009).
+            bragg_normal = temp_normal_bragg.rotateAroundAxis(temp_normal_bragg, azimuthal_angle)
+            return bragg_normal
 
     def getVectorWithAngle(self, angle):
         """Returns one arbitrary vector with the vector rotated with a given angle.

@@ -604,7 +604,7 @@ class DiffractionSetupAbstract(object):
 
         H = self.vectorH()
         NORMAL = self.vectorNormalSurface()
-        K_OUT = K_IN.scattering_on_surface(NORMAL, H)
+        K_OUT = K_IN.scatteringOnSurface(NORMAL, H)
         return K_OUT
 
     # useful for scans...
