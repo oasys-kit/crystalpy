@@ -1,6 +1,6 @@
 """
 Represents a diffraction setup (from where it inherits) and includes a photon beam
-with scanning ephoton energy and deviation angle (scattering plane is YZ plane)
+with scanning photon energy and deviation angle (scattering plane is YZ plane)
 
 Units are in SI except for photon energy in eV. Angles in radians.
 
@@ -14,7 +14,54 @@ from crystalpy.util.PhotonBunch import PhotonBunch
 
 
 class DiffractionSetupSweeps(DiffractionSetupXraylib):
-    """ """
+    """
+    Constructor.
+
+    Parameters
+    ----------
+    geometry_type: instance of BraggDiffraction, LaueDiffraction, BraggTransmission, or LaueTransmission
+
+    crystal_name: str
+        The name of the crystal, e.g. "Si".
+
+    thickness: float
+        The crystal thickness in m.
+
+    miller_h: int
+        Miller index H.
+
+    miller_k: int
+        Miller index K.
+
+    miller_l: int
+        Miller index L.
+
+    asymmetry_angle: float
+        The asymmetry angle between surface normal and Bragg normal (radians).
+
+    azimuthal_angle: float
+        The angle between the projection of the Bragg normal on the crystal surface plane and the Y axis (radians).
+        It can also be called the inclination angle.
+
+    energy_min: float
+        The minimum energy in eV.
+
+    energy_max: float
+         The maximum energy in eV.
+
+    energy_points: int
+         Number of energy points.
+
+    angle_deviation_min: float
+         Minimal angle deviation in rad.
+
+    angle_deviation_max: float
+         Maximal angle  in rad.
+
+    angle_deviation_points: int
+         Number of deviations points.
+
+    """
 
     def __init__(self,
                  geometry_type, crystal_name, thickness,
@@ -27,24 +74,7 @@ class DiffractionSetupSweeps(DiffractionSetupXraylib):
                  angle_deviation_min,
                  angle_deviation_max,
                  angle_deviation_points):
-        """
-        Constructor.
-        :param geometry_type: GeometryType (BraggDiffraction,...).
-        :param crystal_name: The name of the crystal, e.g. Si.
-        :param thickness: The crystal thickness.
-        :param miller_h: Miller index H.
-        :param miller_k: Miller index K.
-        :param miller_l: Miller index L.
-        :param asymmetry_angle: The asymmetry angle between surface normal and Bragg normal.
-        :param azimuthal_angle: The angle between the projection of the Bragg normal
-                                on the crystal surface plane and the x axis.
-        :param energy_min: The minimum energy.
-        :param energy_max: The maximum energy.
-        :param energy_points: Number of energy points.
-        :param angle_deviation_min: Minimal angle deviation.
-        :param angle_deviation_max: Maximal angle deviation.
-        :param angle_deviation_points: Number of deviations points.
-        """
+
         energies = numpy.linspace(energy_min,
                                energy_max,
                                energy_points)

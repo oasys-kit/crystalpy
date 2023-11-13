@@ -38,7 +38,8 @@ class DiffractionSetupAbstract(object):
         The asymmetry angle between surface normal and Bragg normal (radians).
 
     azimuthal_angle: float
-        The angle between the projection of the Bragg normal on the crystal surface plane and the x axis (radians).
+        The angle between the projection of the Bragg normal on the crystal surface plane and the Y axis (radians).
+        It can also be called inclination angle.
 
     debye_waller: float
         The Debye-Waller factor exp(-M).

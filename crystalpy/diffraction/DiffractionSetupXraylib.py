@@ -39,7 +39,8 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         The asymmetry angle between surface normal and Bragg normal (radians).
 
     azimuthal_angle: float
-        The angle between the projection of the Bragg normal on the crystal surface plane and the x axis (radians).
+        The angle between the projection of the Bragg normal on the crystal surface plane and the Y axis (radians).
+        It can also be called inclination angle.
 
     debye_waller: float
         The Debye-Waller factor exp(-M).
@@ -47,16 +48,23 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
     """
 
     def __init__(self,
-                 geometry_type=None, crystal_name="", thickness=1e-6,
-                 miller_h=1, miller_k=1, miller_l=1,
+                 geometry_type=None,
+                 crystal_name="",
+                 thickness=1e-6,
+                 miller_h=1,
+                 miller_k=1,
+                 miller_l=1,
                  asymmetry_angle=0.0,
                  azimuthal_angle=0.0,):
 
         super().__init__(geometry_type=geometry_type,
                          crystal_name=crystal_name,
                          thickness=thickness,
-                         miller_h=miller_h, miller_k=miller_k, miller_l=miller_l,
-                         asymmetry_angle=asymmetry_angle,azimuthal_angle=azimuthal_angle)
+                         miller_h=miller_h,
+                         miller_k=miller_k,
+                         miller_l=miller_l,
+                         asymmetry_angle=asymmetry_angle,
+                         azimuthal_angle=azimuthal_angle)
 
         # Load crystal from xraylib.
         self._crystal = xraylib.Crystal_GetCrystal(self.crystalName())
@@ -258,8 +266,12 @@ if __name__ == "__main__":
         from crystalpy.diffraction.GeometryType import BraggDiffraction
         import numpy
 
-        a = DiffractionSetupXraylib(geometry_type=BraggDiffraction, crystal_name="Si", thickness=1e-5,
-                     miller_h=1, miller_k=1, miller_l=1,
+        a = DiffractionSetupXraylib(geometry_type=BraggDiffraction,
+                     crystal_name="Si",
+                     thickness=1e-5,
+                     miller_h=1,
+                     miller_k=1,
+                     miller_l=1,
                      asymmetry_angle=0.0,
                      azimuthal_angle=0.0,)
 
