@@ -55,4 +55,5 @@ util
    util.PolarizedPhotonBunch
    util.ComplexAmplitudePhoton
    util.ComplexAmplitudePhotonBunch
+   util.CalculationStrategy
    util.bragg_preprocessor_file_io
