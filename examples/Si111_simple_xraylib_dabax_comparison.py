@@ -26,7 +26,7 @@ from dabax.dabax_xraylib import DabaxXraylib
 import time
 
 #
-def calculate_simple_diffraction_angular_scan(calculation_method=0):
+def calculate_simple_diffraction_angular_scan(calculation_method=0, calculation_strategy_flag=0):
 
     # Create a diffraction setup.
 
@@ -66,10 +66,6 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
     print("Bragg angle for E=%f eV is %f deg"%(energy,bragg_angle*180.0/numpy.pi))
 
 
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-    diffraction_dabax = Diffraction()
-
     # initialize arrays for storing outputs
     deviations = numpy.zeros(angle_deviation_points)
     intensityS = numpy.zeros(angle_deviation_points)
@@ -89,7 +85,9 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon)
+        coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                  calculation_method=calculation_method,
+                                                                  calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
         deviations[ia] = deviation
@@ -108,13 +106,14 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax,
-                                    photon, calculation_method=calculation_method)
+        coeffs_dabax = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon,
+                                                                        calculation_method=calculation_method,
+                                                                        calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
         deviations[ia] = deviation
-        intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2 # coeffs_dabax['S'].intensity()
-        intensityP_dabax[ia] = numpy.abs(coeffs_dabax['P'])**2 # coeffs_dabax['P'].intensity()
+        intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2
+        intensityP_dabax[ia] = numpy.abs(coeffs_dabax['P'])**2
     t2 = time.time()
 
     # plot results
@@ -131,7 +130,7 @@ def calculate_simple_diffraction_angular_scan(calculation_method=0):
     print("Total time, Time per point DABAX: ", t2-t1, (t2-t1) / angle_deviation_points)
 
 
-def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
+def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0, calculation_strategy_flag=0, diffraction_dabax=0):
 
     # Create a diffraction setup.
 
@@ -172,10 +171,6 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
     print("Bragg angle for E=%f eV is %f deg"%(energy,bragg_angle*180.0/numpy.pi))
 
 
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-    diffraction_dabax = Diffraction()
-
     # initialize arrays for storing outputs
     deviations = numpy.zeros(angle_deviation_points)
     intensityS = numpy.zeros(angle_deviation_points)
@@ -195,8 +190,9 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
-                                            calculation_method=calculation_method)
+        coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                            calculation_method=calculation_method,
+                                            calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
         deviations[ia] = deviation
@@ -216,15 +212,6 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         zz = - numpy.abs(numpy.sin(angle))
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
-        # perform the calculation
-        # coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon)
-        #
-        # # store results
-        # deviations[ia] = deviation
-        # intensityS_dabax[ia] = coeffs_dabax['S'].intensity()
-        # intensityP_dabax[ia] = coeffs_dabax['P'].intensity()
-
-
         # Create PerfectCrystalDiffraction instance.
         perfect_crystal = PerfectCrystalDiffraction(geometry_type=diffraction_setup_dabax.geometryType(),
                                                     bragg_normal=diffraction_setup_dabax.vectorH(),
@@ -234,13 +221,14 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
                                                     psi_H=psi_H,
                                                     psi_H_bar=psi_H_bar,
                                                     thickness=diffraction_setup_dabax.thickness(),
-                                                    d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10)
+                                                    d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10,
+                                                    calculation_strategy_flag=calculation_strategy_flag)
 
         complex_amplitudes = perfect_crystal.calculateDiffraction(photon, calculation_method=calculation_method)
 
         deviations[ia] = deviation
-        intensityS_dabax[ia] = numpy.abs(complex_amplitudes['S']) ** 2  # 0.0 # coeffs_dabax['S'].intensity()
-        intensityP_dabax[ia] = numpy.abs(complex_amplitudes['P']) ** 2  # 0.0 # coeffs_dabax['P'].intensity()
+        intensityS_dabax[ia] = numpy.abs(complex_amplitudes['S']) ** 2
+        intensityP_dabax[ia] = numpy.abs(complex_amplitudes['P']) ** 2
     t2 = time.time()
 
     # plot results
@@ -256,7 +244,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
     print("Total time, Time per point XRAYLIB: ", t1-t0, (t1-t0) / angle_deviation_points)
     print("Total time, Time per point DABAX: ", t2-t1, (t2-t1) / angle_deviation_points)
 
-def calculate_simple_diffraction_energy_scan(calculation_method=0):
+def calculate_simple_diffraction_energy_scan(calculation_method=0, diffraction_dabax=0, calculation_strategy_flag=0):
 
     # Create a diffraction setup.
 
@@ -304,10 +292,6 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
     npoints = 100
     energies = numpy.linspace(energy-3*DeltaE, energy+3*DeltaE, npoints)
 
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-    diffraction_dabax = Diffraction()
-
     # initialize arrays for storing outputs
     intensityS =       numpy.zeros(npoints)
     intensityP =       numpy.zeros(npoints)
@@ -325,8 +309,9 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
         photon = Photon(energy_in_ev=energies[ia],direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
-                                                                  calculation_method=calculation_method)
+        coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                  calculation_method=calculation_method,
+                                                                  calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
         intensityS[ia] = numpy.abs(coeffs['S'])**2 # coeffs['S'].intensity()
@@ -343,12 +328,13 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
         photon = Photon(energy_in_ev=energies[ia],direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs_dabax = diffraction_dabax.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax,
-                                                    photon, calculation_method=calculation_method)
+        coeffs_dabax = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon,
+                                                                        calculation_method=calculation_method,
+                                                                        calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
-        intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2 # coeffs_dabax['S'].intensity()
-        intensityP_dabax[ia] = numpy.abs(coeffs_dabax['P'])**2 # coeffs_dabax['P'].intensity()
+        intensityS_dabax[ia] = numpy.abs(coeffs_dabax['S'])**2
+        intensityP_dabax[ia] = numpy.abs(coeffs_dabax['P'])**2
 
     t2 = time.time()
 
@@ -366,7 +352,7 @@ def calculate_simple_diffraction_energy_scan(calculation_method=0):
     print("Total time, Time per point XRAYLIB: ", t1-t0, (t1-t0) / npoints)
     print("Total time, Time per point DABAX: ", t2-t1, (t2-t1) / npoints)
 
-def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
+def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0, calculation_strategy_flag=0):
 
     # Create a diffraction setup.
 
@@ -414,10 +400,6 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
     npoints = 100
     energies = numpy.linspace(energy-3*DeltaE, energy+3*DeltaE, npoints)
 
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-    diffraction_dabax = Diffraction()
-
     # initialize arrays for storing outputs
     intensityS =       numpy.zeros(npoints)
     intensityP =       numpy.zeros(npoints)
@@ -435,7 +417,9 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
         photon = Photon(energy_in_ev=energies[ia],direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
+        coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                  calculation_method=calculation_method,
+                                                                  calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
         intensityS[ia] = numpy.abs(coeffs['S']) ** 2
@@ -477,7 +461,8 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
                                                     psi_H=psi_H,
                                                     psi_H_bar=psi_H_bar,
                                                     thickness=diffraction_setup_dabax.thickness(),
-                                                    d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10)
+                                                    d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10,
+                                                    calculation_strategy_flag=calculation_strategy_flag)
 
         complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon, calculation_method=calculation_method)
 
@@ -507,10 +492,11 @@ def calculate_simple_diffraction_energy_scan_accelerated(calculation_method=0):
 if __name__ == "__main__":
 
     calculation_method = 0 # 0=Zachariasen, 1=Guigay
+    calculation_strategy_flag = 2  # 0=mpmath 1=numpy 2=numpy-truncated
 
-    calculate_simple_diffraction_angular_scan(calculation_method=calculation_method)
-    calculate_simple_diffraction_angular_scan_accelerated(calculation_method=calculation_method)
+    calculate_simple_diffraction_angular_scan(            calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
+    calculate_simple_diffraction_angular_scan_accelerated(calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
 
-    calculate_simple_diffraction_energy_scan(calculation_method=calculation_method)
-    calculate_simple_diffraction_energy_scan_accelerated(calculation_method=calculation_method)
+    calculate_simple_diffraction_energy_scan(            calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
+    calculate_simple_diffraction_energy_scan_accelerated(calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
 

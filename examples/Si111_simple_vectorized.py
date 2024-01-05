@@ -25,7 +25,7 @@ from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBun
 from crystalpy.util.ComplexAmplitudePhoton import ComplexAmplitudePhoton
 
 #
-def calculate_simple_diffraction(method=0, calculation_method=0):
+def calculate_simple_diffraction(method=0, calculation_method=0, calculation_strategy_flag=0):
 
     # Create a diffraction setup.
 
@@ -54,10 +54,6 @@ def calculate_simple_diffraction(method=0, calculation_method=0):
 
     print("Bragg angle for E=%f eV is %f deg"%(energy,bragg_angle*180.0/numpy.pi))
 
-
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-
     deviations = numpy.zeros(angle_deviation_points)
 
 
@@ -78,7 +74,9 @@ def calculate_simple_diffraction(method=0, calculation_method=0):
             photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
             # perform the calculation
-            coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
+            coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                      calculation_method=calculation_method,
+                                                                      calculation_strategy_flag=calculation_strategy_flag)
 
             # store results
             deviations[ia] = deviation
@@ -108,14 +106,14 @@ def calculate_simple_diffraction(method=0, calculation_method=0):
         ti1 = time.time()
 
         if method == 1:
-            bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
+            bunch_out = Diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                                    bunch_in,
                                                                                    calculation_method=calculation_method)
             bunch_out_dict = bunch_out.toDictionary()
             intensityS = bunch_out_dict["intensityS"]
             intensityP = bunch_out_dict["intensityP"]
         elif method == 2:
-            coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup,
+            coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup,
                                                                                    bunch_in,
                                                                                    calculation_method=calculation_method)
             intensityS = numpy.abs(coeffs["S"])**2
@@ -145,12 +143,16 @@ def calculate_simple_diffraction(method=0, calculation_method=0):
 #
 if __name__ == "__main__":
 
-    method = 1
-
-
     calculation_method = 0 # 0=Zachariasen, 1=Guigay
-    calculate_simple_diffraction(method=method, calculation_method=calculation_method)
+    calculation_strategy_flag = 2  # 0=mpmath 1=numpy 2=numpy-truncated
 
-    calculation_method = 1 # 0=Zachariasen, 1=Guigay
-    calculate_simple_diffraction(method=method, calculation_method=calculation_method)
+    calculate_simple_diffraction(method=0, # non=vectorized
+                                 calculation_method=calculation_method,
+                                 calculation_strategy_flag=calculation_strategy_flag,
+                                 )
+
+    calculate_simple_diffraction(method=1, # vectorized
+                                 calculation_method=calculation_method,
+                                 calculation_strategy_flag=calculation_strategy_flag,
+                                 )
 

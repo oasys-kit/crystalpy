@@ -38,6 +38,7 @@ class Diffraction(object):
                                              calculation_method=0,
                                              is_thick=0,
                                              use_transfer_matrix=0,
+                                             calculation_strategy_flag=0,
                                              ):
         """Calculates the diffracted complex amplitude
 
@@ -56,6 +57,10 @@ class Diffraction(object):
         use_transfer_matrix : int, optional
              0: No, 1: Yes (Default value = 0)
 
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
+
         Returns
         -------
         dict
@@ -65,7 +70,9 @@ class Diffraction(object):
         # print(">>>> in calculateDiffractedComplexAmplitudes", use_transfer_matrix)
 
         # Get PerfectCrystal instance for the current photon.
-        perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_photon)
+        perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup,
+                                                       incoming_photon,
+                                                       calculation_strategy_flag=calculation_strategy_flag)
 
         # Calculate diffraction for current incoming photon.
         complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_photon,
@@ -81,6 +88,7 @@ class Diffraction(object):
                                                   calculation_method=0,
                                                   is_thick=0,
                                                   use_transfer_matrix=0,
+                                                  calculation_strategy_flag=0,
                                                   ):
         """
 
@@ -99,6 +107,9 @@ class Diffraction(object):
         use_transfer_matrix : int, optional
              0: No, 1: Yes (Default value = 0)
 
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
 
         Returns
         -------
@@ -109,12 +120,15 @@ class Diffraction(object):
         # print(">>>> in calculateDiffractedComplexAmplitudePhoton")
 
         # Get PerfectCrystal instance for the current photon.
-        perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, photon)
+        perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup,
+                                                       photon,
+                                                       calculation_strategy_flag=calculation_strategy_flag)
 
         coeffs = cls.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
                                                           calculation_method=calculation_method,
                                                           is_thick=is_thick,
-                                                          use_transfer_matrix=use_transfer_matrix)
+                                                          use_transfer_matrix=use_transfer_matrix,
+                                                          calculation_strategy_flag=calculation_strategy_flag)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(photon)
@@ -130,7 +144,8 @@ class Diffraction(object):
                                                        incoming_bunch,
                                                        calculation_method=0,
                                                        is_thick=0,
-                                                       use_transfer_matrix=0):
+                                                       use_transfer_matrix=0,
+                                                       calculation_strategy_flag=0):
         """Calculates the diffraction/transmission given by the setup.
 
         Parameters
@@ -148,6 +163,10 @@ class Diffraction(object):
 
         use_transfer_matrix : int, optional
              0: No, 1: Yes (Default value = 0)
+
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
 
         Returns
         -------
@@ -169,13 +188,15 @@ class Diffraction(object):
                                                           incoming_bunch,
                                                           calculation_method=calculation_method,
                                                           is_thick=0,
-                                                          use_transfer_matrix=0)
+                                                          use_transfer_matrix=0,
+                                                          calculation_strategy_flag=calculation_strategy_flag)
         elif vectorized_method == 1:
             perfect_crystal = cls._perfectCrystalForPhotonBunch(diffraction_setup, incoming_bunch)
             coeffs = perfect_crystal.calculateDiffraction(incoming_bunch,
                                                           calculation_method=calculation_method,
                                                           is_thick=is_thick,
-                                                          use_transfer_matrix=use_transfer_matrix)
+                                                          use_transfer_matrix=use_transfer_matrix,
+                                                          calculation_strategy_flag=calculation_strategy_flag)
             outgoing_bunch = perfect_crystal._calculatePhotonOut(incoming_bunch)
             outgoing_bunch.rescaleEsigma(coeffs["S"])
             outgoing_bunch.rescaleEpi(coeffs["P"])
@@ -185,16 +206,21 @@ class Diffraction(object):
             # Create PhotonBunch instance.
             outgoing_bunch = ComplexAmplitudePhotonBunch([])
 
-            perfect_crystal_bunch = cls._perfectCrystalForPhotonBunch(diffraction_setup, incoming_bunch)
+            perfect_crystal_bunch = cls._perfectCrystalForPhotonBunch(diffraction_setup,
+                                                                      incoming_bunch,
+                                                                      calculation_strategy_flag=calculation_strategy_flag)
             outgoing_bunch2 = perfect_crystal_bunch._calculatePhotonOut(incoming_bunch)
 
             for index, complex_amplitude_photon in enumerate(incoming_bunch):
                 # Get PerfectCrystal instance for the current photon.
-                perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, complex_amplitude_photon)
+                perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup,
+                                                               complex_amplitude_photon,
+                                                               calculation_strategy_flag=calculation_strategy_flag)
                 coeffs = perfect_crystal.calculateDiffraction(complex_amplitude_photon,
                                                               calculation_method=calculation_method,
                                                               is_thick=is_thick,
-                                                              use_transfer_matrix=use_transfer_matrix)
+                                                              use_transfer_matrix=use_transfer_matrix,
+                                                              calculation_strategy_flag=calculation_strategy_flag)
 
                 # Calculate outgoing Photon.
                 outgoing_complex_amplitude_photon = perfect_crystal._calculatePhotonOut(complex_amplitude_photon)
@@ -219,7 +245,9 @@ class Diffraction(object):
                                            inclination_angle,
                                            calculation_method=0,
                                            is_thick=0,
-                                           use_transfer_matrix=0):
+                                           use_transfer_matrix=0,
+                                           calculation_strategy_flag=0,
+                                           ):
         """Calculates the diffraction/transmission given by the setup.
 
         Parameters
@@ -241,6 +269,10 @@ class Diffraction(object):
         use_transfer_matrix : int, optional
              0: No, 1: Yes (Default value = 0)
 
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
+
         Returns
         -------
         ComplexAmplitudePhoton instance
@@ -254,13 +286,15 @@ class Diffraction(object):
         incoming_stokes_vector = incoming_polarized_photon.stokesVector()
 
         # Get PerfectCrystal instance for the current photon.
-        perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup, incoming_polarized_photon)
+        perfect_crystal = cls._perfectCrystalForPhoton(diffraction_setup,
+                                                       incoming_polarized_photon,
+                                                       calculation_strategy_flag=calculation_strategy_flag)
 
         # Calculate diffraction for current incoming photon.
         complex_amplitudes = perfect_crystal.calculateDiffraction(incoming_polarized_photon,
                                                                   calculation_method=calculation_method,
                                                                   is_thick=is_thick,
-                                                                  use_transfer_matrix=use_transfer_matrix)
+                                                                  use_transfer_matrix=use_transfer_matrix,)
 
         # Calculate outgoing Photon.
         outgoing_photon = perfect_crystal._calculatePhotonOut(incoming_polarized_photon)
@@ -298,7 +332,9 @@ class Diffraction(object):
                                                 inclination_angle,
                                                 calculation_method=0,
                                                 is_thick=0,
-                                                use_transfer_matrix=0):
+                                                use_transfer_matrix=0,
+                                                calculation_strategy_flag=0,
+                                                ):
         """Calculates the diffraction/transmission bunch given by the crystal in the setup.
 
         Parameters
@@ -320,6 +356,10 @@ class Diffraction(object):
         use_transfer_matrix : int, optional
              0: No, 1: Yes (Default value = 0)
 
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
+
         Returns
         -------
         ComplexAmplitudePhotonBunch
@@ -340,7 +380,8 @@ class Diffraction(object):
                                                                                inclination_angle,
                                                                                calculation_method=calculation_method,
                                                                                is_thick=is_thick,
-                                                                               use_transfer_matrix=use_transfer_matrix)
+                                                                               use_transfer_matrix=use_transfer_matrix,
+                                                                               calculation_strategy_flag=calculation_strategy_flag)
             # Add result of current deviation.
             outgoing_bunch.addPhoton(outgoing_polarized_photon)
 
@@ -348,7 +389,8 @@ class Diffraction(object):
         return outgoing_bunch
 
     @classmethod
-    def calculateDiffraction(cls, diffraction_setup, calculation_method=0, is_thick=0, use_transfer_matrix=0):
+    def calculateDiffraction(cls, diffraction_setup, calculation_method=0, is_thick=0, use_transfer_matrix=0,
+                             calculation_strategy_flag=0):
         """Calculates the diffraction/transmission given by the setup.
 
         Parameters
@@ -363,6 +405,10 @@ class Diffraction(object):
 
         use_transfer_matrix : int, optional
              0: No, 1: Yes (Default value = 0)
+
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
 
         Returns
         -------
@@ -381,7 +427,8 @@ class Diffraction(object):
             cls._calculateDiffractionForEnergy(diffraction_setup, energy, result,
                                                calculation_method=calculation_method,
                                                is_thick=is_thick,
-                                               use_transfer_matrix=use_transfer_matrix)
+                                               use_transfer_matrix=use_transfer_matrix,
+                                               calculation_strategy_flag=calculation_strategy_flag)
 
         # Return diffraction results.
         return result
@@ -512,6 +559,7 @@ class Diffraction(object):
                                  # psi_H_bar=None,
                                  thickness=None,
                                  d_spacing=None,
+                                 calculation_strategy_flag=0,
                                  ):
         """
         Creates a PerfectCrystalDiffraction instance from parameters in a DiffractionSetupAbstract instance and a
@@ -534,10 +582,12 @@ class Diffraction(object):
         thickness : float or numpy array, optional
             crystal thickness in m. If None, retrieve from DiffractionSetup
 
-
         d_spacing : float or numpy array
             d-spacing in m. If None, retrieve from DiffractionSetup
 
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
 
         Returns
         -------
@@ -555,6 +605,7 @@ class Diffraction(object):
                                                     # psi_H_bar=None,
                                                     thickness=thickness,
                                                     d_spacing=d_spacing,
+                                                    calculation_strategy_flag=calculation_strategy_flag,
                                                     )
 
         # #
@@ -586,7 +637,7 @@ class Diffraction(object):
         # return perfect_crystal
 
     @classmethod
-    def _perfectCrystalForPhoton(cls, diffraction_setup, polarized_photon, **kwargs):
+    def _perfectCrystalForPhoton(cls, diffraction_setup, polarized_photon, calculation_strategy_flag=0,):
         """
 
         Parameters
@@ -595,17 +646,23 @@ class Diffraction(object):
             
         polarized_photon :
 
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
+
         Returns
         -------
         PerfectCrystalDiffraction instance
 
         """
 
-        return cls._perfectCrystalForEnergy(diffraction_setup, polarized_photon.energy(), **kwargs)
+        return cls._perfectCrystalForEnergy(diffraction_setup,
+                                            polarized_photon.energy(),
+                                            calculation_strategy_flag=calculation_strategy_flag)
 
 
     @classmethod
-    def _perfectCrystalForPhotonBunch(cls, diffraction_setup, incoming_bunch, **kwargs):
+    def _perfectCrystalForPhotonBunch(cls, diffraction_setup, incoming_bunch, calculation_strategy_flag=0):
         """
 
         Parameters
@@ -613,14 +670,19 @@ class Diffraction(object):
         diffraction_setup :
             
         incoming_bunch :
-            
+
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
 
         Returns
         -------
         PerfectCrystalDiffraction instance
 
         """
-        return cls._perfectCrystalForPhoton(diffraction_setup, incoming_bunch, **kwargs)
+        return cls._perfectCrystalForPhoton(diffraction_setup,
+                                            incoming_bunch,
+                                            calculation_strategy_flag=calculation_strategy_flag)
 
 
     # these methods use DiffractionSetupSweeps (for scans)
@@ -632,7 +694,8 @@ class Diffraction(object):
                                        result,
                                        calculation_method=0,
                                        is_thick=0,
-                                       use_transfer_matrix=0):
+                                       use_transfer_matrix=0,
+                                       calculation_strategy_flag=0):
         """Calculates the diffraction/transmission given by the setup.
 
         Parameters
@@ -663,7 +726,9 @@ class Diffraction(object):
         if not isinstance(diffraction_setup, DiffractionSetupSweeps):
             raise Exception("Inmut must be of type: DiffractionSetupSweeps")
 
-        perfect_crystal = cls._perfectCrystalForEnergy(diffraction_setup, energy)
+        perfect_crystal = cls._perfectCrystalForEnergy(diffraction_setup,
+                                                       energy,
+                                                       calculation_strategy_flag=calculation_strategy_flag)
 
         # For every deviation from Bragg angle ...
         for index, deviation in enumerate(diffraction_setup.angleDeviationGrid()):

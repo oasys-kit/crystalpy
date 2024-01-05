@@ -23,7 +23,7 @@ from crystalpy.util.Vector import Vector
 from crystalpy.util.Photon import Photon
 
 #
-def calculate_simple_diffraction(calculation_method=0):
+def calculate_simple_diffraction(calculation_method=0, calculation_strategy_flag=1):
 
     # Create a diffraction setup.
 
@@ -77,6 +77,7 @@ def calculate_simple_diffraction(calculation_method=0):
     complex_amplitude_ter  = numpy.zeros(angle_deviation_points, dtype=complex)
 
 
+
     for ia in range(angle_deviation_points):
         deviation = angle_deviation_min + ia * angle_step
         angle = deviation  + bragg_angle
@@ -91,13 +92,15 @@ def calculate_simple_diffraction(calculation_method=0):
         coeffs_r_half = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r_half, photon,
                                                                          calculation_method=calculation_method,
                                                                          is_thick=0,
-                                                                         use_transfer_matrix=True)
+                                                                         use_transfer_matrix=True,
+                                                                         calculation_strategy_flag=calculation_strategy_flag)
 
 
         coeffs_r      = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_r, photon,
                                                                          calculation_method=calculation_method,
                                                                          is_thick=0,
-                                                                         use_transfer_matrix=True)
+                                                                         use_transfer_matrix=True,
+                                                                         calculation_strategy_flag=calculation_strategy_flag)
 
         # 0    1     2    3
         # 11   12    21   22
@@ -177,5 +180,6 @@ def calculate_simple_diffraction(calculation_method=0):
 if __name__ == "__main__":
 
     calculation_method = 1 # 0=Zachariasen, 1=Guigay
-    calculate_simple_diffraction(calculation_method=calculation_method)
+    calculation_strategy_flag = 0 # 0=mpmath 1=numpy 2=numpy-truncated
+    calculate_simple_diffraction(calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
 

@@ -9,422 +9,7 @@ from crystalpy.util.Photon import Photon
 from crystalpy.util.ComplexAmplitudePhotonBunch import ComplexAmplitudePhotonBunch
 from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueDiffraction, BraggTransmission, LaueTransmission
 
-use_mpmath = 3 # 0: if available use mpmath otherwise numpy truncated
-               # 1: use mpmath
-               # 2: use numpy
-               # 3: use numpy with truncation of the arguments of sin, cos, exp
-
-if use_mpmath == 0:
-    try:
-        import mpmath
-        mpmath_sin = numpy.vectorize(mpmath.sin)
-        mpmath_cos = numpy.vectorize(mpmath.cos)
-        mpmath_exp = numpy.vectorize(mpmath.exp)
-        use_mpmath = 1
-    except ImportError:
-        print("mpmath module for arbitrary-precision floating-point arithmetic could not be found!\n "
-              "Using numpy with truncation to trap/correct overflow errors.\n")
-        use_mpmath = 3
-elif use_mpmath == 1:
-        import mpmath
-        mpmath_sin = numpy.vectorize(mpmath.sin)
-        mpmath_cos = numpy.vectorize(mpmath.cos)
-        mpmath_exp = numpy.vectorize(mpmath.exp)
-
-
-class CalculationStrategy(object):
-    """Abstract strategy for calculation. Can be plain python or arbitrary precision like mpmath."""
-    def createVariable(self, initial_value):
-        """Factory method for calculation variable.
-
-        Parameters
-        ----------
-        initial_value :
-            Initial value of the variable.
-
-        Raises
-        ------
-        Exception
-            Must override this method.
-
-        """
-        raise Exception("Must override this method.")
-
-    def exponentiate(self, power):
-        """Exponentiates to the power.
-
-        Parameters
-        ----------
-        power :
-            The power to raise to.
-
-        Raises
-        ------
-        Exception
-            Must override this method.
-
-        """
-        raise Exception("Must override this method.")
-
-    def sin(self, power):
-        """Sin to the power.
-
-        Parameters
-        ----------
-        power :
-            The power to raise to.
-
-        Raises
-        ------
-        Exception
-            Must override this method.
-
-        """
-        raise Exception("Must override this method.")
-
-    def cos(self, power):
-        """Cos to the power.
-
-        Parameters
-        ----------
-        power :
-            The power to raise to.
-
-        Raises
-        ------
-        Exception
-            Must override this method.
-
-        """
-        raise Exception("Must override this method.")
-
-
-    def toComplex(self, variable):
-        """Converts calculation variable to native python complex.
-
-        Parameters
-        ----------
-        variable :
-            Calculation variable to convert.
-
-        Raises
-        ------
-        Exception
-            Must override this method.
-
-        """
-        raise Exception("Must override this method.")
-
-
-class CalculationStrategyMPMath(CalculationStrategy):
-    """Use mpmath for calculation."""
-    def __init__(self):
-        """
-        Constructor.
-        """
-        # Use 32 digits in mpmath calculations.
-        mpmath.mp.dps = 32
-
-    def createVariable(self, initial_value):
-        """Factory method for calculation variable.
-
-        Parameters
-        ----------
-        initial_value : float, complex or numpy array
-            Initial value of the variable.
-
-        Returns
-        -------
-        instance of CalculationStrategyMPMath
-            variable.
-
-        """
-
-        if not(isinstance(initial_value, numpy.ndarray)):
-            initial_value = numpy.array(initial_value)
-
-        if initial_value.size == 1:
-            mpc = mpmath.mpc(complex(initial_value.real) + 1j * complex(initial_value.imag))
-        else:
-            mpc = mpmath.mpc(complex(1) + 1j * complex(0)) * initial_value
-
-        return mpc
-
-    def exponentiate(self, power):
-        """Exponentiates to the power.
-
-        Parameters
-        ----------
-        power : float
-            The power to raise to.
-
-        Returns
-        -------
-        mpmath variable
-            Exponential.
-
-        """
-        return mpmath_exp(power)
-
-    def sin(self, power):
-        """Sin function.
-
-        Parameters
-        ----------
-        power : float or numpy array
-            The arg of sin.
-
-        Returns
-        -------
-        mpmath variable
-            Sin.
-
-        """
-        return mpmath_sin(power)
-
-    def cos(self, power):
-        """Cos function.
-
-        Parameters
-        ----------
-        power : float or numpy array
-            The arg of cos.
-
-        Returns
-        -------
-        mpmath variable
-            Cos.
-
-        """
-        return mpmath_cos(power)
-
-    def toComplex(self, variable):
-        """Converts calculation variable to native python complex.
-
-        Parameters
-        ----------
-        variable :
-            variable to convert.
-
-        Returns
-        -------
-        numpy array
-            Native python complex variable.
-
-        """
-        return numpy.array(variable, dtype=complex)
-
-
-class CalculationStrategyNumpy(CalculationStrategy):
-    """Use plain python for calculation."""
-    def createVariable(self, initial_value):
-        """Factory method for calculation variable.
-
-        Parameters
-        ----------
-        initial_value :
-            Initial value of the variable.
-
-        Returns
-        -------
-        instance of CalculationStrategyNumpy
-            variable.
-
-        """
-        return initial_value + 0j # complex(initial_value)
-
-    def exponentiate(self, power):
-        """Exponentiates to the power.
-
-        Parameters
-        ----------
-        power : float
-            The power to raise to.
-
-        Returns
-        -------
-        numpy array
-            Exponential.
-
-        """
-
-        try:
-            ans =  numpy.exp(power)
-        except:
-            ans = float("Inf")
-        return ans
-
-    def sin(self, power):
-        """Sin function.
-
-        Parameters
-        ----------
-        power :
-            The sin argument.
-
-        Returns
-        -------
-        numpy array
-            Sin.
-
-        """
-        return numpy.sin(power)
-
-    def cos(self, power):
-        """Cos function.
-
-        Parameters
-        ----------
-        power :
-            The coa argument.
-
-        Returns
-        -------
-        numpy array
-            Cos.
-
-        """
-        return numpy.cos(power)
-
-
-    def toComplex(self, variable):
-        """Converts calculation variable to native python complex.
-
-        Parameters
-        ----------
-        variable :
-            Calculation variable to convert.
-
-        Returns
-        -------
-        numpy array (complex)
-            Native python complex variable.
-
-        """
-        return complex(variable)
-
-class CalculationStrategyNumpyTruncated(CalculationStrategy):
-    """Use plain python for calculation."""
-    def __init__(self, limit=1000):
-        self.limit = limit
-
-    def createVariable(self, initial_value):
-        """Factory method for calculation variable.
-
-        Parameters
-        ----------
-        initial_value :
-            Initial value of the variable.
-
-        Returns
-        -------
-        instance of CalculationStrategyNumpy
-            variable.
-
-        """
-        return initial_value + 0j # complex(initial_value)
-
-    def exponentiate(self, power):
-        """Exponentiates to the power.
-
-        Parameters
-        ----------
-        power : float
-            The power to raise to.
-
-        Returns
-        -------
-        numpy array
-            Exponential.
-
-        """
-        if power.size == 1:
-            power1 = numpy.array([power], dtype=numpy.complex128)
-        else:
-            power1 = numpy.array(power, dtype=numpy.complex128)
-
-        if numpy.any(power1.real > self.limit):
-            ii = numpy.where(power1.real > self.limit)
-            power1[ii] = self.limit + power1.imag[ii] * 1j
-
-        try:
-            ans =  numpy.exp(power1)
-        except:
-            ans = float("Inf")
-        return ans
-
-    def sin(self, power):
-        """Sin function.
-
-        Parameters
-        ----------
-        power :
-            The sin argument.
-
-        Returns
-        -------
-        numpy array
-            Sin.
-
-        """
-        if power.size == 1:
-            power1 = numpy.array([power])
-        else:
-            power1 = numpy.array(power)
-
-        if numpy.any(power1.imag > self.limit):
-            ii = numpy.where(power1.imag > self.limit)
-            power1[ii] = power1.real[ii] + self.limit * 1j
-        if numpy.any(power1.imag < -self.limit):
-            ii = numpy.where(power1.imag < self.limit)
-            power1[ii] = power1.real[ii] - self.limit * 1j
-
-        return numpy.sin(power1)
-
-    def cos(self, power):
-        """Cos function.
-
-        Parameters
-        ----------
-        power :
-            The coa argument.
-
-        Returns
-        -------
-        numpy array
-            Cos.
-
-        """
-        if power.size == 1:
-            power1 = numpy.array([power])
-        else:
-            power1 = numpy.array(power)
-
-        if numpy.any(power1.imag > self.limit):
-            ii = numpy.where(power1.imag > self.limit)
-            power1[ii] = power1.real[ii] + self.limit * 1j
-        if numpy.any(power1.imag < -self.limit):
-            ii = numpy.where(power1.imag < self.limit)
-            power1[ii] = power1.real[ii] - self.limit * 1j
-
-        return numpy.cos(power1)
-
-
-    def toComplex(self, variable):
-        """Converts calculation variable to native python complex.
-
-        Parameters
-        ----------
-        variable :
-            Calculation variable to convert.
-
-        Returns
-        -------
-        numpy array (complex)
-            Native python complex variable.
-
-        """
-        return complex(variable)
+from crystalpy.util.CalculationStrategy import CalculationStrategyNumpy, CalculationStrategyNumpyTruncated, CalculationStrategyMPMath
 
 
 class PerfectCrystalDiffraction(object):
@@ -461,11 +46,16 @@ class PerfectCrystalDiffraction(object):
         the crystal thickness in m.
     d_spacing : float
         the crystal dSpacing in m.
+    calculation_strategy_flag : int
+        For computing exp, sin, cos:
+        0: use mpmath, 1: use numpy, 2=use numpy truncated.
 
     """
     isDebug = False
 
-    def __init__(self, geometry_type, bragg_normal, surface_normal, bragg_angle, psi_0, psi_H, psi_H_bar, thickness, d_spacing):
+    def __init__(self, geometry_type, bragg_normal, surface_normal, bragg_angle,
+                 psi_0, psi_H, psi_H_bar, thickness, d_spacing,
+                 calculation_strategy_flag):
 
         self._geometryType = geometry_type
         self._bragg_normal = bragg_normal
@@ -477,15 +67,15 @@ class PerfectCrystalDiffraction(object):
         self._thickness = thickness
         self._d_spacing = d_spacing
 
-        global use_mpmath
-        if use_mpmath == 1:
+        # global use_mpmath
+        if calculation_strategy_flag == 0:
             self._calculation_strategy = CalculationStrategyMPMath()
-        elif use_mpmath == 2:
+        elif calculation_strategy_flag == 1:
             self._calculation_strategy = CalculationStrategyNumpy()
-        elif use_mpmath == 3:
-            self._calculation_strategy = CalculationStrategyNumpyTruncated(limit=300)
+        elif calculation_strategy_flag == 2:
+            self._calculation_strategy = CalculationStrategyNumpyTruncated(limit=100)
         else:
-            raise Exception("Undefined CalculationStrategy.")
+            raise Exception("Undefined calculation_strategy_flag.")
 
     @classmethod
     def initializeFromDiffractionSetupAndEnergy(cls, diffraction_setup, energy,
@@ -498,6 +88,7 @@ class PerfectCrystalDiffraction(object):
                                  # psi_H_bar=None,
                                  thickness=None,
                                  d_spacing=None,
+                                 calculation_strategy_flag=0,
                                  ):
         """
         Creates a PerfectCrystalDiffraction instance from parameters in a DiffractionSetupAbstract instance and a
@@ -523,6 +114,9 @@ class PerfectCrystalDiffraction(object):
         d_spacing : float or numpy array
             d-spacing in m. If None, retrieve from DiffractionSetup
 
+        calculation_strategy_flag : int, optional
+            For computing exp, sin, cos:
+            0: use mpmath, 1: use numpy, 2=use numpy truncated.
 
         Returns
         -------
@@ -555,7 +149,8 @@ class PerfectCrystalDiffraction(object):
             psi_H,
             psi_H_bar,
             thickness,
-            d_spacing)
+            d_spacing,
+            calculation_strategy_flag)
 
 
     #

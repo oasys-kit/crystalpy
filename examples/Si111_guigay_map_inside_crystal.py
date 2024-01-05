@@ -18,7 +18,10 @@ from srxraylib.plot.gol import plot_image, plot
 
 
 #
-def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6):
+def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),
+                                             asymmetry_angle=numpy.radians(65),
+                                             thickness=10e-6,
+                                             calculation_strategy_flag=0):
 
     # Create a diffraction setup.
 
@@ -53,9 +56,6 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(), as
     print("Bragg angle for E=%f eV is %f deg"%(energy,bragg_angle*180.0/numpy.pi))
 
 
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-
     # initialize arrays for storing outputs
     deviations = numpy.zeros(angle_deviation_points)
 
@@ -78,10 +78,13 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(), as
 
             if False:
                 # perform the calculation
-                coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, method=1)
+                coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                          calculation_method=1,
+                                                                          calculation_strategy_flag=calculation_strategy_flag)
             else:
                 # Get PerfectCrystal instance for the current photon.
-                perfect_crystal = diffraction._perfectCrystalForPhoton(diffraction_setup, photon)
+                perfect_crystal = Diffraction._perfectCrystalForPhoton(diffraction_setup, photon,
+                                                                       calculation_strategy_flag=calculation_strategy_flag)
                 coeffs = perfect_crystal.calculateDiffractionGuigay(photon, debug=0, s_ratio=s_ratio)
 
 
@@ -112,9 +115,10 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(), as
 # main
 #
 if __name__ == "__main__":
+    calculation_strategy_flag = 0  # 0=mpmath 1=numpy 2=numpy-truncated
 
-    calculate_diffraction_map_inside_crystal(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians(0), thickness=50e-6)
-    calculate_diffraction_map_inside_crystal(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=50e-6)
+    calculate_diffraction_map_inside_crystal(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians(0), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)
+    calculate_diffraction_map_inside_crystal(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)
     #TODO: Laue case
-    calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),  asymmetry_angle=numpy.radians(90), thickness=50e-6)
-    calculate_diffraction_map_inside_crystal(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(90), thickness=50e-6)
+    calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),  asymmetry_angle=numpy.radians(90), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)
+    calculate_diffraction_map_inside_crystal(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(90), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)

@@ -33,7 +33,7 @@ import time
 
 #
 
-def calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup, calculation_method=0):
+def calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup, calculation_method=0, calculation_strategy_flag=0):
 
 
     energy                 = 8000.0                           # eV
@@ -55,9 +55,6 @@ def calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup, calc
     npoints = 100
     energies = numpy.linspace(energy-3*DeltaE, energy+3*DeltaE, npoints)
 
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-
     # initialize arrays for storing outputs
     intensityS =       numpy.zeros(npoints)
     intensityP =       numpy.zeros(npoints)
@@ -76,15 +73,10 @@ def calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup, calc
 
         bunch.addPhoton(photon)
 
-        # # perform the calculation
-        # coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=calculation_method)
-        #
-        # # store results
-        # intensityS[ia] = numpy.abs(coeffs['S']) ** 2
-        # intensityP[ia] = numpy.abs(coeffs['P']) ** 2
 
-    out_bunch = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup, bunch,
-                                                                        calculation_method=calculation_method)
+    out_bunch = Diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup, bunch,
+                                                                        calculation_method=calculation_method,
+                                                                        calculation_strategy_flag=calculation_strategy_flag)
 
 
     t1 = time.time()
@@ -101,6 +93,7 @@ if __name__ == "__main__":
 
     create_preprocessor_files = False
     calculation_method = 0 # 0=Zachariasen, 1=Guigay
+    calculation_strategy_flag = 2  # 0=mpmath 1=numpy 2=numpy-truncated
 
     # Create a diffraction setup.
 
@@ -190,10 +183,10 @@ if __name__ == "__main__":
                  azimuthal_angle=0.0,
                  preprocessor_file=preprocessor_file_v2)
     #
-    ex, ix = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_xraylib, calculation_method=calculation_method)
-    ed, id = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_dabax, calculation_method=calculation_method)
-    e1, i1 = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_v1, calculation_method=calculation_method)
-    e2, i2 = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_v2, calculation_method=calculation_method)
+    ex, ix = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_xraylib, calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
+    ed, id = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_dabax,   calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
+    e1, i1 = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_v1,      calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
+    e2, i2 = calculate_simple_diffraction_energy_scan_accelerated(diffraction_setup_v2,      calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
     from srxraylib.plot.gol import plot
     plot(ex, ix,
          ed, id,

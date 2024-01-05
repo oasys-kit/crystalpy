@@ -27,7 +27,7 @@ from crystalpy.util.Photon import Photon
 
 #
 def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6,
-                                 method=1, plot_phase=0):
+                                 calculation_method=1, plot_phase=0, calculation_strategy_flag=0):
 
     # Create a diffraction setup.
 
@@ -84,7 +84,9 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon, calculation_method=method)
+        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                  calculation_method=calculation_method,
+                                                                  calculation_strategy_flag=calculation_strategy_flag)
         # print(">>>> ", coeffs["transfer_matrix_s"])
         # store results
         deviations[ia] = deviation
@@ -128,8 +130,11 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
 # main
 #
 if __name__ == "__main__":
-    calculate_simple_diffraction(geometry_type=LaueDiffraction(),   asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1, plot_phase=1)
-    calculate_simple_diffraction(geometry_type=LaueTransmission(),  asymmetry_angle=numpy.radians(65), thickness=10e-6, method=1, plot_phase=1)
-    calculate_simple_diffraction(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians( 0), thickness=10e-6, method=1, plot_phase=1)
-    calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians( 0), thickness=10e-6, method=1, plot_phase=1)
+    calculation_method = 1  # 0=Zachariasen, 1=Guigay
+    calculation_strategy_flag = 2  # 0=mpmath 1=numpy 2=numpy-truncated
+
+    calculate_simple_diffraction(geometry_type=LaueDiffraction(),   asymmetry_angle=numpy.radians(65), thickness=10e-6, calculation_method=calculation_method, plot_phase=1, calculation_strategy_flag=calculation_strategy_flag)
+    calculate_simple_diffraction(geometry_type=LaueTransmission(),  asymmetry_angle=numpy.radians(65), thickness=10e-6, calculation_method=calculation_method, plot_phase=1, calculation_strategy_flag=calculation_strategy_flag)
+    calculate_simple_diffraction(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians( 0), thickness=10e-6, calculation_method=calculation_method, plot_phase=1, calculation_strategy_flag=calculation_strategy_flag)
+    calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians( 0), thickness=10e-6, calculation_method=calculation_method, plot_phase=1, calculation_strategy_flag=calculation_strategy_flag)
 

@@ -37,6 +37,7 @@ def compute_crystalpy_profile(do_plot=0,
         is_thick=0,
         use_transfer_matrix=0,
         geometry_type_index=0,
+        calculation_strategy_flag=0,
     )
 
     tmp = numpy.zeros((bunch_out_dict["energies"].size, 7))

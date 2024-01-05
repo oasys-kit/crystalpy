@@ -72,7 +72,8 @@ def calc_xcrystal_angular_scan(
         is_thick=0,
         use_transfer_matrix=0,
         do_plot=0,
-):
+        calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
+        ):
 
     print("material_constants_library_flag    = ", material_constants_library_flag)
     print("crystal_name                       = ", crystal_name)
@@ -110,8 +111,6 @@ def calc_xcrystal_angular_scan(
     bragg_angle_corrected = diffraction_setup.angleBraggCorrected(energy)
     print("Bragg angle corrected for E=%f eV is %f deg" % (energy, numpy.degrees(bragg_angle_corrected)))
 
-    # Create a Diffraction object.
-    diffraction = Diffraction()
 
     deviations = numpy.linspace(angle_deviation_min, angle_deviation_max, angle_deviation_points)
 
@@ -128,11 +127,13 @@ def calc_xcrystal_angular_scan(
 
         bunch_in.addPhoton(photon)
 
-    bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
+    bunch_out = Diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
                                                                            calculation_method=calculation_method,
                                                                            is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+                                                                           use_transfer_matrix=use_transfer_matrix,
+                                                                           calculation_strategy_flag=calculation_strategy_flag,
+                                                                           )
 
     bunch_out_dict = bunch_out.toDictionary()
 
@@ -164,7 +165,8 @@ def calc_xcrystal_alphazachariasen_scan(
         is_thick=0,
         use_transfer_matrix=0,
         do_plot=0,
-):
+        calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
+        ):
 
     print("material_constants_library_flag    = ", material_constants_library_flag)
     print("crystal_name                       = ", crystal_name)
@@ -205,9 +207,6 @@ def calc_xcrystal_alphazachariasen_scan(
     print("Darwin half width for E=%f eV is %f deg" % (energy, numpy.degrees(darwin_half_width[0])))
 
 
-    # Create a Diffraction object.
-    diffraction = Diffraction()
-
     deviations = numpy.linspace(angle_deviation_min, angle_deviation_max, angle_deviation_points)
 
     bunch_in = ComplexAmplitudePhotonBunch()
@@ -224,11 +223,13 @@ def calc_xcrystal_alphazachariasen_scan(
 
         bunch_in.addPhoton(photon)
 
-    bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
+    bunch_out = Diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
                                                                            calculation_method=calculation_method,
                                                                            is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+                                                                           use_transfer_matrix=use_transfer_matrix,
+                                                                           calculation_strategy_flag=calculation_strategy_flag,
+                                                                           )
 
     bunch_out_dict = bunch_out.toDictionary()
 
@@ -260,7 +261,8 @@ def calc_xcrystal_energy_scan(
         is_thick=0,
         use_transfer_matrix=0,
         do_plot=0,
-):
+        calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
+        ):
 
     print("material_constants_library_flag    = ", material_constants_library_flag)
     print("crystal_name                       = ", crystal_name)
@@ -295,9 +297,6 @@ def calc_xcrystal_energy_scan(
         theta = diffraction_setup.angleBragg(energy_mean)
         print("Using theta as the Bragg angle for mean E=%f eV, which is %f deg"%(energy_mean, numpy.degrees(theta)))
 
-    # Create a Diffraction object.
-    diffraction = Diffraction()
-
     energies = numpy.linspace(energy_min, energy_max, energy_points)
 
     bunch_in = ComplexAmplitudePhotonBunch()
@@ -315,11 +314,12 @@ def calc_xcrystal_energy_scan(
 
         bunch_in.addPhoton(photon)
 
-    bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
+    bunch_out = Diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
                                                                            calculation_method=calculation_method,
                                                                            is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+                                                                           use_transfer_matrix=use_transfer_matrix,
+                                                                           calculation_strategy_flag=calculation_strategy_flag)
 
     bunch_out_dict = bunch_out.toDictionary()
 
@@ -353,6 +353,7 @@ def calc_xcrystal_double_scan(
         use_transfer_matrix=0,
         geometry_type_index=0,
         do_plot=0,
+        calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
 ):
 
 
@@ -403,9 +404,6 @@ def calc_xcrystal_double_scan(
     bragg_angle_corrected = diffraction_setup.angleBraggCorrected(energy_mean)
     print("Bragg angle corrected for E=%f eV is %f deg" % (energy_mean, numpy.degrees(bragg_angle_corrected)))
 
-    # Create a Diffraction object.
-    diffraction = Diffraction()
-
     deviations = numpy.linspace(angle_deviation_min, angle_deviation_max, angle_deviation_points)
     energies   = numpy.linspace(energy_min, energy_max, energy_points)
 
@@ -428,11 +426,12 @@ def calc_xcrystal_double_scan(
 
     print("Calculating diffraction...")
     t0 = time.time()
-    bunch_out = diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
+    bunch_out = Diffraction.calculateDiffractedComplexAmplitudePhotonBunch(diffraction_setup,
                                                                            bunch_in,
                                                                            calculation_method=calculation_method,
                                                                            is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+                                                                           use_transfer_matrix=use_transfer_matrix,
+                                                                           calculation_strategy_flag=calculation_strategy_flag)
 
     print("Done (%d ms)." % (1e3*(time.time() - t0)))
 
@@ -470,28 +469,47 @@ if __name__ == "__main__":
     calculation_method = 1
     is_thick = 0
     use_transfer_matrix = 0
+    calculation_strategy_flag = 0  # 0=mpmath 1=numpy 2=numpy-truncated
 
     if True:
-        calc_xcrystal_angular_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_angular_scan(material_constants_library_flag=0,
+                                   do_plot=True,
+                                   calculation_method=calculation_method,
+                                   is_thick=is_thick,
+                                   use_transfer_matrix=use_transfer_matrix,
+                                   calculation_strategy_flag=calculation_strategy_flag, # 0=mpmath 1=numpy 2=numpy-truncated
+                                   )
 
     if True:
-        calc_xcrystal_angular_scan(material_constants_library_flag=0, geometry_type_index=1, thickness=10e-6,
-                                   asymmetry_angle=numpy.radians(90), do_plot=True, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_angular_scan(material_constants_library_flag=0,
+                                   geometry_type_index=1,
+                                   thickness=10e-6,
+                                   asymmetry_angle=numpy.radians(90),
+                                   do_plot=True,
+                                   calculation_method=calculation_method,
+                                   is_thick=is_thick,
+                                   use_transfer_matrix=use_transfer_matrix,
+                                   calculation_strategy_flag=calculation_strategy_flag,
+                                   )
 
-        calc_xcrystal_energy_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_energy_scan(material_constants_library_flag=0,
+                                  do_plot=True,
+                                  calculation_method=calculation_method,
+                                  is_thick=is_thick,
+                                  use_transfer_matrix=use_transfer_matrix,
+                                  calculation_strategy_flag=calculation_strategy_flag,
+                                  )
 
-        calc_xcrystal_alphazachariasen_scan(do_plot=1, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_alphazachariasen_scan(do_plot=1,
+                                            calculation_method=calculation_method,
+                                            is_thick=is_thick,
+                                            use_transfer_matrix=use_transfer_matrix,
+                                            calculation_strategy_flag=calculation_strategy_flag,
+                                            )
 
     if True:
-        calc_xcrystal_double_scan(        material_constants_library_flag=0,
+        calc_xcrystal_double_scan(
+            material_constants_library_flag=0,
             crystal_name="Si",
             thickness=1e-2,
             miller_h=1,
@@ -509,9 +527,12 @@ if __name__ == "__main__":
             is_thick=is_thick,
             use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
-            do_plot=1,)
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+        )
 
-        calc_xcrystal_double_scan(        material_constants_library_flag=0,
+        calc_xcrystal_double_scan(
+            material_constants_library_flag=0,
             crystal_name="Si",
             thickness=1e-2,
             miller_h=1,
@@ -529,10 +550,13 @@ if __name__ == "__main__":
             is_thick=is_thick,
             use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
-            do_plot=1,)
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+        )
 
     if True:
-        calc_xcrystal_double_scan(        material_constants_library_flag=0,
+        calc_xcrystal_double_scan(
+            material_constants_library_flag=0,
             crystal_name="Si",
             thickness=0.010,
             miller_h=1,
@@ -550,4 +574,6 @@ if __name__ == "__main__":
             is_thick=is_thick,
             use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
-            do_plot=1,)
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+            )

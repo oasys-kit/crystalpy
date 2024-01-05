@@ -28,7 +28,7 @@ from dabax.dabax_xraylib import DabaxXraylib
 import time
 
 
-def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
+def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0, calculation_strategy_flag=0):
 
     # Create a diffraction setup.
 
@@ -59,10 +59,6 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
     print("Bragg angle for E=%f eV is %f deg"%(energy,bragg_angle*180.0/numpy.pi))
 
 
-    # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
-    diffraction_dabax = Diffraction()
-
     # initialize arrays for storing outputs
     deviations = numpy.zeros(angle_deviation_points)
     intensityS = numpy.zeros(angle_deviation_points)
@@ -81,7 +77,9 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
         photon = Photon(energy_in_ev=energy,direction_vector=Vector(0.0,yy,zz))
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon, calculation_method=calculation_method)
+        coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup_dabax, photon,
+                                                                  calculation_method=calculation_method,
+                                                                  calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
         deviations[ia] = deviation
@@ -118,7 +116,8 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
                                                     psi_H=psi_H,
                                                     psi_H_bar=psi_H_bar,
                                                     thickness=diffraction_setup_dabax.thickness(),
-                                                    d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10)
+                                                    d_spacing=diffraction_setup_dabax.dSpacing() * 1e-10,
+                                                    calculation_strategy_flag=calculation_strategy_flag)
 
         complex_amplitudes = perfect_crystal.calculateDiffraction(photon, calculation_method=calculation_method)
 
@@ -145,6 +144,7 @@ def calculate_simple_diffraction_angular_scan_accelerated(calculation_method=0):
 if __name__ == "__main__":
 
     calculation_method = 1 # 0=Zachariasen, 1=Guigay
+    calculation_strategy_flag = 2  # 0=mpmath 1=numpy 2=numpy-truncated
 
-    calculate_simple_diffraction_angular_scan_accelerated(calculation_method=calculation_method)
+    calculate_simple_diffraction_angular_scan_accelerated(calculation_method=calculation_method, calculation_strategy_flag=calculation_strategy_flag)
 

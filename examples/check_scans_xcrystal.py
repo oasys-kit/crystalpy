@@ -9,28 +9,48 @@ if __name__ == "__main__":
     calculation_method = 1
     is_thick = 0
     use_transfer_matrix = 0
+    calculation_method = 1  # 0=Zachariasen, 1=Guigay
+    calculation_strategy_flag = 0  # 0=mpmath 1=numpy 2=numpy-truncated
 
     if True:
-        calc_xcrystal_angular_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_angular_scan(material_constants_library_flag=0,
+                                   do_plot=True,
+                                   calculation_method=calculation_method,
+                                   is_thick=is_thick,
+                                   use_transfer_matrix=use_transfer_matrix,
+                                   calculation_strategy_flag=calculation_strategy_flag,
+                                   )
 
     if True:
-        calc_xcrystal_angular_scan(material_constants_library_flag=0, geometry_type_index=1, thickness=10e-6,
-                                   asymmetry_angle=numpy.radians(90), do_plot=True, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_angular_scan(material_constants_library_flag=0,
+                                   geometry_type_index=1,
+                                   thickness=10e-6,
+                                   asymmetry_angle=numpy.radians(90),
+                                   do_plot=True,
+                                   calculation_method=calculation_method,
+                                   is_thick=is_thick,
+                                   use_transfer_matrix=use_transfer_matrix,
+                                   calculation_strategy_flag=calculation_strategy_flag,
+                                   )
 
-        calc_xcrystal_energy_scan(material_constants_library_flag=0, do_plot=True, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_energy_scan(material_constants_library_flag=0,
+                                  do_plot=True,
+                                  calculation_method=calculation_method,
+                                  is_thick=is_thick,
+                                  use_transfer_matrix=use_transfer_matrix,
+                                  calculation_strategy_flag=calculation_strategy_flag,
+                                  )
 
-        calc_xcrystal_alphazachariasen_scan(do_plot=1, calculation_method=calculation_method,
-                                                                           is_thick=is_thick,
-                                                                           use_transfer_matrix=use_transfer_matrix)
+        calc_xcrystal_alphazachariasen_scan(do_plot=1,
+                                            calculation_method=calculation_method,
+                                            is_thick=is_thick,
+                                            use_transfer_matrix=use_transfer_matrix,
+                                            calculation_strategy_flag=calculation_strategy_flag,
+                                            )
 
     if True:
-        calc_xcrystal_double_scan(        material_constants_library_flag=0,
+        calc_xcrystal_double_scan(
+            material_constants_library_flag=0,
             crystal_name="Si",
             thickness=1e-2,
             miller_h=1,
@@ -48,9 +68,12 @@ if __name__ == "__main__":
             is_thick=is_thick,
             use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
-            do_plot=1,)
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+                                          )
 
-        calc_xcrystal_double_scan(        material_constants_library_flag=0,
+        calc_xcrystal_double_scan(
+            material_constants_library_flag=0,
             crystal_name="Si",
             thickness=1e-2,
             miller_h=1,
@@ -68,10 +91,13 @@ if __name__ == "__main__":
             is_thick=is_thick,
             use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
-            do_plot=1,)
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+                                          )
 
     if True:
-        calc_xcrystal_double_scan(        material_constants_library_flag=0,
+        calc_xcrystal_double_scan(
+            material_constants_library_flag=0,
             crystal_name="Si",
             thickness=0.010,
             miller_h=1,
@@ -89,4 +115,6 @@ if __name__ == "__main__":
             is_thick=is_thick,
             use_transfer_matrix=use_transfer_matrix,
             geometry_type_index=0,
-            do_plot=1,)
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+            )

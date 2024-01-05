@@ -149,6 +149,8 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
                             angle_deviation_min    = -100e-6, # radians
                             angle_deviation_max    = 100e-6,  # radians
                             angle_deviation_points = 500,
+                            calculation_method=0,
+                            calculation_strategy_flag=0,
                             ):
 
     if bragg_or_laue == 0:
@@ -191,7 +193,6 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
 
 
     # Create a Diffraction object (the calculator)
-    diffraction = Diffraction()
 
     # initialize arrays for storing outputs
     deviations = numpy.zeros(angle_deviation_points)
@@ -225,7 +226,9 @@ def calculate_with_crystalpy(bragg_or_laue=0,  #
         photon = Photon(energy_in_ev=energy,direction_vector=k_unitary)
 
         # perform the calculation
-        coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup,photon)
+        coeffs = Diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                  calculation_method=calculation_method,
+                                                                  calculation_strategy_flag=calculation_strategy_flag)
 
         # store results
         deviations[ia] = deviation
@@ -460,7 +463,10 @@ if __name__ == "__main__":
                                     energy                    =  input_dict["energy"],
                                     angle_deviation_min       =  input_dict["angle_deviation_min"],
                                     angle_deviation_max       =  input_dict["angle_deviation_max"],
-                                    angle_deviation_points    =  input_dict["angle_deviation_points"],)
+                                    angle_deviation_points    =  input_dict["angle_deviation_points"],
+                                    calculation_method        = 1,  # 0=Zachariasen, 1=Guigay
+                                    calculation_strategy_flag = 0,  # 0=mpmath 1=numpy 2=numpy-truncated
+            )
 
             # plot(angle1,intS1,legend=['S-pol crystalpy'])
 

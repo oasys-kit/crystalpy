@@ -47,7 +47,7 @@ class ComplexAmplitudePhoton(Photon):
             The multiplying factor.
 
         """
-        self._Esigma *= numpy.array(factor, dtype=complex) # TODO: this cast may lose resolution
+        self._Esigma = self._Esigma * numpy.array(factor, dtype=complex) # TODO: this cast may lose resolution
 
 
     def rescaleEpi(self, factor):
@@ -59,7 +59,7 @@ class ComplexAmplitudePhoton(Photon):
             The multiplying factor.
 
         """
-        self._Epi *= numpy.array(factor, dtype=complex)  # TODO: this cast may lose resolution
+        self._Epi = self._Epi * numpy.array(factor, dtype=complex)  # TODO: this cast may lose resolution
 
     def getIntensityS(self):
         """Gets the sigma intensity.

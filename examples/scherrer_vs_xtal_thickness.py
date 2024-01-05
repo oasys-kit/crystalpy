@@ -18,8 +18,7 @@ def compute_crystalpy_profile(do_plot=0,
                               thickness=1e-08,
                               ):
     import numpy
-    from crystalpy.util.calc_xcrystal import calc_xcrystal_angular_scan, calc_xcrystal_energy_scan, \
-        calc_xcrystal_alphazachariasen_scan
+    from crystalpy.util.calc_xcrystal import calc_xcrystal_angular_scan
 
     bunch_out_dict, diffraction_setup, deviations = calc_xcrystal_angular_scan(
         # material_constants_library_flag=self.material_constants_library_flag,
@@ -38,6 +37,7 @@ def compute_crystalpy_profile(do_plot=0,
         is_thick=0,
         use_transfer_matrix=0,
         geometry_type_index=0,
+        calculation_strategy_flag=0,
     )
 
     tmp = numpy.zeros((bunch_out_dict["energies"].size, 7))
