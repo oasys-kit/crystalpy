@@ -15,6 +15,7 @@ def compute_crystalpy_profile(do_plot=0,
                               miller_k=1,
                               miller_l=1,
                               energy=8047.7969,
+                              crystal_name='LaB6_NIST',
                               ):
     import numpy
     from crystalpy.util.calc_xcrystal import calc_xcrystal_angular_scan, calc_xcrystal_energy_scan, \
@@ -22,7 +23,7 @@ def compute_crystalpy_profile(do_plot=0,
 
     bunch_out_dict, diffraction_setup, deviations = calc_xcrystal_angular_scan(
         # material_constants_library_flag=self.material_constants_library_flag,
-        crystal_name='LaB6_NIST',
+        crystal_name=crystal_name,
         thickness=1e-08,
         miller_h=miller_h,
         miller_k=miller_k,
@@ -81,19 +82,25 @@ if __name__ == "__main__":
     H = [1,1,1,2,2,2,2,2,2,3,3,2,3,3,4,4,4,3,4,4,3,4,5,5,5]
     K = [0,1,1,0,0,1,1,2,2,1,1,2,2,2,0,1,1,3,2,2,3,2,0,1,1]
     L = [0,0,1,0,0,0,1,0,1,0,1,2,0,1,0,0,1,1,0,1,2,2,0,0,1]
+
     BA  = numpy.zeros(len(H))
     FWHM = numpy.zeros(len(H))
     FWHM_S = numpy.zeros(len(H))
 
+    crystal_name = 'LaB6_NIST'
+
+
     for i in range(len(H)):
         try:
-            ba, fwhm = compute_crystalpy_profile(do_plot=0,miller_h=H[i], miller_k=K[i], miller_l=L[i])
+            ba, fwhm = compute_crystalpy_profile(do_plot=0,miller_h=H[i], miller_k=K[i], miller_l=L[i],
+                                                 crystal_name=crystal_name)
             BA[i] = ba
             FWHM[i] = fwhm
             theta_bragg1 = numpy.radians(ba / 2)
             print(">>>>>2theta: ", ba, 'FWHM: ', fwhm, 'thetaB: ', numpy.degrees(theta_bragg1))
             FWHM_S[i] = 4 * numpy.sqrt(numpy.log(2) / numpy.pi) * wavelength * numpy.abs(numpy.sin(theta_bragg1)) / D / numpy.sin(2 * theta_bragg1)
         except:
+            print(">>>> ERROR FOUND! h=%d,k=%d,l=%d" % (H[i], K[i], L[i]))
             pass
 
     # print(ba,fwhm)
@@ -101,7 +108,8 @@ if __name__ == "__main__":
     from srxraylib.plot.gol import plot
     plot(2 * theta_bragg_deg, numpy.degrees(scherrer_fwhm),
          BA, FWHM, marker=[None,'+'], linestyle=[None,''], xtitle="2 theta [deg]", ytitle="FWHM [deg]",
-         legend=['Scherrer eq. (3) in Leitao Muniz et al.', 'dynamical diffraction with crystalpy']
+         legend=['Scherrer eq. (3) in Leitao Muniz et al.', 'dynamical diffraction with crystalpy'],
+         title=crystal_name,
          )
 
     print(BA, FWHM, FWHM_S)

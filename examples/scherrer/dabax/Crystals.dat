@@ -1,0 +1,3426 @@
+#F Crystals.dat
+#UT Crystals: atoms coordinates in unit cell. Cell's dimensions
+#UIDL xfh
+#UD  
+#UD The crystal structures are arranged using as a scan
+#UD identifier (#S) the atomic number of the heavier atom
+#UD present in the crystal. Several crystal are possible with
+#UD the same scan id, but they do not conflict.
+#UD  
+#UD The following keyword contain other information:
+#UD #UCOMMENT  comment 
+#UD #UCELL a b c alpha beta gamma  
+#UD        The unit cell dimensions (A and deg) (*MANDATORY, IT MUST EXIST*)
+#UD #UTEMP temperature in Kelvin at which UCELL is given
+#UD #UREF reference
+#UD #USYSTEM : 7 crystal system, i.e., triclinic monoclinic orthorhombic 
+#UD                                  tetragonal rhombohedral(trigonal) 
+#UD                                  hexagonal cubic
+#UD #ULATTICE the lattice centering: 
+#UD    P: Primitive centering: lattice points on the cell corners only
+#UD    I: Body centered: one additional lattice point at the center of the cell
+#UD    F: Face centered: one additional lattice point at center of each 
+#UD                 of the faces of the cell 
+#UD    A,B,C Centered on a single face (A, B or C centering): one
+#UD                 additional lattice point at the center of one of the 
+#UD                 cell faces.
+#UD  The 14 Bravais lattices are, then:
+#UD     1 triclinic (P)
+#UD     2 monoclinic (P,C)
+#UD     3 orthorhombic (P,C,I,F)
+#UD     2 tetragonal (P,I)
+#UD     1 rhombohedral (P)
+#UD     1 hexagonal (P)
+#UD     3 cubic (P,I,F)
+#UD
+#UD  #USTRUCTURE Model for structure (e.g., diamond, fcc)
+#UD  
+#UD  Data columns: 
+#UD  4 or 5: 
+#UD  AtomicNumber  Fraction  X  Y  Z Biso
+#UD  The Biso one is optional
+#UD  
+#UD  
+#UD  
+
+#S 14 Si
+#UCELL 5.43070 5.43070 5.43070 90.0000 90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.26
+#UTEMP 298.15
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+14 1.0 0.0  0.0  0.0
+14 1.0 0.0  0.5  0.5
+14 1.0 0.5  0.0  0.5
+14 1.0 0.5  0.5  0.0
+14 1.0 .25  .25  .25
+14 1.0 .25  .75  .75
+14 1.0 .75  .25  .75
+14 1.0 .75  .75  .25
+
+#S 14 Si_NIST
+#UCELL 5.4311946 5.4311946 5.4311946 90.0000 90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF NIST Standard Reference Material 640c (Silicon Powder)
+#UTEMP 298.15
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+14 1.0 0.0  0.0  0.0
+14 1.0 0.0  0.5  0.5
+14 1.0 0.5  0.0  0.5
+14 1.0 0.5  0.5  0.0
+14 1.0 .25  .25  .25
+14 1.0 .25  .75  .75
+14 1.0 .75  .25  .75
+14 1.0 .75  .75  .25
+
+#S 14 Si2
+#UCELL 5.43070 5.43070 5.43070 90.0000 90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.26
+#UTEMP 298.15
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+14 1.0 -0.125000    -0.125000    -0.125000
+14 1.0 -0.125000     0.375000     0.375000
+14 1.0 0.375000    -0.125000     0.375000
+14 1.0 0.375000     0.375000    -0.125000
+14 1.0 0.125000     0.125000     0.125000
+14 1.0 0.125000     0.625000     0.625000
+14 1.0 0.625000     0.125000     0.625000
+14 1.0 0.625000     0.625000     0.125000
+
+#S 32 Ge
+#UCELL 5.65735      5.65735      5.65735      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.26
+#UTEMP 293.15
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+32 1.0 0.0  0.0  0.0
+32 1.0 0.0  0.5  0.5
+32 1.0 0.5  0.0  0.5
+32 1.0 0.5  0.5  0.0
+32 1.0 .25  .25  .25
+32 1.0 .25  .75  .75
+32 1.0 .75  .25  .75
+32 1.0 .75  .75  .25
+
+#S 6 Diamond
+#UCELL 3.56679      3.56679      3.56679      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.26
+#UTEMP 293.15
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+6 1.0 0.0  0.0  0.0
+6 1.0 0.0  0.5  0.5
+6 1.0 0.5  0.0  0.5
+6 1.0 0.5  0.5  0.0
+6 1.0 .25  .25  .25
+6 1.0 .25  .75  .75
+6 1.0 .75  .25  .75
+6 1.0 .75  .75  .25
+
+#S 33 GaAs
+#UCELL 5.65370      5.65370      5.65370      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.110
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+31 1.0 0.0  0.0  0.0
+31 1.0 0.0  0.5  0.5
+31 1.0 0.5  0.0  0.5
+31 1.0 0.5  0.5  0.0
+33 1.0 .25  .25  .25
+33 1.0 .25  .75  .75
+33 1.0 .75  .25  .75
+33 1.0 .75  .75  .25
+
+#S 33 GaSb
+#UCELL 6.09593      6.09593      6.09593      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF http://www.ioffe.rssi.ru/SVA/NSM/Semicond/GaSb/basic.html
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+31 1.0 0.0  0.0  0.0
+31 1.0 0.0  0.5  0.5
+31 1.0 0.5  0.0  0.5
+31 1.0 0.5  0.5  0.0
+51 1.0 .25  .25  .25
+51 1.0 .25  .75  .75
+51 1.0 .75  .25  .75
+51 1.0 .75  .75  .25
+
+#S 31 GaP
+#UCELL 5.45050      5.45050      5.45050      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.110
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+31 1.0 0.0  0.0  0.0
+31 1.0 0.0  0.5  0.5
+31 1.0 0.5  0.0  0.5
+31 1.0 0.5  0.5  0.0
+15 1.0 .25  .25  .25
+15 1.0 .25  .75  .75
+15 1.0 .75  .25  .75
+15 1.0 .75  .75  .25
+
+#S 49 InAs
+#UCELL 6.03600      6.03600      6.03600      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.110
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+49 1.0 0.0  0.0  0.0
+49 1.0 0.0  0.5  0.5
+49 1.0 0.5  0.0  0.5
+49 1.0 0.5  0.5  0.0
+33 1.0 .25  .25  .25
+33 1.0 .25  .75  .75
+33 1.0 .75  .25  .75
+33 1.0 .75  .75  .25
+
+#S 49 InP
+#UCELL 5.86870      5.86870      5.86870      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.110
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+49 1.0 0.0  0.0  0.0
+49 1.0 0.0  0.5  0.5
+49 1.0 0.5  0.0  0.5
+49 1.0 0.5  0.5  0.0
+15 1.0 .25  .25  .25
+15 1.0 .25  .75  .75
+15 1.0 .75  .25  .75
+15 1.0 .75  .75  .25
+
+#S 51 InSb
+#UCELL 6.47820      6.47820      6.47820      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.110
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+49 1.0 0.0  0.0  0.0
+49 1.0 0.0  0.5  0.5
+49 1.0 0.5  0.0  0.5
+49 1.0 0.5  0.5  0.0
+51 1.0 .25  .25  .25
+51 1.0 .25  .75  .75
+51 1.0 .75  .25  .75
+51 1.0 .75  .75  .25
+
+#S 14 SiC
+#UCELL 4.34800      4.34800      4.34800      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE ZincBlende
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1
+#UCOMMENT The ZincBlende structure is defined by atom A located at (0 0 0) 
+#UCOMMENT and atom B at (1/4 1/4 1/4) of the fcc lattice. Ex: Si(a=5.4309)
+#UCOMMENT Ge(a=5.657)  Diamond(a=3.56)  GaAs  GaP  InAs InP  InSb  SiC... 
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+14 1.0 0.0  0.0  0.0
+14 1.0 0.0  0.5  0.5
+14 1.0 0.5  0.0  0.5
+14 1.0 0.5  0.5  0.0
+6 1.0 .25  .25  .25
+6 1.0 .25  .75  .75
+6 1.0 .75  .25  .75
+6 1.0 .75  .75  .25
+
+#S 17 NaCl
+#UCELL 5.63978      5.63978      5.63978      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE NaCl
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.88
+#UTEMP 291.15
+#UCOMMENT The RockSalt structure is defined by atom A located at
+#UCOMMENT (0 0 0) and atom B at (1/2 1/2 1/2) of the fcc lattice.
+#UCOMMENT Examples: NaCl CsF LiF KCl...
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+11 1.0 0.0  0.0  0.0
+11 1.0 0.0  0.5  0.5
+11 1.0 0.5  0.0  0.5
+11 1.0 0.5  0.5  0.0
+17 1.0 0.5  0.5  0.5
+17 1.0 0.5  0.0  0.0
+17 1.0 0.0  0.5  0.0
+17 1.0 0.0  0.0  0.5
+
+#S 55 CsF
+#UCELL 6.00800      6.00800      6.00800      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE NaCl
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.84
+#UCOMMENT The RockSalt structure is defined by atom A located at
+#UCOMMENT (0 0 0) and atom B at (1/2 1/2 1/2) of the fcc lattice.
+#UCOMMENT Examples: NaCl CsF LiF KCl...
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+55 1.0 0.0  0.0  0.0
+55 1.0 0.0  0.5  0.5
+55 1.0 0.5  0.0  0.5
+55 1.0 0.5  0.5  0.0
+9 1.0 0.5  0.5  0.5
+9 1.0 0.5  0.0  0.0
+9 1.0 0.0  0.5  0.0
+9 1.0 0.0  0.0  0.5
+
+#S 9 LiF
+#UCELL 4.02630      4.02630      4.02630      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE NaCl
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.86
+#UCOMMENT The RockSalt structure is defined by atom A located at
+#UCOMMENT (0 0 0) and atom B at (1/2 1/2 1/2) of the fcc lattice.
+#UCOMMENT Examples: NaCl CsF LiF KCl...
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+3 1.0 0.0  0.0  0.0
+3 1.0 0.0  0.5  0.5
+3 1.0 0.5  0.0  0.5
+3 1.0 0.5  0.5  0.0
+9 1.0 0.5  0.5  0.5
+9 1.0 0.5  0.0  0.0
+9 1.0 0.0  0.5  0.0
+9 1.0 0.0  0.0  0.5
+
+#S 19 KCl
+#UCELL 6.29294      6.29294      6.29294      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE NaCl
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.86
+#UTEMP 298.15
+#UCOMMENT The RockSalt structure is defined by atom A located at
+#UCOMMENT (0 0 0) and atom B at (1/2 1/2 1/2) of the fcc lattice.
+#UCOMMENT Examples: NaCl CsF LiF KCl...
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+19 1.0 0.0  0.0  0.0
+19 1.0 0.0  0.5  0.5
+19 1.0 0.5  0.0  0.5
+19 1.0 0.5  0.5  0.0
+17 1.0 0.5  0.5  0.5
+17 1.0 0.5  0.0  0.0
+17 1.0 0.0  0.5  0.0
+17 1.0 0.0  0.0  0.5
+
+#S 55 CsCl
+#UCELL 7.02000      7.02000      7.02000      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE B
+#USTRUCTURE CsCl
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.86
+#UTEMP 723.15
+#UCOMMENT The CsCl structure is defined by an atom A located at
+#UCOMMENT (0 0 0) and an atom B at (1/2 1/2 1/2) of the cubic lattice
+#UCOMMENT If A = B  then it is a bcc lattice
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+55 1.0 0.0  0.0  0.0
+17 1.0 0.5  0.5  0.5
+
+#S 4 Be
+#UCELL 2.28660      2.28660      3.58330      90.0000      90.0000 120.000
+#USYSTEM Hexagonal
+#ULATTICE P
+#USTRUCTURE Berilium
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1
+#UTEMP 295.15
+#UCOMMENT The Hexagonal Closed-packed structure is defined by an atom A
+#UCOMMENT located at (1/3 2/3 1/4) and an atom B at (2/3  1/3  3/4) in the
+#UCOMMENT prism cell. Example: Berilium (with a=2.287  c=3.583)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+4 1.0 0.333333  0.666667  0.25
+4 1.0 0.666667  0.333333  0.75
+
+#S 6 Graphite
+#UCELL 2.45600      2.45600      6.69600      90.0000      90.0000 120.000
+#USYSTEM Hexagonal
+#ULATTICE P
+#USTRUCTURE Graphite
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.28
+#UCOMMENT The graphite structure contains four atom in unit prism in
+#UCOMMENT (0 0 0) (0 0 1/2) (1/3 2/3 0) and (2/3  1/3  1/2)
+#UCOMMENT Example: Graphite (with C atoms and a=2.456  c=6.696)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+6 1.0 0.0  0.0  0.0
+6 1.0 0.0  0.0  0.5
+6 1.0 0.333333  0.666667  0.0
+6 1.0 0.666667  0.333333  0.5
+
+#S 8 PET
+#UCELL 6.10000      6.10000      8.73000      90.0000      90.0000 90.0000
+#USYSTEM Tetragonal
+#UCOMMENT PET (Pentaerythritol) C(CH2OH)4
+#UCOMMENT Unit cell a: 6.10 A  c: 8.73 A
+#UCOMMENT See also: 
+#UCOMMENT http://www.photonic.saint-gobain.com/Media/Documents/S0000000000000001020/%20XRay.pdf
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+6 1.0  0 0 0
+6 1.0  0.99 0.75 0.85
+6 1.0  -0.99 -0.75 0.85
+6 1.0  -0.75 0.99 -0.85
+6 1.0  0.75 -0.99 -0.85
+6 1.0  0.5 0.5 0.5
+6 1.0  1.49 1.25 1.35
+6 1.0  -0.49 -0.25 1.35
+6 1.0  -0.25 1.49 -0.35
+6 1.0  1.25 -0.49 -0.35   
+8 1.0  1.93 1.5 0.017
+8 1.0  -1.93 -1.5 0.017
+8 1.0  -1.5 1.93 -0.017
+8 1.0  1.5 -1.93 -0.017
+8 1.0  2.43 2 0.517
+8 1.0  -1.43 -1 0.517
+8 1.0  -1 2.43 0.483
+8 1.0  2 -1.43 0.483
+
+#S 14 Beryl
+#UCELL 9.08800      9.08800      9.18960      90.0000      90.0000 120.000
+#USYSTEM Hexagonal
+#UCOMMENT Al2 Be3 (SiO3)6
+#UCOMMENT Unit cell a: 9.088 A  c: 9.1896 A
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+13 1.0 .6667 .3333 .25
+13 1.0 .3333 .6667 .25
+13 1.0 .6667 .3333 .75
+13 1.0 .3333 .6667 .75
+4 1.0 .5 0.0 .25
+4 1.0 0.0 .5 .25
+4 1.0 .5 .5 .25
+4 1.0 .5 0 .75
+4 1.0 0 .5 .75
+4 1.0 .5 .5 .75
+14 1.0 .3875 .1159 0.0
+14 1.0 -.3875 -.1159 0.0
+14 1.0 .2716 .3875 0.0
+14 1.0 -.2716 -.3875 0.0
+14 1.0 .1159 -.2716 0.0
+14 1.0 -.1159 .2716 0.0
+14 1.0 .3875 .1159 0.5
+14 1.0 -.3875 -.1159 0.5
+14 1.0 .2716 .3875 0.5
+14 1.0 -.2716 -.3875 0.5
+14 1.0 .1159 -.2716 0.5
+14 1.0 -.1159 .2716 0.5
+8 1.0 .31 .2366 0.0
+8 1.0 -.31 -.2366 0.0
+8 1.0 .0734 .31 0.0
+8 1.0 -.0734 -.31 0.0
+8 1.0 0.2366 -.0734 0.0
+8 1.0 -.2366 .0734 0.0
+8 1.0 .31 .2366 0.5
+8 1.0 -.31 -.2366 0.5
+8 1.0 .0734 .31 0.5
+8 1.0 -.0734 -.31 0.5
+8 1.0 0.2366 -.0734 0.5
+8 1.0 -.2366 .0734 0.5
+8 1.0 .4988 .1455 .1453
+8 1.0 -.4988 -.1455 .1453
+8 1.0 .3533 .4988 .1453
+8 1.0 -.3533 -.4988 .1453
+8 1.0 -.1455 .3533 .1453
+8 1.0 .1455 -.3533 .1453
+8 1.0 .4988 .1455 .6453
+8 1.0 -.4988 -.1455 .6453
+8 1.0 .3533 .4988 .6453
+8 1.0 -.3533 -.4988 .6453
+8 1.0 -.1455 .3533 .6453
+8 1.0 .1455 -.3533 .6453
+8 1.0 .4988 .3533 .3547
+8 1.0 .1455 .4988 .3547
+8 1.0 -.3533 .1455 .3547
+8 1.0 .3533 -.1455 .3547
+8 1.0 -.4988 -.3533 .3547
+8 1.0 -.1455 -.4988 .3547
+8 1.0 .4988 .3533 .8547
+8 1.0 .1455 .4988 .8547
+8 1.0 -.3533 .1455 .8547
+8 1.0 .3533 -.1455 .8547
+8 1.0 -.4988 -.3533 .8547
+8 1.0 -.1455 -.4988 .8547
+
+#S 19 KAP
+#UCELL 6.46000      9.60000      13.8500      90.0000      90.0000 90.0000
+#USYSTEM Orthorhombic
+#UCOMMENT KAP Acide Phatalate K (HOOC C6H4 COO)
+#UCOMMENT (a=6.460  b=9.600  c=13.850)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+19 1.0  0.25 0.09898 0.03878
+19 1.0  0.75 -0.09898 -0.03878
+19 1.0  0.25 0.59898 -0.03878
+19 1.0  0.75 0.40102 0.03878
+6 1.0  0.00561 -0.1778 0.21761
+6 1.0  -0.23842 0.068887 0.15685
+6 1.0  -0.02519 -0.05921 0.28937
+6 1.0  0.06263 -0.06367 0.38466
+6 1.0  0.03824 0.04731 0.4505
+6 1.0  -0.0735 0.1628 0.42058
+6 1.0  -0.15805 0.16928 0.32513
+6 1.0  -0.13588 0.05799 0.25841
+6 1.0  0.50561 0.1778 -0.21761
+6 1.0  0.26158 -0.068887 -0.15685
+6 1.0  0.47481 0.05921 -0.28937
+6 1.0  0.56263 0.06367 -0.38466
+6 1.0  0.53824 -0.04731 -0.4505
+6 1.0  0.4265 -0.1628 -0.42058
+6 1.0  0.34195 -0.16928 -0.32513
+6 1.0  0.36412 -0.05799 -0.25841
+6 1.0  0.00561 0.3222 -0.21761
+6 1.0  -0.23842 0.568887 -0.15685
+6 1.0  -0.02519 0.44079 -0.28937
+6 1.0  0.06263 0.43633 -0.38466
+6 1.0  0.03824 0.54731 -0.4505
+6 1.0  -0.0735 0.6628 -0.42058
+6 1.0  -0.15805 0.66928 -0.32513
+6 1.0  -0.13588 0.55799 -0.25841
+6 1.0  0.50561 0.6778 0.21761
+6 1.0  0.26158 0.431113 0.15685
+6 1.0  0.47481 0.55921 0.28937
+6 1.0  0.56263 0.56367 0.38466
+6 1.0  0.53824 0.45269 0.4505
+6 1.0  0.4265 0.3372 0.42058
+6 1.0  0.34195 0.33072 0.32513
+6 1.0  0.36412 0.44201 0.25841
+8 1.0  0.07871 -0.29831 0.26258
+8 1.0  0.01748 -0.16109 0.12732
+8 1.0  -0.15861 0.14522 0.09314
+8 1.0  -0.40385 0.00006 0.14401
+8 1.0  0.57871 0.29831 -0.26258
+8 1.0  0.51748 0.16109 -0.12732
+8 1.0  0.34139 -0.14522 -0.09314
+8 1.0  0.09615 -0.00006 -0.14401
+8 1.0  0.07871 0.20169 -0.26258
+8 1.0  0.01748 0.33891 -0.12732
+8 1.0  -0.15861 0.64522 -0.09314
+8 1.0  -0.40385 0.50006 -0.14401
+8 1.0  0.57871 0.79831 0.26258
+8 1.0  0.51748 0.66109 0.12732
+8 1.0  0.34139 0.35478 0.09314
+8 1.0  0.09615 0.49994 0.14401
+
+#S 37 RbAP
+#UCELL 6.56100      10.0640      13.0680      90.0000      90.0000 90.0000
+#USYSTEM Orthorhombic
+#UCOMMENT RbAP Acide Phatalate Rb (HOOC C6H4 COO)
+#UCOMMENT (a=6.561  b=10.064  c=13.068)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+37 1.0  -0.25 0.1014 0.0459
+37 1.0  0.25 -0.1014 -0.0459
+37 1.0  -0.25 0.6014 -0.0459
+37 1.0  0.25 0.3986 0.0459
+6 1.0  0.127 0.051 0.267
+6 1.0  0.009 -0.054 0.296
+6 1.0  -0.088 -0.055 0.392
+6 1.0  -0.07 0.053 0.453
+6 1.0  0.048 0.164 0.425
+6 1.0  0.136 0.161 0.332
+6 1.0  0.239 0.06 0.168
+6 1.0  -0.011 -0.176 0.226
+6 1.0  0.627 -0.051 -0.267
+6 1.0  0.509 0.054 -0.296
+6 1.0  0.412 0.055 -0.392
+6 1.0  0.43 -0.053 -0.453
+6 1.0  0.548 -0.164 -0.425
+6 1.0  0.636 -0.161 -0.332
+6 1.0  0.739 -0.06 -0.168
+6 1.0  0.489 0.176 -0.226
+6 1.0  0.127 0.551 -0.267
+6 1.0  0.009 0.446 -0.296
+6 1.0  -0.088 0.445 -0.392
+6 1.0  -0.07 0.553 -0.453
+6 1.0  0.048 0.664 -0.425
+6 1.0  0.136 0.661 -0.332
+6 1.0  0.239 0.56 -0.168
+6 1.0  -0.011 0.324 -0.226
+6 1.0  0.627 0.449 0.267
+6 1.0  0.509 0.554 0.296
+6 1.0  0.412 0.555 0.392
+6 1.0  0.43 0.447 0.453
+6 1.0  0.548 0.336 0.425
+6 1.0  0.636 0.339 0.332
+6 1.0  0.739 0.44 0.168
+6 1.0  0.489 0.676 0.226
+8 1.0  0.184 0.133 0.1
+8 1.0  0.397 -0.014 0.157
+8 1.0  -0.013 -0.163 0.134
+8 1.0  -0.039 -0.287 0.275
+8 1.0  0.684 -0.133 -0.1
+8 1.0  0.897 0.014 -0.157
+8 1.0  0.487 0.163 -0.134
+8 1.0  0.461 0.287 -0.275
+8 1.0  0.184 0.633 -0.1
+8 1.0  0.397 0.486 -0.157
+8 1.0  -0.013 0.337 -0.134
+8 1.0  -0.039 0.213 -0.275
+8 1.0  0.684 0.367 0.1
+8 1.0  0.897 0.514 0.157
+8 1.0  0.487 0.663 0.134
+8 1.0  0.461 0.787 0.275
+
+#S 81 TlAP
+#UCELL 6.61500      10.0470      12.8780      90.0000      90.0000 90.0000
+#USYSTEM Orthorhombic
+#UCOMMENT TlAP Acide Phatalate Tl (HOOC C6H4 COO)
+#UCOMMENT (a=6.615  b=10.047  c=12.878)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+81 1.0  0.25 -0.10277 -0.0476
+81 1.0  0.75 0.10277 0.0476
+81 1.0  0.25 0.39723 0.0476
+81 1.0  0.75 0.60277 -0.0476
+6 1.0  0.254 0.059 0.163
+6 1.0  0.124 0.052 0.266
+6 1.0  0.144 0.163 0.325
+6 1.0  0.042 0.167 0.427
+6 1.0  -0.072 0.056 0.456
+6 1.0  -0.086 -0.058 0.392
+6 1.0  0.014 -0.057 0.296
+6 1.0  -0.02 -0.176 0.229
+6 1.0  0.754 -0.059 -0.163
+6 1.0  0.624 -0.052 -0.266
+6 1.0  0.644 -0.163 -0.325
+6 1.0  0.542 -0.167 -0.427
+6 1.0  0.428 -0.056 -0.456
+6 1.0  0.414 0.058 -0.392
+6 1.0  0.514 0.057 -0.296
+6 1.0  0.48 0.176 -0.229
+6 1.0  0.254 0.559 -0.163
+6 1.0  0.124 0.552 -0.266
+6 1.0  0.144 0.663 -0.325
+6 1.0  0.042 0.667 -0.427
+6 1.0  -0.072 0.556 -0.456
+6 1.0  -0.086 0.442 -0.392
+6 1.0  0.014 0.443 -0.296
+6 1.0  -0.02 0.324 -0.229
+6 1.0  0.754 0.441 0.163
+6 1.0  0.624 0.448 0.266
+6 1.0  0.644 0.337 0.325
+6 1.0  0.542 0.333 0.427
+6 1.0  0.428 0.444 0.456
+6 1.0  0.414 0.558 0.392
+6 1.0  0.514 0.557 0.296
+6 1.0  0.48 0.676 0.229
+8 1.0  0.19 0.137 0.097
+8 1.0  0.394 -0.02 0.159
+8 1.0  -0.008 -0.164 0.132
+8 1.0  -0.043 -0.288 0.275
+8 1.0  0.69 -0.137 -0.097
+8 1.0  0.894 0.02 -0.159
+8 1.0  0.492 0.164 -0.132
+8 1.0  0.457 0.288 -0.275
+8 1.0  0.19 0.637 -0.097
+8 1.0  0.394 0.48 -0.159
+8 1.0  -0.008 0.336 -0.132
+8 1.0  -0.043 0.212 -0.275
+8 1.0  0.69 0.363 0.097
+8 1.0  0.894 0.52 0.159
+8 1.0  0.492 0.664 0.132
+8 1.0  0.457 0.788 0.275
+
+#S 19 Muscovite
+#UCELL 5.18900      8.99500      20.0970      90.0000      95.1800 90.0000
+#USYSTEM Monoclinic
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 4, p.  346
+#UCOMMENT KAl2(AlSi3)O10(OH)2
+#UCOMMENT The muscovite or mica is composed by K Al Si O and H atoms in 10
+#UCOMMENT different sites  making 13 independent element-sites. It belongs
+#UCOMMENT to the monoclinic system with abc=5.189 8.995 20.097 beta=95.18
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+19 1.00    0.0000  0.1016  0.2500
+19 1.00    0.5000  0.6016  0.2500
+19 1.00   -0.0000 -0.1016 -0.2500
+19 1.00   -0.5000 -0.6016 -0.2500
+13 1.00    0.2484  0.0871  0.0016
+13 1.00    0.2484 -0.0871  0.5016
+13 1.00    0.7484  0.5871  0.0016
+13 1.00    0.7484  0.4129  0.5016
+13 1.00   -0.2484 -0.0871 -0.0016
+13 1.00   -0.2484  0.0871 -0.5016
+13 1.00   -0.7484 -0.5871 -0.0016
+13 1.00   -0.7484 -0.4129 -0.5016
+14 0.75    0.4625  0.9242  0.1372
+14 0.75    0.4625 -0.9242  0.6372
+14 0.75    0.9625  1.4242  0.1372
+14 0.75    0.9625 -0.4242  0.6372
+14 0.75   -0.4625 -0.9242 -0.1372
+14 0.75   -0.4625  0.9242 -0.6372
+14 0.75   -0.9625 -1.4242 -0.1372
+14 0.75   -0.9625  0.4242 -0.6372
+13 0.25    0.4625  0.9242  0.1372
+13 0.25    0.4625 -0.9242  0.6372
+13 0.25    0.9625  1.4242  0.1372
+13 0.25    0.9625 -0.4242  0.6372
+13 0.25   -0.4625 -0.9242 -0.1372
+13 0.25   -0.4625  0.9242 -0.6372
+13 0.25   -0.9625 -1.4242 -0.1372
+13 0.25   -0.9625  0.4242 -0.6372
+14 0.75    0.4593  0.2550  0.1365
+14 0.75    0.4593 -0.2550  0.6365
+14 0.75    0.9593  0.7550  0.1365
+14 0.75    0.9593  0.2450  0.6365
+14 0.75   -0.4593 -0.2550 -0.1365
+14 0.75   -0.4593  0.2550 -0.6365
+14 0.75   -0.9593 -0.7550 -0.1365
+14 0.75   -0.9593 -0.2450 -0.6365
+13 0.25    0.4593  0.2550  0.1365
+13 0.25    0.4593 -0.2550  0.6365
+13 0.25    0.9593  0.7550  0.1365
+13 0.25    0.9593  0.2450  0.6365
+13 0.25   -0.4593 -0.2550 -0.1365
+13 0.25   -0.4593  0.2550 -0.6365
+13 0.25   -0.9593 -0.7550 -0.1365
+13 0.25   -0.9593 -0.2450 -0.6365
+8 1.00    0.2629  0.3713  0.1674
+8 1.00    0.2629 -0.3713  0.6674
+8 1.00    0.7629  0.8713  0.1674
+8 1.00    0.7629  0.1287  0.6674
+8 1.00   -0.2629 -0.3713 -0.1674
+8 1.00   -0.2629  0.3713 -0.6674
+8 1.00   -0.7629 -0.8713 -0.1674
+8 1.00   -0.7629 -0.1287 -0.6674
+8 1.00    0.2450  0.8020  0.1620
+8 1.00    0.2450 -0.8020  0.6620
+8 1.00    0.7450  1.3020  0.1620
+8 1.00    0.7450 -0.3020  0.6620
+8 1.00   -0.2450 -0.8020 -0.1620
+8 1.00   -0.2450  0.8020 -0.6620
+8 1.00   -0.7450 -1.3020 -0.1620
+8 1.00   -0.7450  0.3020 -0.6620
+8 1.00    0.4080  0.0960  0.1680
+8 1.00    0.4080 -0.0960  0.6680
+8 1.00    0.9080  0.5960  0.1680
+8 1.00    0.9080  0.4040  0.6680
+8 1.00   -0.4080 -0.0960 -0.1680
+8 1.00   -0.4080  0.0960 -0.6680
+8 1.00   -0.9080 -0.5960 -0.1680
+8 1.00   -0.9080 -0.4040 -0.6680
+8 1.00    0.4650  0.9450  0.0527
+8 1.00    0.4650 -0.9450  0.5527
+8 1.00    0.9650  1.4450  0.0527
+8 1.00    0.9650 -0.4450  0.5527
+8 1.00   -0.4650 -0.9450 -0.0527
+8 1.00   -0.4650  0.9450 -0.5527
+8 1.00   -0.9650 -1.4450 -0.0527
+8 1.00   -0.9650  0.4450 -0.5527
+8 1.00    0.4250  0.2600  0.0542
+8 1.00    0.4250 -0.2600  0.5542
+8 1.00    0.9250  0.7600  0.0542
+8 1.00    0.9250  0.2400  0.5542
+8 1.00   -0.4250 -0.2600 -0.0542
+8 1.00   -0.4250  0.2600 -0.5542
+8 1.00   -0.9250 -0.7600 -0.0542
+8 1.00   -0.9250 -0.2400 -0.5542
+8 1.00    0.4530  0.5580  0.0520
+8 1.00    0.4530 -0.5580  0.5520
+8 1.00    0.9530  1.0580  0.0520
+8 1.00    0.9530 -0.0580  0.5520
+8 1.00   -0.4530 -0.5580 -0.0520
+8 1.00   -0.4530  0.5580 -0.5520
+8 1.00   -0.9530 -1.0580 -0.0520
+8 1.00   -0.9530  0.0580 -0.5520
+1 1.00    0.4530  0.5580  0.0520
+1 1.00    0.4530 -0.5580  0.5520
+1 1.00    0.9530  1.0580  0.0520
+1 1.00    0.9530 -0.0580  0.5520
+1 1.00   -0.4530 -0.5580 -0.0520
+1 1.00   -0.4530  0.5580 -0.5520
+1 1.00   -0.9530 -1.0580 -0.0520
+1 1.00   -0.9530  0.0580 -0.5520
+
+#S 14 AlphaQuartz
+#UCELL 4.91304      4.91304      5.40463      90.0000      90.0000 120.000
+#USYSTEM Hexagonal
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1
+#UTEMP 298.15
+#ULATTICE P
+#USTRUCTURE AlphaQuartz
+#UCOMMENT The AlphaQuartz (SiO2) structure has three molecules in a
+#UCOMMENT hexagonal unit of dimensions a=4.91304 A  c=5.40463 A
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+14 1.0    0.4697 0. 0.
+14 1.0   -0.4697 -0.4697 0.3333333333
+14 1.0    0. 0.4697 0.6666666666
+8 1.0    0.4125 0.2662 0.1188
+8 1.0   -0.1463 -0.4125 0.4521
+8 1.0   -0.2662 0.1463 -0.2145
+8 1.0    0.1463 -0.2662 -0.1188
+8 1.0   -0.4125 -0.1463 0.2145
+8 1.0    0.2662 0.4125 0.5479
+
+#S 29 Copper
+#N  5
+#UCELL 3.61496      3.61496      3.61496      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE Copper
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1965, 1, p.10
+#UTEMP 298.15
+#UCOMMENT The FCC structure is defined by atom A located at (0 0 0)
+#UCOMMENT and (.5,0,.5), (.5,.5,0) and (0,.5,.5)
+#UCOMMENT Example: Ag, Al, Fe, Cu, Co, etc.
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+29 1.0 0.0  0.0  0.0
+29 1.0 0.0  0.5  0.5
+29 1.0 0.5  0.0  0.5
+29 1.0 0.5  0.5  0.0
+
+#S 41 LiNbO3
+#UCELL 5.148      5.148     13.863      90.0000      90.0000 120.0000
+#USYSTEM Trigonal
+#ULATTICE R
+#UREF R.S. Weis and T.K. Gaylord, Appl. Phys. 191-203 (1985)
+#UCOMMENT LiNbO3 Ref:R.S. Weis and T.K. Gaylord, Appl. Phys. 191-203 (1985)
+#UCOMMENT (coordinates calculated by Olivier Mathon (mathon@esrf.fr)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+3  1.0  0  0  0.2829
+3  1.0  0.3333  0.6667  0.9496
+3  1.0  0.6667  0.3333  0.6162
+3  1.0  0  0  0.7829
+3  1.0  0.3333  0.6667  0.4496
+3  1.0  0.6667  0.3333  0.1162
+41 1.0  0  0  0
+41 1.0  0.3333  0.6667  0.6667
+41 1.0  0.6667  0.3333  0.3333
+41 1.0  0  0  0.5
+41 1.0  0.3333  0.6667  0.1667
+41 1.0  0.6667  0.3333  0.8333
+8  1.0  0.0492  0.3446  0.0647
+8  1.0  0.3825  0.0113  0.7314
+8  1.0  0.7159  0.6779  0.3980
+8  1.0  0.6554  0.7046  0.0647
+8  1.0  0.9887  0.3713  0.7314
+8  1.0  0.3221  0.0379  0.3980
+8  1.0  0.2954  0.9508  0.0647
+8  1.0  0.6287  0.6175  0.7314
+8  1.0  0.9621  0.2841  0.3980
+8  1.0  0.6554  0.9508  0.5647
+8  1.0  0.9887  0.6175  0.2314
+8  1.0  0.3221  0.2841  0.8980
+8  1.0  0.0492  0.7046  0.5647
+8  1.0  0.3825  0.3713  0.2314
+8  1.0  0.7159  0.0379  0.8980
+8  1.0  0.2954  0.3446  0.5647
+8  1.0  0.6287  0.0113  0.2314
+8  1.0  0.9621  0.6779  0.8980
+
+#S 78 Platinum
+#UCELL 3.9242     3.9242     3.9242      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE Copper
+#UCOMMENT The FCC structure is defined by atom A located at (0 0 0)
+#UCOMMENT and (.5,0,.5), (.5,.5,0) and (0,.5,.5)
+#UCOMMENT Example: Ag, Al, Fe, Cu, Co, etc.
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+78 1.0 0.0  0.0  0.0
+78 1.0 0.0  0.5  0.5
+78 1.0 0.5  0.0  0.5
+78 1.0 0.5  0.5  0.0
+
+#S 79 Gold
+#UCELL 4.0782     4.0782     4.0782      90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE Copper
+#UCOMMENT The FCC structure is defined by atom A located at (0 0 0)
+#UCOMMENT and (.5,0,.5), (.5,.5,0) and (0,.5,.5)
+#UCOMMENT Example: Ag, Al, Fe, Cu, Co, etc.
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+79 1.0 0.0  0.0  0.0
+79 1.0 0.0  0.5  0.5
+79 1.0 0.5  0.0  0.5
+79 1.0 0.5  0.5  0.0 
+
+#S 13 Sapphire 
+#UCELL 4.7581322 4.7581322 12.9883093 90.0 90.0 120.0
+#USYSTEM Hexagonal
+#ULATTICE P
+#UREF Yuri Shvyd ko X-ray Optics High Energy Resolution Applications, Springer p.337
+#UTEMP 250.0
+#UCOMMENT Sapphire, Alpha-Al2O3, rhombohedral lattice, space group R-3c (D3d,6)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+ 13 1.0   0.00000   0.00000   0.35220
+ 13 1.0   0.00000   0.00000   0.14780
+ 13 1.0   0.00000   0.00000  -0.35220
+ 13 1.0   0.00000   0.00000   0.85220
+ 13 1.0   0.66667   0.33333   0.68553
+ 13 1.0   0.66667   0.33333   0.48113
+ 13 1.0   0.66667   0.33333  -0.01887
+ 13 1.0   0.66667   0.33333   1.18553
+ 13 1.0   0.33333   0.66667   1.01887
+ 13 1.0   0.33333   0.66667   0.81447
+ 13 1.0   0.33333   0.66667   0.31447
+ 13 1.0   0.33333   0.66667   1.51887
+  8 1.0   0.30627   0.00000   0.25000
+  8 1.0   0.00000   0.30627   0.25000
+  8 1.0  -0.30627  -0.30627   0.25000
+  8 1.0  -0.30627   0.00000   0.75000
+  8 1.0   0.00000  -0.30627   0.75000
+  8 1.0   0.30627   0.30627   0.75000
+  8 1.0   0.97294   0.33333   0.58333
+  8 1.0   0.66667   0.63961   0.58333
+  8 1.0   0.36039   0.02706   0.58333
+  8 1.0   0.36039   0.33333   1.08333
+  8 1.0   0.66667   0.02706   1.08333
+  8 1.0   0.97294   0.63961   1.08333
+  8 1.0   0.63961   0.66667   0.91667
+  8 1.0   0.33333   0.97294   0.91667
+  8 1.0   0.02706   0.36039   0.91667
+  8 1.0   0.02706   0.66667   1.41667
+  8 1.0   0.33333   0.36039   1.41667
+  8 1.0   0.63961   0.97294   1.41667
+
+#S 57 LaB6 
+#UCELL 4.15271 4.15271 4.15271 90 90 90
+#USYSTEM Cubic
+#UREF C.H. Booth et al. Phys. Rev. B 63, 224302 (2001) ICSD Code 94251
+#UCOMMENT C.H. Booth et al. Phys. Rev. B 63, 224302 (2001) ICSD Code 94251
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+57    0.9840 0.0000   0.0000   0.0000    
+5     1.0000 0.1993   0.5000   0.5000 
+5     1.0000 0.8007   0.5000   0.5000 
+5     1.0000 0.5000   0.1993   0.5000 
+5     1.0000 0.5000   0.5000   0.1993 
+5     1.0000 0.5000   0.8007   0.5000 
+5     1.0000 0.5000   0.5000   0.8007 
+
+#S 57 LaB6_NIST 
+#UCELL 4.1569162 4.1569162 4.1569162 90 90 90
+#USYSTEM Cubic
+#UREF NIST Standard Reference Material 660a (Lanthanum Hexaboride Powder)
+#UCOMMENT C.H. Booth et al. Phys. Rev. B 63, 224302 (2001) ICSD Code 94251
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+57    0.9840 0.0000   0.0000   0.0000    
+5     1.0000 0.1993   0.5000   0.5000 
+5     1.0000 0.8007   0.5000   0.5000 
+5     1.0000 0.5000   0.1993   0.5000 
+5     1.0000 0.5000   0.5000   0.1993 
+5     1.0000 0.5000   0.8007   0.5000 
+5     1.0000 0.5000   0.5000   0.8007 
+
+#S 19 KTP
+#UCELL 12.8146 10.6165 6.4042 90 90 90
+#USYSTEM Orthorhombic
+#UREF Tordjman et al. Zeitschrift fuer Kristallographie, (1974) 103-115
+#UCOMMENT Tordjman et al. (1974)
+#UCOMMENT Data calculated with data from http://icsd.ill.fr/icsd/index.html
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+ 22         1.0000        0.37291         0.0000        0.50011
+ 22         1.0000        0.12709        0.50000     0.00011122
+ 22         1.0000        0.62709        0.50000        0.49989
+ 22         1.0000        0.87291         0.0000        0.99989
+ 22         1.0000        0.24671        0.25145        0.26915
+ 22         1.0000        0.25329        0.75145        0.76915
+ 22         1.0000        0.75329        0.75145        0.73085
+ 22         1.0000        0.74671        0.25145        0.23085
+ 15         1.0000        0.49801        0.26078        0.33639
+ 15         1.0000      0.0019900        0.76078        0.83639
+ 15         1.0000        0.50199        0.76078        0.66361
+ 15         1.0000        0.99801        0.26078        0.16361
+ 15         1.0000        0.18081        0.51310        0.50197
+ 15         1.0000        0.31919       0.013101      0.0019720
+ 15         1.0000        0.81919       0.013101        0.49803
+ 15         1.0000        0.68081        0.51310        0.99803
+ 19         1.0000        0.37801        0.31201        0.78042
+ 19         1.0000        0.12199        0.81201        0.28042
+ 19         1.0000        0.62199        0.81201        0.21958
+ 19         1.0000        0.87801        0.31201        0.71958
+ 19         1.0000        0.10528       0.066902        0.69892
+ 19         1.0000        0.39472        0.56690        0.19892
+ 19         1.0000        0.89472        0.56690        0.30108
+ 19         1.0000        0.60528       0.066902        0.80108
+  8         1.0000        0.48623        0.15043        0.48656
+  8         1.0000       0.013770        0.65043        0.98656
+  8         1.0000        0.51377        0.65043        0.51344
+  8         1.0000        0.98623        0.15043       0.013440
+  8         1.0000        0.51003        0.38363        0.46507
+  8         1.0000        0.98997        0.88363        0.96507
+  8         1.0000        0.48997        0.88363        0.53493
+  8         1.0000       0.010030        0.38363       0.034930
+  8         1.0000        0.39993        0.28004        0.19896
+  8         1.0000        0.10007        0.78004        0.69896
+  8         1.0000        0.60007        0.78004        0.80104
+  8         1.0000        0.89993        0.28004        0.30104
+  8         1.0000        0.59373        0.24224        0.19256
+  8         1.0000        0.90627        0.74224        0.69256
+  8         1.0000        0.40627        0.74224        0.80744
+  8         1.0000       0.093730        0.24224        0.30744
+  8         1.0000        0.22473        0.64473        0.96664
+  8         1.0000        0.27527        0.14473        0.46664
+  8         1.0000        0.77527        0.14473       0.033360
+  8         1.0000        0.72473        0.64473        0.53336
+  8         1.0000        0.22383        0.39074       0.040560
+  8         1.0000        0.27617        0.89074        0.54056
+  8         1.0000        0.77617        0.89074        0.95944
+  8         1.0000        0.72383        0.39074        0.45944
+  8         1.0000        0.11203        0.54214        0.31055
+  8         1.0000        0.38797       0.042140        0.81055
+  8         1.0000        0.88797       0.042140        0.68945
+  8         1.0000        0.61203        0.54214        0.18945
+  8         1.0000        0.11113        0.48784        0.69185
+  8         1.0000        0.38887        0.98784        0.19185
+  8         1.0000        0.88887        0.98784        0.30815
+  8         1.0000        0.61113        0.48784        0.80815
+  8         1.0000        0.25263        0.62854        0.53967
+  8         1.0000        0.24737        0.12854       0.039670
+  8         1.0000        0.74737        0.12854        0.46033
+  8         1.0000        0.75263        0.62854        0.96033
+  8         1.0000        0.25303        0.39953        0.46056
+  8         1.0000        0.24697        0.89953        0.96056
+  8         1.0000        0.74697        0.89953        0.53944
+  8         1.0000        0.75303        0.39953       0.039440
+
+#S 13 AlphaAlumina
+#UCELL 4.758846 4.758846 12.99306 90 90 120
+#USYSTEM Trigonal
+#UREF P. Ballirano, R. Caminiti J Appl Crystall (2001) 34, 757-762 
+#UCOMMENT Data calculated with xop/xpowder
+#UCOMMENT Al2 O3 - [Corundum] Dialuminium trioxide - alpha
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+ 13         1.0000         0.0000         0.0000        0.35242
+ 13         1.0000         0.0000         0.0000        0.14758
+ 13         1.0000        -0.0000        -0.0000        0.64758
+ 13         1.0000        -0.0000        -0.0000        0.85242
+ 13         1.0000        0.66667        0.33333        0.68575
+ 13         1.0000        0.66667        0.33333        0.48091
+ 13         1.0000        0.66667        0.33333        0.98091
+ 13         1.0000        0.66667        0.33333        0.18575
+ 13         1.0000        0.33333        0.66667       0.019085
+ 13         1.0000        0.33333        0.66667        0.81425
+ 13         1.0000        0.33333        0.66667        0.31425
+ 13         1.0000        0.33333        0.66667        0.51909
+  8         1.0000        0.30634         0.0000        0.25000
+  8         1.0000        -0.0000        0.30634        0.25000
+  8         1.0000        0.69366        0.69366        0.25000
+  8         1.0000        0.69366        -0.0000        0.75000
+  8         1.0000         0.0000        0.69366        0.75000
+  8         1.0000        0.30634        0.30634        0.75000
+  8         1.0000        0.97301        0.33333        0.58333
+  8         1.0000        0.66667        0.63967        0.58333
+  8         1.0000        0.36033       0.026993        0.58333
+  8         1.0000        0.36033        0.33333       0.083333
+  8         1.0000        0.66667       0.026993       0.083333
+  8         1.0000        0.97301        0.63967       0.083333
+  8         1.0000        0.63967        0.66667        0.91667
+  8         1.0000        0.33333        0.97301        0.91667
+  8         1.0000       0.026993        0.36033        0.91667
+  8         1.0000       0.026993        0.66667        0.41667
+  8         1.0000        0.33333        0.36033        0.41667
+  8         1.0000        0.63967        0.97301        0.41667
+
+#S 13 Aluminum
+#UCELL 4.04958  4.04958 4.04958   90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE Copper
+#UCOMMENT The FCC structure is defined by atom A located at (0 0 0)
+#UCOMMENT and (.5,0,.5), (.5,.5,0) and (0,.5,.5)
+#UCOMMENT Example: Ag, Al, Fe, Cu, Co, etc.
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1963, 1, p.10
+#UTEMP 298.15
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+13 1.0 0.0  0.0  0.0
+13 1.0 0.0  0.5  0.5
+13 1.0 0.5  0.0  0.5
+13 1.0 0.5  0.5  0.0 
+
+#S 26 Iron
+#UCELL 3.5910 3.5910 3.5910    90.0000      90.0000 90.0000
+#USYSTEM Cubic
+#ULATTICE F
+#USTRUCTURE Copper
+#UCOMMENT The FCC structure is defined by atom A located at (0 0 0)
+#UCOMMENT and (.5,0,.5), (.5,.5,0) and (0,.5,.5)
+#UCOMMENT Example: Ag, Al, Fe, Cu, Co, etc.
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1963, 1, p.10
+#UTEMP 295.15
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+26 1.0 0.0  0.0  0.0
+26 1.0 0.0  0.5  0.5
+26 1.0 0.5  0.0  0.5
+26 1.0 0.5  0.5  0.0 
+
+#S 22 Titanium
+#UCELL 2.950  2.950  4.686  90.0000 90.0000 120.000
+#USYSTEM Hexagonal
+#ULATTICE P
+#USTRUCTURE Berilium
+#UREF R.W.G. Wyckoff, Crystal Structures, Interscience Publ. 1963, vol 1, 11
+#UTEMP 298.15
+#UCOMMENT The Hexagonal Closed-packed structure is defined by an atom A
+#UCOMMENT located at (1/3 2/3 1/4) and an atom B at (2/3  1/3  3/4) in the
+#UCOMMENT prism cell. Example: Berilium (with a=2.287  c=3.583)
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+22 1.0 0.333333  0.666667  0.25
+22 1.0 0.666667  0.333333  0.75
+
+
+#S 39 YB66
+#UCELL 23.44 23.44 23.44 90.0000 90.0000 90.0000
+#USYSTEM Cubic
+#UREF Pierre Villars (Chief Editor), PAULING FILE in: Inorganic Solid Phases, SpringerMaterials (online database), Springer, Heidelberg (ed.) SpringerMaterials
+#UTEMP 298.15
+#C YB66 anisotropic temperature factor
+#UANISO_COFF_B1 1 96 0.00038 0.00044 0.00039 0 0 0
+#UANISO_COFF_B2 97 192 0.00053 0.00041 0.00040 0 0 0
+#UANISO_COFF_B3 193 288 0.00048 0.00041 0.00029 0 0 0
+#UANISO_COFF_B4 289 384 0.00034 0.00035 0.00027 0 0 0
+#UANISO_COFF_B5 385 480 0.00045 0.00030 0.00040 0 0 0
+#UANISO_COFF_B6 481 672 0.00068 0.00038 0.00038 0.00006 0.00009 0.00011
+#UANISO_COFF_B7 673 864 0.00068 0.00035 0.00031 -0.00001 -0.00006 0.00007
+#UANISO_COFF_B8 865 1056 0.00045 0.00042 0.00050 -0.00002 0.00020 -0.00005
+#UANISO_COFF_B9 1057 1248 0.00052 0.00030 0.00076 0.00004 -0.00001 0.00005
+#UANISO_COFF_B10 1249 1440 0.00117 0.00140 0.00131 -0.00037 -0.00051 -0.00059
+#UANISO_COFF_B11 1441 1632 0.00215 0.00155 0.00359 -0.00027 -0.00056 0.00049
+#UANISO_COFF_B12 1633 1824 0.00101 0.00032 0.00111 -0.00014 -0.00084 0.00011
+#UANISO_COFF_B13 1825 1888 0.00130 0.00130 0.00130 0.00056 0.00056 0.00056
+#UANISO_COFF_Y 1889 1936 0.00051 0.00048 0.00048 0 0 0
+#C Higashi I., Kobayashi K., Tanaka T., Ishizawa Y.: Structure Refinement of YB62 and YB56 of the YB66-Type Structure. Journal of Solid State Chemistry 133 (1997) 16-20
+#C S.M. Richards and J.S. Kaspar: The crystal structure of YB66. Acta Crystallogr. Sect. B Struct. Crystallogr. Cryst. Chem. 25, 237251 (1969)
+#C Coordinators tabulated by Xiaojiang Yu <xiaojiang@nus.edu.sg>, with suggestion from Manuel Sanchez del Rio <srio@esrf.fr>
+#N  6
+#L  AtomicNumber  Fraction  X  Y  Z  Charge
+5   1   0.5   0.94077   0.96284   -0.045548
+5   1   0   0.55923   0.96284   -0.045548
+5   1   0.55923   0.5   0.96284   -0.045548
+5   1   0.44077   0.5   0.96284   -0.045548
+5   1   0   0.44077   0.96284   -0.045548
+5   1   0.5   0.05923   0.96284   -0.045548
+5   1   0.94077   0   0.96284   -0.045548
+5   1   0.05923   0   0.96284   -0.045548
+5   1   0   0.96284   0.94077   -0.045548
+5   1   0.5   0.53716   0.94077   -0.045548
+5   1   0.96284   0.5   0.94077   -0.045548
+5   1   0.03716   0.5   0.94077   -0.045548
+5   1   0.5   0.46284   0.94077   -0.045548
+5   1   0   0.03716   0.94077   -0.045548
+5   1   0.53716   0   0.94077   -0.045548
+5   1   0.46284   0   0.94077   -0.045548
+5   1   0.5   0.96284   0.55923   -0.045548
+5   1   0   0.53716   0.55923   -0.045548
+5   1   0.53716   0.5   0.55923   -0.045548
+5   1   0.46284   0.5   0.55923   -0.045548
+5   1   0   0.46284   0.55923   -0.045548
+5   1   0.5   0.03716   0.55923   -0.045548
+5   1   0.96284   0   0.55923   -0.045548
+5   1   0.03716   0   0.55923   -0.045548
+5   1   0   0.94077   0.53716   -0.045548
+5   1   0.5   0.55923   0.53716   -0.045548
+5   1   0.94077   0.5   0.53716   -0.045548
+5   1   0.05923   0.5   0.53716   -0.045548
+5   1   0.5   0.44077   0.53716   -0.045548
+5   1   0   0.05923   0.53716   -0.045548
+5   1   0.55923   0   0.53716   -0.045548
+5   1   0.44077   0   0.53716   -0.045548
+5   1   0.94077   0.96284   0.5   -0.045548
+5   1   0.05923   0.96284   0.5   -0.045548
+5   1   0.53716   0.94077   0.5   -0.045548
+5   1   0.46284   0.94077   0.5   -0.045548
+5   1   0.96284   0.55923   0.5   -0.045548
+5   1   0.03716   0.55923   0.5   -0.045548
+5   1   0.55923   0.53716   0.5   -0.045548
+5   1   0.44077   0.53716   0.5   -0.045548
+5   1   0.55923   0.46284   0.5   -0.045548
+5   1   0.44077   0.46284   0.5   -0.045548
+5   1   0.96284   0.44077   0.5   -0.045548
+5   1   0.03716   0.44077   0.5   -0.045548
+5   1   0.53716   0.05923   0.5   -0.045548
+5   1   0.46284   0.05923   0.5   -0.045548
+5   1   0.94077   0.03716   0.5   -0.045548
+5   1   0.05923   0.03716   0.5   -0.045548
+5   1   0   0.94077   0.46284   -0.045548
+5   1   0.5   0.55923   0.46284   -0.045548
+5   1   0.94077   0.5   0.46284   -0.045548
+5   1   0.05923   0.5   0.46284   -0.045548
+5   1   0.5   0.44077   0.46284   -0.045548
+5   1   0   0.05923   0.46284   -0.045548
+5   1   0.55923   0   0.46284   -0.045548
+5   1   0.44077   0   0.46284   -0.045548
+5   1   0.5   0.96284   0.44077   -0.045548
+5   1   0   0.53716   0.44077   -0.045548
+5   1   0.53716   0.5   0.44077   -0.045548
+5   1   0.46284   0.5   0.44077   -0.045548
+5   1   0   0.46284   0.44077   -0.045548
+5   1   0.5   0.03716   0.44077   -0.045548
+5   1   0.96284   0   0.44077   -0.045548
+5   1   0.03716   0   0.44077   -0.045548
+5   1   0   0.96284   0.05923   -0.045548
+5   1   0.5   0.53716   0.05923   -0.045548
+5   1   0.96284   0.5   0.05923   -0.045548
+5   1   0.03716   0.5   0.05923   -0.045548
+5   1   0.5   0.46284   0.05923   -0.045548
+5   1   0   0.03716   0.05923   -0.045548
+5   1   0.53716   0   0.05923   -0.045548
+5   1   0.46284   0   0.05923   -0.045548
+5   1   0.5   0.94077   0.03716   -0.045548
+5   1   0   0.55923   0.03716   -0.045548
+5   1   0.55923   0.5   0.03716   -0.045548
+5   1   0.44077   0.5   0.03716   -0.045548
+5   1   0   0.44077   0.03716   -0.045548
+5   1   0.5   0.05923   0.03716   -0.045548
+5   1   0.94077   0   0.03716   -0.045548
+5   1   0.05923   0   0.03716   -0.045548
+5   1   0.55923   0.96284   0   -0.045548
+5   1   0.44077   0.96284   0   -0.045548
+5   1   0.96284   0.94077   0   -0.045548
+5   1   0.03716   0.94077   0   -0.045548
+5   1   0.53716   0.55923   0   -0.045548
+5   1   0.46284   0.55923   0   -0.045548
+5   1   0.94077   0.53716   0   -0.045548
+5   1   0.05923   0.53716   0   -0.045548
+5   1   0.94077   0.46284   0   -0.045548
+5   1   0.05923   0.46284   0   -0.045548
+5   1   0.53716   0.44077   0   -0.045548
+5   1   0.46284   0.44077   0   -0.045548
+5   1   0.96284   0.05923   0   -0.045548
+5   1   0.03716   0.05923   0   -0.045548
+5   1   0.55923   0.03716   0   -0.045548
+5   1   0.44077   0.03716   0   -0.045548
+5   1   0.5   0.88341   0.92402   -0.045548
+5   1   0   0.61659   0.92402   -0.045548
+5   1   0.61659   0.5   0.92402   -0.045548
+5   1   0.38341   0.5   0.92402   -0.045548
+5   1   0   0.38341   0.92402   -0.045548
+5   1   0.5   0.11659   0.92402   -0.045548
+5   1   0.88341   0   0.92402   -0.045548
+5   1   0.11659   0   0.92402   -0.045548
+5   1   0   0.92402   0.88341   -0.045548
+5   1   0.5   0.57598   0.88341   -0.045548
+5   1   0.92402   0.5   0.88341   -0.045548
+5   1   0.07598   0.5   0.88341   -0.045548
+5   1   0.5   0.42402   0.88341   -0.045548
+5   1   0   0.07598   0.88341   -0.045548
+5   1   0.57598   0   0.88341   -0.045548
+5   1   0.42402   0   0.88341   -0.045548
+5   1   0.5   0.92402   0.61659   -0.045548
+5   1   0   0.57598   0.61659   -0.045548
+5   1   0.57598   0.5   0.61659   -0.045548
+5   1   0.42402   0.5   0.61659   -0.045548
+5   1   0   0.42402   0.61659   -0.045548
+5   1   0.5   0.07598   0.61659   -0.045548
+5   1   0.92402   0   0.61659   -0.045548
+5   1   0.07598   0   0.61659   -0.045548
+5   1   0   0.88341   0.57598   -0.045548
+5   1   0.5   0.61659   0.57598   -0.045548
+5   1   0.88341   0.5   0.57598   -0.045548
+5   1   0.11659   0.5   0.57598   -0.045548
+5   1   0.5   0.38341   0.57598   -0.045548
+5   1   0   0.11659   0.57598   -0.045548
+5   1   0.61659   0   0.57598   -0.045548
+5   1   0.38341   0   0.57598   -0.045548
+5   1   0.88341   0.92402   0.5   -0.045548
+5   1   0.11659   0.92402   0.5   -0.045548
+5   1   0.57598   0.88341   0.5   -0.045548
+5   1   0.42402   0.88341   0.5   -0.045548
+5   1   0.92402   0.61659   0.5   -0.045548
+5   1   0.07598   0.61659   0.5   -0.045548
+5   1   0.61659   0.57598   0.5   -0.045548
+5   1   0.38341   0.57598   0.5   -0.045548
+5   1   0.61659   0.42402   0.5   -0.045548
+5   1   0.38341   0.42402   0.5   -0.045548
+5   1   0.92402   0.38341   0.5   -0.045548
+5   1   0.07598   0.38341   0.5   -0.045548
+5   1   0.57598   0.11659   0.5   -0.045548
+5   1   0.42402   0.11659   0.5   -0.045548
+5   1   0.88341   0.07598   0.5   -0.045548
+5   1   0.11659   0.07598   0.5   -0.045548
+5   1   0   0.88341   0.42402   -0.045548
+5   1   0.5   0.61659   0.42402   -0.045548
+5   1   0.88341   0.5   0.42402   -0.045548
+5   1   0.11659   0.5   0.42402   -0.045548
+5   1   0.5   0.38341   0.42402   -0.045548
+5   1   0   0.11659   0.42402   -0.045548
+5   1   0.61659   0   0.42402   -0.045548
+5   1   0.38341   0   0.42402   -0.045548
+5   1   0.5   0.92402   0.38341   -0.045548
+5   1   0   0.57598   0.38341   -0.045548
+5   1   0.57598   0.5   0.38341   -0.045548
+5   1   0.42402   0.5   0.38341   -0.045548
+5   1   0   0.42402   0.38341   -0.045548
+5   1   0.5   0.07598   0.38341   -0.045548
+5   1   0.92402   0   0.38341   -0.045548
+5   1   0.07598   0   0.38341   -0.045548
+5   1   0   0.92402   0.11659   -0.045548
+5   1   0.5   0.57598   0.11659   -0.045548
+5   1   0.92402   0.5   0.11659   -0.045548
+5   1   0.07598   0.5   0.11659   -0.045548
+5   1   0.5   0.42402   0.11659   -0.045548
+5   1   0   0.07598   0.11659   -0.045548
+5   1   0.57598   0   0.11659   -0.045548
+5   1   0.42402   0   0.11659   -0.045548
+5   1   0.5   0.88341   0.07598   -0.045548
+5   1   0   0.61659   0.07598   -0.045548
+5   1   0.61659   0.5   0.07598   -0.045548
+5   1   0.38341   0.5   0.07598   -0.045548
+5   1   0   0.38341   0.07598   -0.045548
+5   1   0.5   0.11659   0.07598   -0.045548
+5   1   0.88341   0   0.07598   -0.045548
+5   1   0.11659   0   0.07598   -0.045548
+5   1   0.61659   0.92402   0   -0.045548
+5   1   0.38341   0.92402   0   -0.045548
+5   1   0.92402   0.88341   0   -0.045548
+5   1   0.07598   0.88341   0   -0.045548
+5   1   0.57598   0.61659   0   -0.045548
+5   1   0.42402   0.61659   0   -0.045548
+5   1   0.88341   0.57598   0   -0.045548
+5   1   0.11659   0.57598   0   -0.045548
+5   1   0.88341   0.42402   0   -0.045548
+5   1   0.11659   0.42402   0   -0.045548
+5   1   0.57598   0.38341   0   -0.045548
+5   1   0.42402   0.38341   0   -0.045548
+5   1   0.92402   0.11659   0   -0.045548
+5   1   0.07598   0.11659   0   -0.045548
+5   1   0.61659   0.07598   0   -0.045548
+5   1   0.38341   0.07598   0   -0.045548
+5   1   0.5   0.81855   0.96111   -0.045548
+5   1   0   0.68145   0.96111   -0.045548
+5   1   0.68145   0.5   0.96111   -0.045548
+5   1   0.31855   0.5   0.96111   -0.045548
+5   1   0   0.31855   0.96111   -0.045548
+5   1   0.5   0.18145   0.96111   -0.045548
+5   1   0.81855   0   0.96111   -0.045548
+5   1   0.18145   0   0.96111   -0.045548
+5   1   0   0.96111   0.81855   -0.045548
+5   1   0.5   0.53889   0.81855   -0.045548
+5   1   0.96111   0.5   0.81855   -0.045548
+5   1   0.03889   0.5   0.81855   -0.045548
+5   1   0.5   0.46111   0.81855   -0.045548
+5   1   0   0.03889   0.81855   -0.045548
+5   1   0.53889   0   0.81855   -0.045548
+5   1   0.46111   0   0.81855   -0.045548
+5   1   0.5   0.96111   0.68145   -0.045548
+5   1   0   0.53889   0.68145   -0.045548
+5   1   0.53889   0.5   0.68145   -0.045548
+5   1   0.46111   0.5   0.68145   -0.045548
+5   1   0   0.46111   0.68145   -0.045548
+5   1   0.5   0.03889   0.68145   -0.045548
+5   1   0.96111   0   0.68145   -0.045548
+5   1   0.03889   0   0.68145   -0.045548
+5   1   0   0.81855   0.53889   -0.045548
+5   1   0.5   0.68145   0.53889   -0.045548
+5   1   0.81855   0.5   0.53889   -0.045548
+5   1   0.18145   0.5   0.53889   -0.045548
+5   1   0.5   0.31855   0.53889   -0.045548
+5   1   0   0.18145   0.53889   -0.045548
+5   1   0.68145   0   0.53889   -0.045548
+5   1   0.31855   0   0.53889   -0.045548
+5   1   0.81855   0.96111   0.5   -0.045548
+5   1   0.18145   0.96111   0.5   -0.045548
+5   1   0.53889   0.81855   0.5   -0.045548
+5   1   0.46111   0.81855   0.5   -0.045548
+5   1   0.96111   0.68145   0.5   -0.045548
+5   1   0.03889   0.68145   0.5   -0.045548
+5   1   0.68145   0.53889   0.5   -0.045548
+5   1   0.31855   0.53889   0.5   -0.045548
+5   1   0.68145   0.46111   0.5   -0.045548
+5   1   0.31855   0.46111   0.5   -0.045548
+5   1   0.96111   0.31855   0.5   -0.045548
+5   1   0.03889   0.31855   0.5   -0.045548
+5   1   0.53889   0.18145   0.5   -0.045548
+5   1   0.46111   0.18145   0.5   -0.045548
+5   1   0.81855   0.03889   0.5   -0.045548
+5   1   0.18145   0.03889   0.5   -0.045548
+5   1   0   0.81855   0.46111   -0.045548
+5   1   0.5   0.68145   0.46111   -0.045548
+5   1   0.81855   0.5   0.46111   -0.045548
+5   1   0.18145   0.5   0.46111   -0.045548
+5   1   0.5   0.31855   0.46111   -0.045548
+5   1   0   0.18145   0.46111   -0.045548
+5   1   0.68145   0   0.46111   -0.045548
+5   1   0.31855   0   0.46111   -0.045548
+5   1   0.5   0.96111   0.31855   -0.045548
+5   1   0   0.53889   0.31855   -0.045548
+5   1   0.53889   0.5   0.31855   -0.045548
+5   1   0.46111   0.5   0.31855   -0.045548
+5   1   0   0.46111   0.31855   -0.045548
+5   1   0.5   0.03889   0.31855   -0.045548
+5   1   0.96111   0   0.31855   -0.045548
+5   1   0.03889   0   0.31855   -0.045548
+5   1   0   0.96111   0.18145   -0.045548
+5   1   0.5   0.53889   0.18145   -0.045548
+5   1   0.96111   0.5   0.18145   -0.045548
+5   1   0.03889   0.5   0.18145   -0.045548
+5   1   0.5   0.46111   0.18145   -0.045548
+5   1   0   0.03889   0.18145   -0.045548
+5   1   0.53889   0   0.18145   -0.045548
+5   1   0.46111   0   0.18145   -0.045548
+5   1   0.5   0.81855   0.03889   -0.045548
+5   1   0   0.68145   0.03889   -0.045548
+5   1   0.68145   0.5   0.03889   -0.045548
+5   1   0.31855   0.5   0.03889   -0.045548
+5   1   0   0.31855   0.03889   -0.045548
+5   1   0.5   0.18145   0.03889   -0.045548
+5   1   0.81855   0   0.03889   -0.045548
+5   1   0.18145   0   0.03889   -0.045548
+5   1   0.68145   0.96111   0   -0.045548
+5   1   0.31855   0.96111   0   -0.045548
+5   1   0.96111   0.81855   0   -0.045548
+5   1   0.03889   0.81855   0   -0.045548
+5   1   0.53889   0.68145   0   -0.045548
+5   1   0.46111   0.68145   0   -0.045548
+5   1   0.81855   0.53889   0   -0.045548
+5   1   0.18145   0.53889   0   -0.045548
+5   1   0.81855   0.46111   0   -0.045548
+5   1   0.18145   0.46111   0   -0.045548
+5   1   0.53889   0.31855   0   -0.045548
+5   1   0.46111   0.31855   0   -0.045548
+5   1   0.96111   0.18145   0   -0.045548
+5   1   0.03889   0.18145   0   -0.045548
+5   1   0.68145   0.03889   0   -0.045548
+5   1   0.31855   0.03889   0   -0.045548
+5   1   0.5   0.75812   0.85165   -0.045548
+5   1   0   0.74188   0.85165   -0.045548
+5   1   0.74188   0.5   0.85165   -0.045548
+5   1   0.25812   0.5   0.85165   -0.045548
+5   1   0   0.25812   0.85165   -0.045548
+5   1   0.5   0.24188   0.85165   -0.045548
+5   1   0.75812   0   0.85165   -0.045548
+5   1   0.24188   0   0.85165   -0.045548
+5   1   0   0.85165   0.75812   -0.045548
+5   1   0.5   0.64835   0.75812   -0.045548
+5   1   0.85165   0.5   0.75812   -0.045548
+5   1   0.14835   0.5   0.75812   -0.045548
+5   1   0.5   0.35165   0.75812   -0.045548
+5   1   0   0.14835   0.75812   -0.045548
+5   1   0.64835   0   0.75812   -0.045548
+5   1   0.35165   0   0.75812   -0.045548
+5   1   0.5   0.85165   0.74188   -0.045548
+5   1   0   0.64835   0.74188   -0.045548
+5   1   0.64835   0.5   0.74188   -0.045548
+5   1   0.35165   0.5   0.74188   -0.045548
+5   1   0   0.35165   0.74188   -0.045548
+5   1   0.5   0.14835   0.74188   -0.045548
+5   1   0.85165   0   0.74188   -0.045548
+5   1   0.14835   0   0.74188   -0.045548
+5   1   0   0.75812   0.64835   -0.045548
+5   1   0.5   0.74188   0.64835   -0.045548
+5   1   0.75812   0.5   0.64835   -0.045548
+5   1   0.24188   0.5   0.64835   -0.045548
+5   1   0.5   0.25812   0.64835   -0.045548
+5   1   0   0.24188   0.64835   -0.045548
+5   1   0.74188   0   0.64835   -0.045548
+5   1   0.25812   0   0.64835   -0.045548
+5   1   0.75812   0.85165   0.5   -0.045548
+5   1   0.24188   0.85165   0.5   -0.045548
+5   1   0.64835   0.75812   0.5   -0.045548
+5   1   0.35165   0.75812   0.5   -0.045548
+5   1   0.85165   0.74188   0.5   -0.045548
+5   1   0.14835   0.74188   0.5   -0.045548
+5   1   0.74188   0.64835   0.5   -0.045548
+5   1   0.25812   0.64835   0.5   -0.045548
+5   1   0.74188   0.35165   0.5   -0.045548
+5   1   0.25812   0.35165   0.5   -0.045548
+5   1   0.85165   0.25812   0.5   -0.045548
+5   1   0.14835   0.25812   0.5   -0.045548
+5   1   0.64835   0.24188   0.5   -0.045548
+5   1   0.35165   0.24188   0.5   -0.045548
+5   1   0.75812   0.14835   0.5   -0.045548
+5   1   0.24188   0.14835   0.5   -0.045548
+5   1   0   0.75812   0.35165   -0.045548
+5   1   0.5   0.74188   0.35165   -0.045548
+5   1   0.75812   0.5   0.35165   -0.045548
+5   1   0.24188   0.5   0.35165   -0.045548
+5   1   0.5   0.25812   0.35165   -0.045548
+5   1   0   0.24188   0.35165   -0.045548
+5   1   0.74188   0   0.35165   -0.045548
+5   1   0.25812   0   0.35165   -0.045548
+5   1   0.5   0.85165   0.25812   -0.045548
+5   1   0   0.64835   0.25812   -0.045548
+5   1   0.64835   0.5   0.25812   -0.045548
+5   1   0.35165   0.5   0.25812   -0.045548
+5   1   0   0.35165   0.25812   -0.045548
+5   1   0.5   0.14835   0.25812   -0.045548
+5   1   0.85165   0   0.25812   -0.045548
+5   1   0.14835   0   0.25812   -0.045548
+5   1   0   0.85165   0.24188   -0.045548
+5   1   0.5   0.64835   0.24188   -0.045548
+5   1   0.85165   0.5   0.24188   -0.045548
+5   1   0.14835   0.5   0.24188   -0.045548
+5   1   0.5   0.35165   0.24188   -0.045548
+5   1   0   0.14835   0.24188   -0.045548
+5   1   0.64835   0   0.24188   -0.045548
+5   1   0.35165   0   0.24188   -0.045548
+5   1   0.5   0.75812   0.14835   -0.045548
+5   1   0   0.74188   0.14835   -0.045548
+5   1   0.74188   0.5   0.14835   -0.045548
+5   1   0.25812   0.5   0.14835   -0.045548
+5   1   0   0.25812   0.14835   -0.045548
+5   1   0.5   0.24188   0.14835   -0.045548
+5   1   0.75812   0   0.14835   -0.045548
+5   1   0.24188   0   0.14835   -0.045548
+5   1   0.74188   0.85165   0   -0.045548
+5   1   0.25812   0.85165   0   -0.045548
+5   1   0.85165   0.75812   0   -0.045548
+5   1   0.14835   0.75812   0   -0.045548
+5   1   0.64835   0.74188   0   -0.045548
+5   1   0.35165   0.74188   0   -0.045548
+5   1   0.75812   0.64835   0   -0.045548
+5   1   0.24188   0.64835   0   -0.045548
+5   1   0.75812   0.35165   0   -0.045548
+5   1   0.24188   0.35165   0   -0.045548
+5   1   0.64835   0.25812   0   -0.045548
+5   1   0.35165   0.25812   0   -0.045548
+5   1   0.85165   0.24188   0   -0.045548
+5   1   0.14835   0.24188   0   -0.045548
+5   1   0.74188   0.14835   0   -0.045548
+5   1   0.25812   0.14835   0   -0.045548
+5   1   0   0.81407   0.82814   -0.045548
+5   1   0.5   0.68593   0.82814   -0.045548
+5   1   0.81407   0.5   0.82814   -0.045548
+5   1   0.18593   0.5   0.82814   -0.045548
+5   1   0.5   0.31407   0.82814   -0.045548
+5   1   0   0.18593   0.82814   -0.045548
+5   1   0.68593   0   0.82814   -0.045548
+5   1   0.31407   0   0.82814   -0.045548
+5   1   0.5   0.82814   0.81407   -0.045548
+5   1   0   0.67186   0.81407   -0.045548
+5   1   0.67186   0.5   0.81407   -0.045548
+5   1   0.32814   0.5   0.81407   -0.045548
+5   1   0   0.32814   0.81407   -0.045548
+5   1   0.5   0.17186   0.81407   -0.045548
+5   1   0.82814   0   0.81407   -0.045548
+5   1   0.17186   0   0.81407   -0.045548
+5   1   0   0.82814   0.68593   -0.045548
+5   1   0.5   0.67186   0.68593   -0.045548
+5   1   0.82814   0.5   0.68593   -0.045548
+5   1   0.17186   0.5   0.68593   -0.045548
+5   1   0.5   0.32814   0.68593   -0.045548
+5   1   0   0.17186   0.68593   -0.045548
+5   1   0.67186   0   0.68593   -0.045548
+5   1   0.32814   0   0.68593   -0.045548
+5   1   0.5   0.81407   0.67186   -0.045548
+5   1   0   0.68593   0.67186   -0.045548
+5   1   0.68593   0.5   0.67186   -0.045548
+5   1   0.31407   0.5   0.67186   -0.045548
+5   1   0   0.31407   0.67186   -0.045548
+5   1   0.5   0.18593   0.67186   -0.045548
+5   1   0.81407   0   0.67186   -0.045548
+5   1   0.18593   0   0.67186   -0.045548
+5   1   0.68593   0.82814   0.5   -0.045548
+5   1   0.31407   0.82814   0.5   -0.045548
+5   1   0.82814   0.81407   0.5   -0.045548
+5   1   0.17186   0.81407   0.5   -0.045548
+5   1   0.67186   0.68593   0.5   -0.045548
+5   1   0.32814   0.68593   0.5   -0.045548
+5   1   0.81407   0.67186   0.5   -0.045548
+5   1   0.18593   0.67186   0.5   -0.045548
+5   1   0.81407   0.32814   0.5   -0.045548
+5   1   0.18593   0.32814   0.5   -0.045548
+5   1   0.67186   0.31407   0.5   -0.045548
+5   1   0.32814   0.31407   0.5   -0.045548
+5   1   0.82814   0.18593   0.5   -0.045548
+5   1   0.17186   0.18593   0.5   -0.045548
+5   1   0.68593   0.17186   0.5   -0.045548
+5   1   0.31407   0.17186   0.5   -0.045548
+5   1   0.5   0.81407   0.32814   -0.045548
+5   1   0   0.68593   0.32814   -0.045548
+5   1   0.68593   0.5   0.32814   -0.045548
+5   1   0.31407   0.5   0.32814   -0.045548
+5   1   0   0.31407   0.32814   -0.045548
+5   1   0.5   0.18593   0.32814   -0.045548
+5   1   0.81407   0   0.32814   -0.045548
+5   1   0.18593   0   0.32814   -0.045548
+5   1   0   0.82814   0.31407   -0.045548
+5   1   0.5   0.67186   0.31407   -0.045548
+5   1   0.82814   0.5   0.31407   -0.045548
+5   1   0.17186   0.5   0.31407   -0.045548
+5   1   0.5   0.32814   0.31407   -0.045548
+5   1   0   0.17186   0.31407   -0.045548
+5   1   0.67186   0   0.31407   -0.045548
+5   1   0.32814   0   0.31407   -0.045548
+5   1   0.5   0.82814   0.18593   -0.045548
+5   1   0   0.67186   0.18593   -0.045548
+5   1   0.67186   0.5   0.18593   -0.045548
+5   1   0.32814   0.5   0.18593   -0.045548
+5   1   0   0.32814   0.18593   -0.045548
+5   1   0.5   0.17186   0.18593   -0.045548
+5   1   0.82814   0   0.18593   -0.045548
+5   1   0.17186   0   0.18593   -0.045548
+5   1   0   0.81407   0.17186   -0.045548
+5   1   0.5   0.68593   0.17186   -0.045548
+5   1   0.81407   0.5   0.17186   -0.045548
+5   1   0.18593   0.5   0.17186   -0.045548
+5   1   0.5   0.31407   0.17186   -0.045548
+5   1   0   0.18593   0.17186   -0.045548
+5   1   0.68593   0   0.17186   -0.045548
+5   1   0.31407   0   0.17186   -0.045548
+5   1   0.81407   0.82814   0   -0.045548
+5   1   0.18593   0.82814   0   -0.045548
+5   1   0.67186   0.81407   0   -0.045548
+5   1   0.32814   0.81407   0   -0.045548
+5   1   0.82814   0.68593   0   -0.045548
+5   1   0.17186   0.68593   0   -0.045548
+5   1   0.68593   0.67186   0   -0.045548
+5   1   0.31407   0.67186   0   -0.045548
+5   1   0.68593   0.32814   0   -0.045548
+5   1   0.31407   0.32814   0   -0.045548
+5   1   0.82814   0.31407   0   -0.045548
+5   1   0.17186   0.31407   0   -0.045548
+5   1   0.67186   0.18593   0   -0.045548
+5   1   0.32814   0.18593   0   -0.045548
+5   1   0.81407   0.17186   0   -0.045548
+5   1   0.18593   0.17186   0   -0.045548
+5   1   0.85973   0.87837   0.96155   -0.045548
+5   1   0.14027   0.87837   0.96155   -0.045548
+5   1   0.62163   0.85973   0.96155   -0.045548
+5   1   0.37837   0.85973   0.96155   -0.045548
+5   1   0.87837   0.64027   0.96155   -0.045548
+5   1   0.12163   0.64027   0.96155   -0.045548
+5   1   0.64027   0.62163   0.96155   -0.045548
+5   1   0.35973   0.62163   0.96155   -0.045548
+5   1   0.64027   0.37837   0.96155   -0.045548
+5   1   0.35973   0.37837   0.96155   -0.045548
+5   1   0.87837   0.35973   0.96155   -0.045548
+5   1   0.12163   0.35973   0.96155   -0.045548
+5   1   0.62163   0.14027   0.96155   -0.045548
+5   1   0.37837   0.14027   0.96155   -0.045548
+5   1   0.85973   0.12163   0.96155   -0.045548
+5   1   0.14027   0.12163   0.96155   -0.045548
+5   1   0.64027   0.96155   0.87837   -0.045548
+5   1   0.35973   0.96155   0.87837   -0.045548
+5   1   0.96155   0.85973   0.87837   -0.045548
+5   1   0.03845   0.85973   0.87837   -0.045548
+5   1   0.53845   0.64027   0.87837   -0.045548
+5   1   0.46155   0.64027   0.87837   -0.045548
+5   1   0.85973   0.53845   0.87837   -0.045548
+5   1   0.14027   0.53845   0.87837   -0.045548
+5   1   0.85973   0.46155   0.87837   -0.045548
+5   1   0.14027   0.46155   0.87837   -0.045548
+5   1   0.53845   0.35973   0.87837   -0.045548
+5   1   0.46155   0.35973   0.87837   -0.045548
+5   1   0.96155   0.14027   0.87837   -0.045548
+5   1   0.03845   0.14027   0.87837   -0.045548
+5   1   0.64027   0.03845   0.87837   -0.045548
+5   1   0.35973   0.03845   0.87837   -0.045548
+5   1   0.87837   0.96155   0.85973   -0.045548
+5   1   0.12163   0.96155   0.85973   -0.045548
+5   1   0.53845   0.87837   0.85973   -0.045548
+5   1   0.46155   0.87837   0.85973   -0.045548
+5   1   0.96155   0.62163   0.85973   -0.045548
+5   1   0.03845   0.62163   0.85973   -0.045548
+5   1   0.62163   0.53845   0.85973   -0.045548
+5   1   0.37837   0.53845   0.85973   -0.045548
+5   1   0.62163   0.46155   0.85973   -0.045548
+5   1   0.37837   0.46155   0.85973   -0.045548
+5   1   0.96155   0.37837   0.85973   -0.045548
+5   1   0.03845   0.37837   0.85973   -0.045548
+5   1   0.53845   0.12163   0.85973   -0.045548
+5   1   0.46155   0.12163   0.85973   -0.045548
+5   1   0.87837   0.03845   0.85973   -0.045548
+5   1   0.12163   0.03845   0.85973   -0.045548
+5   1   0.62163   0.96155   0.64027   -0.045548
+5   1   0.37837   0.96155   0.64027   -0.045548
+5   1   0.96155   0.87837   0.64027   -0.045548
+5   1   0.03845   0.87837   0.64027   -0.045548
+5   1   0.53845   0.62163   0.64027   -0.045548
+5   1   0.46155   0.62163   0.64027   -0.045548
+5   1   0.87837   0.53845   0.64027   -0.045548
+5   1   0.12163   0.53845   0.64027   -0.045548
+5   1   0.87837   0.46155   0.64027   -0.045548
+5   1   0.12163   0.46155   0.64027   -0.045548
+5   1   0.53845   0.37837   0.64027   -0.045548
+5   1   0.46155   0.37837   0.64027   -0.045548
+5   1   0.96155   0.12163   0.64027   -0.045548
+5   1   0.03845   0.12163   0.64027   -0.045548
+5   1   0.62163   0.03845   0.64027   -0.045548
+5   1   0.37837   0.03845   0.64027   -0.045548
+5   1   0.85973   0.96155   0.62163   -0.045548
+5   1   0.14027   0.96155   0.62163   -0.045548
+5   1   0.53845   0.85973   0.62163   -0.045548
+5   1   0.46155   0.85973   0.62163   -0.045548
+5   1   0.96155   0.64027   0.62163   -0.045548
+5   1   0.03845   0.64027   0.62163   -0.045548
+5   1   0.64027   0.53845   0.62163   -0.045548
+5   1   0.35973   0.53845   0.62163   -0.045548
+5   1   0.64027   0.46155   0.62163   -0.045548
+5   1   0.35973   0.46155   0.62163   -0.045548
+5   1   0.96155   0.35973   0.62163   -0.045548
+5   1   0.03845   0.35973   0.62163   -0.045548
+5   1   0.53845   0.14027   0.62163   -0.045548
+5   1   0.46155   0.14027   0.62163   -0.045548
+5   1   0.85973   0.03845   0.62163   -0.045548
+5   1   0.14027   0.03845   0.62163   -0.045548
+5   1   0.64027   0.87837   0.53845   -0.045548
+5   1   0.35973   0.87837   0.53845   -0.045548
+5   1   0.87837   0.85973   0.53845   -0.045548
+5   1   0.12163   0.85973   0.53845   -0.045548
+5   1   0.62163   0.64027   0.53845   -0.045548
+5   1   0.37837   0.64027   0.53845   -0.045548
+5   1   0.85973   0.62163   0.53845   -0.045548
+5   1   0.14027   0.62163   0.53845   -0.045548
+5   1   0.85973   0.37837   0.53845   -0.045548
+5   1   0.14027   0.37837   0.53845   -0.045548
+5   1   0.62163   0.35973   0.53845   -0.045548
+5   1   0.37837   0.35973   0.53845   -0.045548
+5   1   0.87837   0.14027   0.53845   -0.045548
+5   1   0.12163   0.14027   0.53845   -0.045548
+5   1   0.64027   0.12163   0.53845   -0.045548
+5   1   0.35973   0.12163   0.53845   -0.045548
+5   1   0.64027   0.87837   0.46155   -0.045548
+5   1   0.35973   0.87837   0.46155   -0.045548
+5   1   0.87837   0.85973   0.46155   -0.045548
+5   1   0.12163   0.85973   0.46155   -0.045548
+5   1   0.62163   0.64027   0.46155   -0.045548
+5   1   0.37837   0.64027   0.46155   -0.045548
+5   1   0.85973   0.62163   0.46155   -0.045548
+5   1   0.14027   0.62163   0.46155   -0.045548
+5   1   0.85973   0.37837   0.46155   -0.045548
+5   1   0.14027   0.37837   0.46155   -0.045548
+5   1   0.62163   0.35973   0.46155   -0.045548
+5   1   0.37837   0.35973   0.46155   -0.045548
+5   1   0.87837   0.14027   0.46155   -0.045548
+5   1   0.12163   0.14027   0.46155   -0.045548
+5   1   0.64027   0.12163   0.46155   -0.045548
+5   1   0.35973   0.12163   0.46155   -0.045548
+5   1   0.85973   0.96155   0.37837   -0.045548
+5   1   0.14027   0.96155   0.37837   -0.045548
+5   1   0.53845   0.85973   0.37837   -0.045548
+5   1   0.46155   0.85973   0.37837   -0.045548
+5   1   0.96155   0.64027   0.37837   -0.045548
+5   1   0.03845   0.64027   0.37837   -0.045548
+5   1   0.64027   0.53845   0.37837   -0.045548
+5   1   0.35973   0.53845   0.37837   -0.045548
+5   1   0.64027   0.46155   0.37837   -0.045548
+5   1   0.35973   0.46155   0.37837   -0.045548
+5   1   0.96155   0.35973   0.37837   -0.045548
+5   1   0.03845   0.35973   0.37837   -0.045548
+5   1   0.53845   0.14027   0.37837   -0.045548
+5   1   0.46155   0.14027   0.37837   -0.045548
+5   1   0.85973   0.03845   0.37837   -0.045548
+5   1   0.14027   0.03845   0.37837   -0.045548
+5   1   0.62163   0.96155   0.35973   -0.045548
+5   1   0.37837   0.96155   0.35973   -0.045548
+5   1   0.96155   0.87837   0.35973   -0.045548
+5   1   0.03845   0.87837   0.35973   -0.045548
+5   1   0.53845   0.62163   0.35973   -0.045548
+5   1   0.46155   0.62163   0.35973   -0.045548
+5   1   0.87837   0.53845   0.35973   -0.045548
+5   1   0.12163   0.53845   0.35973   -0.045548
+5   1   0.87837   0.46155   0.35973   -0.045548
+5   1   0.12163   0.46155   0.35973   -0.045548
+5   1   0.53845   0.37837   0.35973   -0.045548
+5   1   0.46155   0.37837   0.35973   -0.045548
+5   1   0.96155   0.12163   0.35973   -0.045548
+5   1   0.03845   0.12163   0.35973   -0.045548
+5   1   0.62163   0.03845   0.35973   -0.045548
+5   1   0.37837   0.03845   0.35973   -0.045548
+5   1   0.87837   0.96155   0.14027   -0.045548
+5   1   0.12163   0.96155   0.14027   -0.045548
+5   1   0.53845   0.87837   0.14027   -0.045548
+5   1   0.46155   0.87837   0.14027   -0.045548
+5   1   0.96155   0.62163   0.14027   -0.045548
+5   1   0.03845   0.62163   0.14027   -0.045548
+5   1   0.62163   0.53845   0.14027   -0.045548
+5   1   0.37837   0.53845   0.14027   -0.045548
+5   1   0.62163   0.46155   0.14027   -0.045548
+5   1   0.37837   0.46155   0.14027   -0.045548
+5   1   0.96155   0.37837   0.14027   -0.045548
+5   1   0.03845   0.37837   0.14027   -0.045548
+5   1   0.53845   0.12163   0.14027   -0.045548
+5   1   0.46155   0.12163   0.14027   -0.045548
+5   1   0.87837   0.03845   0.14027   -0.045548
+5   1   0.12163   0.03845   0.14027   -0.045548
+5   1   0.64027   0.96155   0.12163   -0.045548
+5   1   0.35973   0.96155   0.12163   -0.045548
+5   1   0.96155   0.85973   0.12163   -0.045548
+5   1   0.03845   0.85973   0.12163   -0.045548
+5   1   0.53845   0.64027   0.12163   -0.045548
+5   1   0.46155   0.64027   0.12163   -0.045548
+5   1   0.85973   0.53845   0.12163   -0.045548
+5   1   0.14027   0.53845   0.12163   -0.045548
+5   1   0.85973   0.46155   0.12163   -0.045548
+5   1   0.14027   0.46155   0.12163   -0.045548
+5   1   0.53845   0.35973   0.12163   -0.045548
+5   1   0.46155   0.35973   0.12163   -0.045548
+5   1   0.96155   0.14027   0.12163   -0.045548
+5   1   0.03845   0.14027   0.12163   -0.045548
+5   1   0.64027   0.03845   0.12163   -0.045548
+5   1   0.35973   0.03845   0.12163   -0.045548
+5   1   0.85973   0.87837   0.03845   -0.045548
+5   1   0.14027   0.87837   0.03845   -0.045548
+5   1   0.62163   0.85973   0.03845   -0.045548
+5   1   0.37837   0.85973   0.03845   -0.045548
+5   1   0.87837   0.64027   0.03845   -0.045548
+5   1   0.12163   0.64027   0.03845   -0.045548
+5   1   0.64027   0.62163   0.03845   -0.045548
+5   1   0.35973   0.62163   0.03845   -0.045548
+5   1   0.64027   0.37837   0.03845   -0.045548
+5   1   0.35973   0.37837   0.03845   -0.045548
+5   1   0.87837   0.35973   0.03845   -0.045548
+5   1   0.12163   0.35973   0.03845   -0.045548
+5   1   0.62163   0.14027   0.03845   -0.045548
+5   1   0.37837   0.14027   0.03845   -0.045548
+5   1   0.85973   0.12163   0.03845   -0.045548
+5   1   0.14027   0.12163   0.03845   -0.045548
+5   1   0.72939   0.91829   0.96079   -0.045548
+5   1   0.27061   0.91829   0.96079   -0.045548
+5   1   0.91829   0.77061   0.96079   -0.045548
+5   1   0.08171   0.77061   0.96079   -0.045548
+5   1   0.58171   0.72939   0.96079   -0.045548
+5   1   0.41829   0.72939   0.96079   -0.045548
+5   1   0.77061   0.58171   0.96079   -0.045548
+5   1   0.22939   0.58171   0.96079   -0.045548
+5   1   0.77061   0.41829   0.96079   -0.045548
+5   1   0.22939   0.41829   0.96079   -0.045548
+5   1   0.58171   0.27061   0.96079   -0.045548
+5   1   0.41829   0.27061   0.96079   -0.045548
+5   1   0.91829   0.22939   0.96079   -0.045548
+5   1   0.08171   0.22939   0.96079   -0.045548
+5   1   0.72939   0.08171   0.96079   -0.045548
+5   1   0.27061   0.08171   0.96079   -0.045548
+5   1   0.77061   0.96079   0.91829   -0.045548
+5   1   0.22939   0.96079   0.91829   -0.045548
+5   1   0.53921   0.77061   0.91829   -0.045548
+5   1   0.46079   0.77061   0.91829   -0.045548
+5   1   0.96079   0.72939   0.91829   -0.045548
+5   1   0.03921   0.72939   0.91829   -0.045548
+5   1   0.72939   0.53921   0.91829   -0.045548
+5   1   0.27061   0.53921   0.91829   -0.045548
+5   1   0.72939   0.46079   0.91829   -0.045548
+5   1   0.27061   0.46079   0.91829   -0.045548
+5   1   0.96079   0.27061   0.91829   -0.045548
+5   1   0.03921   0.27061   0.91829   -0.045548
+5   1   0.53921   0.22939   0.91829   -0.045548
+5   1   0.46079   0.22939   0.91829   -0.045548
+5   1   0.77061   0.03921   0.91829   -0.045548
+5   1   0.22939   0.03921   0.91829   -0.045548
+5   1   0.58171   0.96079   0.77061   -0.045548
+5   1   0.41829   0.96079   0.77061   -0.045548
+5   1   0.96079   0.91829   0.77061   -0.045548
+5   1   0.03921   0.91829   0.77061   -0.045548
+5   1   0.53921   0.58171   0.77061   -0.045548
+5   1   0.46079   0.58171   0.77061   -0.045548
+5   1   0.91829   0.53921   0.77061   -0.045548
+5   1   0.08171   0.53921   0.77061   -0.045548
+5   1   0.91829   0.46079   0.77061   -0.045548
+5   1   0.08171   0.46079   0.77061   -0.045548
+5   1   0.53921   0.41829   0.77061   -0.045548
+5   1   0.46079   0.41829   0.77061   -0.045548
+5   1   0.96079   0.08171   0.77061   -0.045548
+5   1   0.03921   0.08171   0.77061   -0.045548
+5   1   0.58171   0.03921   0.77061   -0.045548
+5   1   0.41829   0.03921   0.77061   -0.045548
+5   1   0.91829   0.96079   0.72939   -0.045548
+5   1   0.08171   0.96079   0.72939   -0.045548
+5   1   0.53921   0.91829   0.72939   -0.045548
+5   1   0.46079   0.91829   0.72939   -0.045548
+5   1   0.96079   0.58171   0.72939   -0.045548
+5   1   0.03921   0.58171   0.72939   -0.045548
+5   1   0.58171   0.53921   0.72939   -0.045548
+5   1   0.41829   0.53921   0.72939   -0.045548
+5   1   0.58171   0.46079   0.72939   -0.045548
+5   1   0.41829   0.46079   0.72939   -0.045548
+5   1   0.96079   0.41829   0.72939   -0.045548
+5   1   0.03921   0.41829   0.72939   -0.045548
+5   1   0.53921   0.08171   0.72939   -0.045548
+5   1   0.46079   0.08171   0.72939   -0.045548
+5   1   0.91829   0.03921   0.72939   -0.045548
+5   1   0.08171   0.03921   0.72939   -0.045548
+5   1   0.72939   0.96079   0.58171   -0.045548
+5   1   0.27061   0.96079   0.58171   -0.045548
+5   1   0.96079   0.77061   0.58171   -0.045548
+5   1   0.03921   0.77061   0.58171   -0.045548
+5   1   0.53921   0.72939   0.58171   -0.045548
+5   1   0.46079   0.72939   0.58171   -0.045548
+5   1   0.77061   0.53921   0.58171   -0.045548
+5   1   0.22939   0.53921   0.58171   -0.045548
+5   1   0.77061   0.46079   0.58171   -0.045548
+5   1   0.22939   0.46079   0.58171   -0.045548
+5   1   0.53921   0.27061   0.58171   -0.045548
+5   1   0.46079   0.27061   0.58171   -0.045548
+5   1   0.96079   0.22939   0.58171   -0.045548
+5   1   0.03921   0.22939   0.58171   -0.045548
+5   1   0.72939   0.03921   0.58171   -0.045548
+5   1   0.27061   0.03921   0.58171   -0.045548
+5   1   0.77061   0.91829   0.53921   -0.045548
+5   1   0.22939   0.91829   0.53921   -0.045548
+5   1   0.58171   0.77061   0.53921   -0.045548
+5   1   0.41829   0.77061   0.53921   -0.045548
+5   1   0.91829   0.72939   0.53921   -0.045548
+5   1   0.08171   0.72939   0.53921   -0.045548
+5   1   0.72939   0.58171   0.53921   -0.045548
+5   1   0.27061   0.58171   0.53921   -0.045548
+5   1   0.72939   0.41829   0.53921   -0.045548
+5   1   0.27061   0.41829   0.53921   -0.045548
+5   1   0.91829   0.27061   0.53921   -0.045548
+5   1   0.08171   0.27061   0.53921   -0.045548
+5   1   0.58171   0.22939   0.53921   -0.045548
+5   1   0.41829   0.22939   0.53921   -0.045548
+5   1   0.77061   0.08171   0.53921   -0.045548
+5   1   0.22939   0.08171   0.53921   -0.045548
+5   1   0.77061   0.91829   0.46079   -0.045548
+5   1   0.22939   0.91829   0.46079   -0.045548
+5   1   0.58171   0.77061   0.46079   -0.045548
+5   1   0.41829   0.77061   0.46079   -0.045548
+5   1   0.91829   0.72939   0.46079   -0.045548
+5   1   0.08171   0.72939   0.46079   -0.045548
+5   1   0.72939   0.58171   0.46079   -0.045548
+5   1   0.27061   0.58171   0.46079   -0.045548
+5   1   0.72939   0.41829   0.46079   -0.045548
+5   1   0.27061   0.41829   0.46079   -0.045548
+5   1   0.91829   0.27061   0.46079   -0.045548
+5   1   0.08171   0.27061   0.46079   -0.045548
+5   1   0.58171   0.22939   0.46079   -0.045548
+5   1   0.41829   0.22939   0.46079   -0.045548
+5   1   0.77061   0.08171   0.46079   -0.045548
+5   1   0.22939   0.08171   0.46079   -0.045548
+5   1   0.72939   0.96079   0.41829   -0.045548
+5   1   0.27061   0.96079   0.41829   -0.045548
+5   1   0.96079   0.77061   0.41829   -0.045548
+5   1   0.03921   0.77061   0.41829   -0.045548
+5   1   0.53921   0.72939   0.41829   -0.045548
+5   1   0.46079   0.72939   0.41829   -0.045548
+5   1   0.77061   0.53921   0.41829   -0.045548
+5   1   0.22939   0.53921   0.41829   -0.045548
+5   1   0.77061   0.46079   0.41829   -0.045548
+5   1   0.22939   0.46079   0.41829   -0.045548
+5   1   0.53921   0.27061   0.41829   -0.045548
+5   1   0.46079   0.27061   0.41829   -0.045548
+5   1   0.96079   0.22939   0.41829   -0.045548
+5   1   0.03921   0.22939   0.41829   -0.045548
+5   1   0.72939   0.03921   0.41829   -0.045548
+5   1   0.27061   0.03921   0.41829   -0.045548
+5   1   0.91829   0.96079   0.27061   -0.045548
+5   1   0.08171   0.96079   0.27061   -0.045548
+5   1   0.53921   0.91829   0.27061   -0.045548
+5   1   0.46079   0.91829   0.27061   -0.045548
+5   1   0.96079   0.58171   0.27061   -0.045548
+5   1   0.03921   0.58171   0.27061   -0.045548
+5   1   0.58171   0.53921   0.27061   -0.045548
+5   1   0.41829   0.53921   0.27061   -0.045548
+5   1   0.58171   0.46079   0.27061   -0.045548
+5   1   0.41829   0.46079   0.27061   -0.045548
+5   1   0.96079   0.41829   0.27061   -0.045548
+5   1   0.03921   0.41829   0.27061   -0.045548
+5   1   0.53921   0.08171   0.27061   -0.045548
+5   1   0.46079   0.08171   0.27061   -0.045548
+5   1   0.91829   0.03921   0.27061   -0.045548
+5   1   0.08171   0.03921   0.27061   -0.045548
+5   1   0.58171   0.96079   0.22939   -0.045548
+5   1   0.41829   0.96079   0.22939   -0.045548
+5   1   0.96079   0.91829   0.22939   -0.045548
+5   1   0.03921   0.91829   0.22939   -0.045548
+5   1   0.53921   0.58171   0.22939   -0.045548
+5   1   0.46079   0.58171   0.22939   -0.045548
+5   1   0.91829   0.53921   0.22939   -0.045548
+5   1   0.08171   0.53921   0.22939   -0.045548
+5   1   0.91829   0.46079   0.22939   -0.045548
+5   1   0.08171   0.46079   0.22939   -0.045548
+5   1   0.53921   0.41829   0.22939   -0.045548
+5   1   0.46079   0.41829   0.22939   -0.045548
+5   1   0.96079   0.08171   0.22939   -0.045548
+5   1   0.03921   0.08171   0.22939   -0.045548
+5   1   0.58171   0.03921   0.22939   -0.045548
+5   1   0.41829   0.03921   0.22939   -0.045548
+5   1   0.77061   0.96079   0.08171   -0.045548
+5   1   0.22939   0.96079   0.08171   -0.045548
+5   1   0.53921   0.77061   0.08171   -0.045548
+5   1   0.46079   0.77061   0.08171   -0.045548
+5   1   0.96079   0.72939   0.08171   -0.045548
+5   1   0.03921   0.72939   0.08171   -0.045548
+5   1   0.72939   0.53921   0.08171   -0.045548
+5   1   0.27061   0.53921   0.08171   -0.045548
+5   1   0.72939   0.46079   0.08171   -0.045548
+5   1   0.27061   0.46079   0.08171   -0.045548
+5   1   0.96079   0.27061   0.08171   -0.045548
+5   1   0.03921   0.27061   0.08171   -0.045548
+5   1   0.53921   0.22939   0.08171   -0.045548
+5   1   0.46079   0.22939   0.08171   -0.045548
+5   1   0.77061   0.03921   0.08171   -0.045548
+5   1   0.22939   0.03921   0.08171   -0.045548
+5   1   0.72939   0.91829   0.03921   -0.045548
+5   1   0.27061   0.91829   0.03921   -0.045548
+5   1   0.91829   0.77061   0.03921   -0.045548
+5   1   0.08171   0.77061   0.03921   -0.045548
+5   1   0.58171   0.72939   0.03921   -0.045548
+5   1   0.41829   0.72939   0.03921   -0.045548
+5   1   0.77061   0.58171   0.03921   -0.045548
+5   1   0.22939   0.58171   0.03921   -0.045548
+5   1   0.77061   0.41829   0.03921   -0.045548
+5   1   0.22939   0.41829   0.03921   -0.045548
+5   1   0.58171   0.27061   0.03921   -0.045548
+5   1   0.41829   0.27061   0.03921   -0.045548
+5   1   0.91829   0.22939   0.03921   -0.045548
+5   1   0.08171   0.22939   0.03921   -0.045548
+5   1   0.72939   0.08171   0.03921   -0.045548
+5   1   0.27061   0.08171   0.03921   -0.045548
+5   1   0.6586   0.92252   0.93694   -0.045548
+5   1   0.3414   0.92252   0.93694   -0.045548
+5   1   0.92252   0.8414   0.93694   -0.045548
+5   1   0.07748   0.8414   0.93694   -0.045548
+5   1   0.57748   0.6586   0.93694   -0.045548
+5   1   0.42252   0.6586   0.93694   -0.045548
+5   1   0.8414   0.57748   0.93694   -0.045548
+5   1   0.1586   0.57748   0.93694   -0.045548
+5   1   0.8414   0.42252   0.93694   -0.045548
+5   1   0.1586   0.42252   0.93694   -0.045548
+5   1   0.57748   0.3414   0.93694   -0.045548
+5   1   0.42252   0.3414   0.93694   -0.045548
+5   1   0.92252   0.1586   0.93694   -0.045548
+5   1   0.07748   0.1586   0.93694   -0.045548
+5   1   0.6586   0.07748   0.93694   -0.045548
+5   1   0.3414   0.07748   0.93694   -0.045548
+5   1   0.8414   0.93694   0.92252   -0.045548
+5   1   0.1586   0.93694   0.92252   -0.045548
+5   1   0.56306   0.8414   0.92252   -0.045548
+5   1   0.43694   0.8414   0.92252   -0.045548
+5   1   0.93694   0.6586   0.92252   -0.045548
+5   1   0.06306   0.6586   0.92252   -0.045548
+5   1   0.6586   0.56306   0.92252   -0.045548
+5   1   0.3414   0.56306   0.92252   -0.045548
+5   1   0.6586   0.43694   0.92252   -0.045548
+5   1   0.3414   0.43694   0.92252   -0.045548
+5   1   0.93694   0.3414   0.92252   -0.045548
+5   1   0.06306   0.3414   0.92252   -0.045548
+5   1   0.56306   0.1586   0.92252   -0.045548
+5   1   0.43694   0.1586   0.92252   -0.045548
+5   1   0.8414   0.06306   0.92252   -0.045548
+5   1   0.1586   0.06306   0.92252   -0.045548
+5   1   0.57748   0.93694   0.8414   -0.045548
+5   1   0.42252   0.93694   0.8414   -0.045548
+5   1   0.93694   0.92252   0.8414   -0.045548
+5   1   0.06306   0.92252   0.8414   -0.045548
+5   1   0.56306   0.57748   0.8414   -0.045548
+5   1   0.43694   0.57748   0.8414   -0.045548
+5   1   0.92252   0.56306   0.8414   -0.045548
+5   1   0.07748   0.56306   0.8414   -0.045548
+5   1   0.92252   0.43694   0.8414   -0.045548
+5   1   0.07748   0.43694   0.8414   -0.045548
+5   1   0.56306   0.42252   0.8414   -0.045548
+5   1   0.43694   0.42252   0.8414   -0.045548
+5   1   0.93694   0.07748   0.8414   -0.045548
+5   1   0.06306   0.07748   0.8414   -0.045548
+5   1   0.57748   0.06306   0.8414   -0.045548
+5   1   0.42252   0.06306   0.8414   -0.045548
+5   1   0.92252   0.93694   0.6586   -0.045548
+5   1   0.07748   0.93694   0.6586   -0.045548
+5   1   0.56306   0.92252   0.6586   -0.045548
+5   1   0.43694   0.92252   0.6586   -0.045548
+5   1   0.93694   0.57748   0.6586   -0.045548
+5   1   0.06306   0.57748   0.6586   -0.045548
+5   1   0.57748   0.56306   0.6586   -0.045548
+5   1   0.42252   0.56306   0.6586   -0.045548
+5   1   0.57748   0.43694   0.6586   -0.045548
+5   1   0.42252   0.43694   0.6586   -0.045548
+5   1   0.93694   0.42252   0.6586   -0.045548
+5   1   0.06306   0.42252   0.6586   -0.045548
+5   1   0.56306   0.07748   0.6586   -0.045548
+5   1   0.43694   0.07748   0.6586   -0.045548
+5   1   0.92252   0.06306   0.6586   -0.045548
+5   1   0.07748   0.06306   0.6586   -0.045548
+5   1   0.6586   0.93694   0.57748   -0.045548
+5   1   0.3414   0.93694   0.57748   -0.045548
+5   1   0.93694   0.8414   0.57748   -0.045548
+5   1   0.06306   0.8414   0.57748   -0.045548
+5   1   0.56306   0.6586   0.57748   -0.045548
+5   1   0.43694   0.6586   0.57748   -0.045548
+5   1   0.8414   0.56306   0.57748   -0.045548
+5   1   0.1586   0.56306   0.57748   -0.045548
+5   1   0.8414   0.43694   0.57748   -0.045548
+5   1   0.1586   0.43694   0.57748   -0.045548
+5   1   0.56306   0.3414   0.57748   -0.045548
+5   1   0.43694   0.3414   0.57748   -0.045548
+5   1   0.93694   0.1586   0.57748   -0.045548
+5   1   0.06306   0.1586   0.57748   -0.045548
+5   1   0.6586   0.06306   0.57748   -0.045548
+5   1   0.3414   0.06306   0.57748   -0.045548
+5   1   0.8414   0.92252   0.56306   -0.045548
+5   1   0.1586   0.92252   0.56306   -0.045548
+5   1   0.57748   0.8414   0.56306   -0.045548
+5   1   0.42252   0.8414   0.56306   -0.045548
+5   1   0.92252   0.6586   0.56306   -0.045548
+5   1   0.07748   0.6586   0.56306   -0.045548
+5   1   0.6586   0.57748   0.56306   -0.045548
+5   1   0.3414   0.57748   0.56306   -0.045548
+5   1   0.6586   0.42252   0.56306   -0.045548
+5   1   0.3414   0.42252   0.56306   -0.045548
+5   1   0.92252   0.3414   0.56306   -0.045548
+5   1   0.07748   0.3414   0.56306   -0.045548
+5   1   0.57748   0.1586   0.56306   -0.045548
+5   1   0.42252   0.1586   0.56306   -0.045548
+5   1   0.8414   0.07748   0.56306   -0.045548
+5   1   0.1586   0.07748   0.56306   -0.045548
+5   1   0.8414   0.92252   0.43694   -0.045548
+5   1   0.1586   0.92252   0.43694   -0.045548
+5   1   0.57748   0.8414   0.43694   -0.045548
+5   1   0.42252   0.8414   0.43694   -0.045548
+5   1   0.92252   0.6586   0.43694   -0.045548
+5   1   0.07748   0.6586   0.43694   -0.045548
+5   1   0.6586   0.57748   0.43694   -0.045548
+5   1   0.3414   0.57748   0.43694   -0.045548
+5   1   0.6586   0.42252   0.43694   -0.045548
+5   1   0.3414   0.42252   0.43694   -0.045548
+5   1   0.92252   0.3414   0.43694   -0.045548
+5   1   0.07748   0.3414   0.43694   -0.045548
+5   1   0.57748   0.1586   0.43694   -0.045548
+5   1   0.42252   0.1586   0.43694   -0.045548
+5   1   0.8414   0.07748   0.43694   -0.045548
+5   1   0.1586   0.07748   0.43694   -0.045548
+5   1   0.6586   0.93694   0.42252   -0.045548
+5   1   0.3414   0.93694   0.42252   -0.045548
+5   1   0.93694   0.8414   0.42252   -0.045548
+5   1   0.06306   0.8414   0.42252   -0.045548
+5   1   0.56306   0.6586   0.42252   -0.045548
+5   1   0.43694   0.6586   0.42252   -0.045548
+5   1   0.8414   0.56306   0.42252   -0.045548
+5   1   0.1586   0.56306   0.42252   -0.045548
+5   1   0.8414   0.43694   0.42252   -0.045548
+5   1   0.1586   0.43694   0.42252   -0.045548
+5   1   0.56306   0.3414   0.42252   -0.045548
+5   1   0.43694   0.3414   0.42252   -0.045548
+5   1   0.93694   0.1586   0.42252   -0.045548
+5   1   0.06306   0.1586   0.42252   -0.045548
+5   1   0.6586   0.06306   0.42252   -0.045548
+5   1   0.3414   0.06306   0.42252   -0.045548
+5   1   0.92252   0.93694   0.3414   -0.045548
+5   1   0.07748   0.93694   0.3414   -0.045548
+5   1   0.56306   0.92252   0.3414   -0.045548
+5   1   0.43694   0.92252   0.3414   -0.045548
+5   1   0.93694   0.57748   0.3414   -0.045548
+5   1   0.06306   0.57748   0.3414   -0.045548
+5   1   0.57748   0.56306   0.3414   -0.045548
+5   1   0.42252   0.56306   0.3414   -0.045548
+5   1   0.57748   0.43694   0.3414   -0.045548
+5   1   0.42252   0.43694   0.3414   -0.045548
+5   1   0.93694   0.42252   0.3414   -0.045548
+5   1   0.06306   0.42252   0.3414   -0.045548
+5   1   0.56306   0.07748   0.3414   -0.045548
+5   1   0.43694   0.07748   0.3414   -0.045548
+5   1   0.92252   0.06306   0.3414   -0.045548
+5   1   0.07748   0.06306   0.3414   -0.045548
+5   1   0.57748   0.93694   0.1586   -0.045548
+5   1   0.42252   0.93694   0.1586   -0.045548
+5   1   0.93694   0.92252   0.1586   -0.045548
+5   1   0.06306   0.92252   0.1586   -0.045548
+5   1   0.56306   0.57748   0.1586   -0.045548
+5   1   0.43694   0.57748   0.1586   -0.045548
+5   1   0.92252   0.56306   0.1586   -0.045548
+5   1   0.07748   0.56306   0.1586   -0.045548
+5   1   0.92252   0.43694   0.1586   -0.045548
+5   1   0.07748   0.43694   0.1586   -0.045548
+5   1   0.56306   0.42252   0.1586   -0.045548
+5   1   0.43694   0.42252   0.1586   -0.045548
+5   1   0.93694   0.07748   0.1586   -0.045548
+5   1   0.06306   0.07748   0.1586   -0.045548
+5   1   0.57748   0.06306   0.1586   -0.045548
+5   1   0.42252   0.06306   0.1586   -0.045548
+5   1   0.8414   0.93694   0.07748   -0.045548
+5   1   0.1586   0.93694   0.07748   -0.045548
+5   1   0.56306   0.8414   0.07748   -0.045548
+5   1   0.43694   0.8414   0.07748   -0.045548
+5   1   0.93694   0.6586   0.07748   -0.045548
+5   1   0.06306   0.6586   0.07748   -0.045548
+5   1   0.6586   0.56306   0.07748   -0.045548
+5   1   0.3414   0.56306   0.07748   -0.045548
+5   1   0.6586   0.43694   0.07748   -0.045548
+5   1   0.3414   0.43694   0.07748   -0.045548
+5   1   0.93694   0.3414   0.07748   -0.045548
+5   1   0.06306   0.3414   0.07748   -0.045548
+5   1   0.56306   0.1586   0.07748   -0.045548
+5   1   0.43694   0.1586   0.07748   -0.045548
+5   1   0.8414   0.06306   0.07748   -0.045548
+5   1   0.1586   0.06306   0.07748   -0.045548
+5   1   0.6586   0.92252   0.06306   -0.045548
+5   1   0.3414   0.92252   0.06306   -0.045548
+5   1   0.92252   0.8414   0.06306   -0.045548
+5   1   0.07748   0.8414   0.06306   -0.045548
+5   1   0.57748   0.6586   0.06306   -0.045548
+5   1   0.42252   0.6586   0.06306   -0.045548
+5   1   0.8414   0.57748   0.06306   -0.045548
+5   1   0.1586   0.57748   0.06306   -0.045548
+5   1   0.8414   0.42252   0.06306   -0.045548
+5   1   0.1586   0.42252   0.06306   -0.045548
+5   1   0.57748   0.3414   0.06306   -0.045548
+5   1   0.42252   0.3414   0.06306   -0.045548
+5   1   0.92252   0.1586   0.06306   -0.045548
+5   1   0.07748   0.1586   0.06306   -0.045548
+5   1   0.6586   0.07748   0.06306   -0.045548
+5   1   0.3414   0.07748   0.06306   -0.045548
+5   1   0.69491   0.85405   0.93635   -0.045548
+5   1   0.30509   0.85405   0.93635   -0.045548
+5   1   0.85405   0.80509   0.93635   -0.045548
+5   1   0.14595   0.80509   0.93635   -0.045548
+5   1   0.64595   0.69491   0.93635   -0.045548
+5   1   0.35405   0.69491   0.93635   -0.045548
+5   1   0.80509   0.64595   0.93635   -0.045548
+5   1   0.19491   0.64595   0.93635   -0.045548
+5   1   0.80509   0.35405   0.93635   -0.045548
+5   1   0.19491   0.35405   0.93635   -0.045548
+5   1   0.64595   0.30509   0.93635   -0.045548
+5   1   0.35405   0.30509   0.93635   -0.045548
+5   1   0.85405   0.19491   0.93635   -0.045548
+5   1   0.14595   0.19491   0.93635   -0.045548
+5   1   0.69491   0.14595   0.93635   -0.045548
+5   1   0.30509   0.14595   0.93635   -0.045548
+5   1   0.80509   0.93635   0.85405   -0.045548
+5   1   0.19491   0.93635   0.85405   -0.045548
+5   1   0.56365   0.80509   0.85405   -0.045548
+5   1   0.43635   0.80509   0.85405   -0.045548
+5   1   0.93635   0.69491   0.85405   -0.045548
+5   1   0.06365   0.69491   0.85405   -0.045548
+5   1   0.69491   0.56365   0.85405   -0.045548
+5   1   0.30509   0.56365   0.85405   -0.045548
+5   1   0.69491   0.43635   0.85405   -0.045548
+5   1   0.30509   0.43635   0.85405   -0.045548
+5   1   0.93635   0.30509   0.85405   -0.045548
+5   1   0.06365   0.30509   0.85405   -0.045548
+5   1   0.56365   0.19491   0.85405   -0.045548
+5   1   0.43635   0.19491   0.85405   -0.045548
+5   1   0.80509   0.06365   0.85405   -0.045548
+5   1   0.19491   0.06365   0.85405   -0.045548
+5   1   0.64595   0.93635   0.80509   -0.045548
+5   1   0.35405   0.93635   0.80509   -0.045548
+5   1   0.93635   0.85405   0.80509   -0.045548
+5   1   0.06365   0.85405   0.80509   -0.045548
+5   1   0.56365   0.64595   0.80509   -0.045548
+5   1   0.43635   0.64595   0.80509   -0.045548
+5   1   0.85405   0.56365   0.80509   -0.045548
+5   1   0.14595   0.56365   0.80509   -0.045548
+5   1   0.85405   0.43635   0.80509   -0.045548
+5   1   0.14595   0.43635   0.80509   -0.045548
+5   1   0.56365   0.35405   0.80509   -0.045548
+5   1   0.43635   0.35405   0.80509   -0.045548
+5   1   0.93635   0.14595   0.80509   -0.045548
+5   1   0.06365   0.14595   0.80509   -0.045548
+5   1   0.64595   0.06365   0.80509   -0.045548
+5   1   0.35405   0.06365   0.80509   -0.045548
+5   1   0.85405   0.93635   0.69491   -0.045548
+5   1   0.14595   0.93635   0.69491   -0.045548
+5   1   0.56365   0.85405   0.69491   -0.045548
+5   1   0.43635   0.85405   0.69491   -0.045548
+5   1   0.93635   0.64595   0.69491   -0.045548
+5   1   0.06365   0.64595   0.69491   -0.045548
+5   1   0.64595   0.56365   0.69491   -0.045548
+5   1   0.35405   0.56365   0.69491   -0.045548
+5   1   0.64595   0.43635   0.69491   -0.045548
+5   1   0.35405   0.43635   0.69491   -0.045548
+5   1   0.93635   0.35405   0.69491   -0.045548
+5   1   0.06365   0.35405   0.69491   -0.045548
+5   1   0.56365   0.14595   0.69491   -0.045548
+5   1   0.43635   0.14595   0.69491   -0.045548
+5   1   0.85405   0.06365   0.69491   -0.045548
+5   1   0.14595   0.06365   0.69491   -0.045548
+5   1   0.69491   0.93635   0.64595   -0.045548
+5   1   0.30509   0.93635   0.64595   -0.045548
+5   1   0.93635   0.80509   0.64595   -0.045548
+5   1   0.06365   0.80509   0.64595   -0.045548
+5   1   0.56365   0.69491   0.64595   -0.045548
+5   1   0.43635   0.69491   0.64595   -0.045548
+5   1   0.80509   0.56365   0.64595   -0.045548
+5   1   0.19491   0.56365   0.64595   -0.045548
+5   1   0.80509   0.43635   0.64595   -0.045548
+5   1   0.19491   0.43635   0.64595   -0.045548
+5   1   0.56365   0.30509   0.64595   -0.045548
+5   1   0.43635   0.30509   0.64595   -0.045548
+5   1   0.93635   0.19491   0.64595   -0.045548
+5   1   0.06365   0.19491   0.64595   -0.045548
+5   1   0.69491   0.06365   0.64595   -0.045548
+5   1   0.30509   0.06365   0.64595   -0.045548
+5   1   0.80509   0.85405   0.56365   -0.045548
+5   1   0.19491   0.85405   0.56365   -0.045548
+5   1   0.64595   0.80509   0.56365   -0.045548
+5   1   0.35405   0.80509   0.56365   -0.045548
+5   1   0.85405   0.69491   0.56365   -0.045548
+5   1   0.14595   0.69491   0.56365   -0.045548
+5   1   0.69491   0.64595   0.56365   -0.045548
+5   1   0.30509   0.64595   0.56365   -0.045548
+5   1   0.69491   0.35405   0.56365   -0.045548
+5   1   0.30509   0.35405   0.56365   -0.045548
+5   1   0.85405   0.30509   0.56365   -0.045548
+5   1   0.14595   0.30509   0.56365   -0.045548
+5   1   0.64595   0.19491   0.56365   -0.045548
+5   1   0.35405   0.19491   0.56365   -0.045548
+5   1   0.80509   0.14595   0.56365   -0.045548
+5   1   0.19491   0.14595   0.56365   -0.045548
+5   1   0.80509   0.85405   0.43635   -0.045548
+5   1   0.19491   0.85405   0.43635   -0.045548
+5   1   0.64595   0.80509   0.43635   -0.045548
+5   1   0.35405   0.80509   0.43635   -0.045548
+5   1   0.85405   0.69491   0.43635   -0.045548
+5   1   0.14595   0.69491   0.43635   -0.045548
+5   1   0.69491   0.64595   0.43635   -0.045548
+5   1   0.30509   0.64595   0.43635   -0.045548
+5   1   0.69491   0.35405   0.43635   -0.045548
+5   1   0.30509   0.35405   0.43635   -0.045548
+5   1   0.85405   0.30509   0.43635   -0.045548
+5   1   0.14595   0.30509   0.43635   -0.045548
+5   1   0.64595   0.19491   0.43635   -0.045548
+5   1   0.35405   0.19491   0.43635   -0.045548
+5   1   0.80509   0.14595   0.43635   -0.045548
+5   1   0.19491   0.14595   0.43635   -0.045548
+5   1   0.69491   0.93635   0.35405   -0.045548
+5   1   0.30509   0.93635   0.35405   -0.045548
+5   1   0.93635   0.80509   0.35405   -0.045548
+5   1   0.06365   0.80509   0.35405   -0.045548
+5   1   0.56365   0.69491   0.35405   -0.045548
+5   1   0.43635   0.69491   0.35405   -0.045548
+5   1   0.80509   0.56365   0.35405   -0.045548
+5   1   0.19491   0.56365   0.35405   -0.045548
+5   1   0.80509   0.43635   0.35405   -0.045548
+5   1   0.19491   0.43635   0.35405   -0.045548
+5   1   0.56365   0.30509   0.35405   -0.045548
+5   1   0.43635   0.30509   0.35405   -0.045548
+5   1   0.93635   0.19491   0.35405   -0.045548
+5   1   0.06365   0.19491   0.35405   -0.045548
+5   1   0.69491   0.06365   0.35405   -0.045548
+5   1   0.30509   0.06365   0.35405   -0.045548
+5   1   0.85405   0.93635   0.30509   -0.045548
+5   1   0.14595   0.93635   0.30509   -0.045548
+5   1   0.56365   0.85405   0.30509   -0.045548
+5   1   0.43635   0.85405   0.30509   -0.045548
+5   1   0.93635   0.64595   0.30509   -0.045548
+5   1   0.06365   0.64595   0.30509   -0.045548
+5   1   0.64595   0.56365   0.30509   -0.045548
+5   1   0.35405   0.56365   0.30509   -0.045548
+5   1   0.64595   0.43635   0.30509   -0.045548
+5   1   0.35405   0.43635   0.30509   -0.045548
+5   1   0.93635   0.35405   0.30509   -0.045548
+5   1   0.06365   0.35405   0.30509   -0.045548
+5   1   0.56365   0.14595   0.30509   -0.045548
+5   1   0.43635   0.14595   0.30509   -0.045548
+5   1   0.85405   0.06365   0.30509   -0.045548
+5   1   0.14595   0.06365   0.30509   -0.045548
+5   1   0.64595   0.93635   0.19491   -0.045548
+5   1   0.35405   0.93635   0.19491   -0.045548
+5   1   0.93635   0.85405   0.19491   -0.045548
+5   1   0.06365   0.85405   0.19491   -0.045548
+5   1   0.56365   0.64595   0.19491   -0.045548
+5   1   0.43635   0.64595   0.19491   -0.045548
+5   1   0.85405   0.56365   0.19491   -0.045548
+5   1   0.14595   0.56365   0.19491   -0.045548
+5   1   0.85405   0.43635   0.19491   -0.045548
+5   1   0.14595   0.43635   0.19491   -0.045548
+5   1   0.56365   0.35405   0.19491   -0.045548
+5   1   0.43635   0.35405   0.19491   -0.045548
+5   1   0.93635   0.14595   0.19491   -0.045548
+5   1   0.06365   0.14595   0.19491   -0.045548
+5   1   0.64595   0.06365   0.19491   -0.045548
+5   1   0.35405   0.06365   0.19491   -0.045548
+5   1   0.80509   0.93635   0.14595   -0.045548
+5   1   0.19491   0.93635   0.14595   -0.045548
+5   1   0.56365   0.80509   0.14595   -0.045548
+5   1   0.43635   0.80509   0.14595   -0.045548
+5   1   0.93635   0.69491   0.14595   -0.045548
+5   1   0.06365   0.69491   0.14595   -0.045548
+5   1   0.69491   0.56365   0.14595   -0.045548
+5   1   0.30509   0.56365   0.14595   -0.045548
+5   1   0.69491   0.43635   0.14595   -0.045548
+5   1   0.30509   0.43635   0.14595   -0.045548
+5   1   0.93635   0.30509   0.14595   -0.045548
+5   1   0.06365   0.30509   0.14595   -0.045548
+5   1   0.56365   0.19491   0.14595   -0.045548
+5   1   0.43635   0.19491   0.14595   -0.045548
+5   1   0.80509   0.06365   0.14595   -0.045548
+5   1   0.19491   0.06365   0.14595   -0.045548
+5   1   0.69491   0.85405   0.06365   -0.045548
+5   1   0.30509   0.85405   0.06365   -0.045548
+5   1   0.85405   0.80509   0.06365   -0.045548
+5   1   0.14595   0.80509   0.06365   -0.045548
+5   1   0.64595   0.69491   0.06365   -0.045548
+5   1   0.35405   0.69491   0.06365   -0.045548
+5   1   0.80509   0.64595   0.06365   -0.045548
+5   1   0.19491   0.64595   0.06365   -0.045548
+5   1   0.80509   0.35405   0.06365   -0.045548
+5   1   0.19491   0.35405   0.06365   -0.045548
+5   1   0.64595   0.30509   0.06365   -0.045548
+5   1   0.35405   0.30509   0.06365   -0.045548
+5   1   0.85405   0.19491   0.06365   -0.045548
+5   1   0.14595   0.19491   0.06365   -0.045548
+5   1   0.69491   0.14595   0.06365   -0.045548
+5   1   0.30509   0.14595   0.06365   -0.045548
+5   0.71   0.69719   0.82507   0.86807   -0.045548
+5   0.71   0.30281   0.82507   0.86807   -0.045548
+5   0.71   0.82507   0.80281   0.86807   -0.045548
+5   0.71   0.17493   0.80281   0.86807   -0.045548
+5   0.71   0.67493   0.69719   0.86807   -0.045548
+5   0.71   0.32507   0.69719   0.86807   -0.045548
+5   0.71   0.80281   0.67493   0.86807   -0.045548
+5   0.71   0.19719   0.67493   0.86807   -0.045548
+5   0.71   0.80281   0.32507   0.86807   -0.045548
+5   0.71   0.19719   0.32507   0.86807   -0.045548
+5   0.71   0.67493   0.30281   0.86807   -0.045548
+5   0.71   0.32507   0.30281   0.86807   -0.045548
+5   0.71   0.82507   0.19719   0.86807   -0.045548
+5   0.71   0.17493   0.19719   0.86807   -0.045548
+5   0.71   0.69719   0.17493   0.86807   -0.045548
+5   0.71   0.30281   0.17493   0.86807   -0.045548
+5   0.71   0.80281   0.86807   0.82507   -0.045548
+5   0.71   0.19719   0.86807   0.82507   -0.045548
+5   0.71   0.63193   0.80281   0.82507   -0.045548
+5   0.71   0.36807   0.80281   0.82507   -0.045548
+5   0.71   0.86807   0.69719   0.82507   -0.045548
+5   0.71   0.13193   0.69719   0.82507   -0.045548
+5   0.71   0.69719   0.63193   0.82507   -0.045548
+5   0.71   0.30281   0.63193   0.82507   -0.045548
+5   0.71   0.69719   0.36807   0.82507   -0.045548
+5   0.71   0.30281   0.36807   0.82507   -0.045548
+5   0.71   0.86807   0.30281   0.82507   -0.045548
+5   0.71   0.13193   0.30281   0.82507   -0.045548
+5   0.71   0.63193   0.19719   0.82507   -0.045548
+5   0.71   0.36807   0.19719   0.82507   -0.045548
+5   0.71   0.80281   0.13193   0.82507   -0.045548
+5   0.71   0.19719   0.13193   0.82507   -0.045548
+5   0.71   0.67493   0.86807   0.80281   -0.045548
+5   0.71   0.32507   0.86807   0.80281   -0.045548
+5   0.71   0.86807   0.82507   0.80281   -0.045548
+5   0.71   0.13193   0.82507   0.80281   -0.045548
+5   0.71   0.63193   0.67493   0.80281   -0.045548
+5   0.71   0.36807   0.67493   0.80281   -0.045548
+5   0.71   0.82507   0.63193   0.80281   -0.045548
+5   0.71   0.17493   0.63193   0.80281   -0.045548
+5   0.71   0.82507   0.36807   0.80281   -0.045548
+5   0.71   0.17493   0.36807   0.80281   -0.045548
+5   0.71   0.63193   0.32507   0.80281   -0.045548
+5   0.71   0.36807   0.32507   0.80281   -0.045548
+5   0.71   0.86807   0.17493   0.80281   -0.045548
+5   0.71   0.13193   0.17493   0.80281   -0.045548
+5   0.71   0.67493   0.13193   0.80281   -0.045548
+5   0.71   0.32507   0.13193   0.80281   -0.045548
+5   0.71   0.82507   0.86807   0.69719   -0.045548
+5   0.71   0.17493   0.86807   0.69719   -0.045548
+5   0.71   0.63193   0.82507   0.69719   -0.045548
+5   0.71   0.36807   0.82507   0.69719   -0.045548
+5   0.71   0.86807   0.67493   0.69719   -0.045548
+5   0.71   0.13193   0.67493   0.69719   -0.045548
+5   0.71   0.67493   0.63193   0.69719   -0.045548
+5   0.71   0.32507   0.63193   0.69719   -0.045548
+5   0.71   0.67493   0.36807   0.69719   -0.045548
+5   0.71   0.32507   0.36807   0.69719   -0.045548
+5   0.71   0.86807   0.32507   0.69719   -0.045548
+5   0.71   0.13193   0.32507   0.69719   -0.045548
+5   0.71   0.63193   0.17493   0.69719   -0.045548
+5   0.71   0.36807   0.17493   0.69719   -0.045548
+5   0.71   0.82507   0.13193   0.69719   -0.045548
+5   0.71   0.17493   0.13193   0.69719   -0.045548
+5   0.71   0.69719   0.86807   0.67493   -0.045548
+5   0.71   0.30281   0.86807   0.67493   -0.045548
+5   0.71   0.86807   0.80281   0.67493   -0.045548
+5   0.71   0.13193   0.80281   0.67493   -0.045548
+5   0.71   0.63193   0.69719   0.67493   -0.045548
+5   0.71   0.36807   0.69719   0.67493   -0.045548
+5   0.71   0.80281   0.63193   0.67493   -0.045548
+5   0.71   0.19719   0.63193   0.67493   -0.045548
+5   0.71   0.80281   0.36807   0.67493   -0.045548
+5   0.71   0.19719   0.36807   0.67493   -0.045548
+5   0.71   0.63193   0.30281   0.67493   -0.045548
+5   0.71   0.36807   0.30281   0.67493   -0.045548
+5   0.71   0.86807   0.19719   0.67493   -0.045548
+5   0.71   0.13193   0.19719   0.67493   -0.045548
+5   0.71   0.69719   0.13193   0.67493   -0.045548
+5   0.71   0.30281   0.13193   0.67493   -0.045548
+5   0.71   0.80281   0.82507   0.63193   -0.045548
+5   0.71   0.19719   0.82507   0.63193   -0.045548
+5   0.71   0.67493   0.80281   0.63193   -0.045548
+5   0.71   0.32507   0.80281   0.63193   -0.045548
+5   0.71   0.82507   0.69719   0.63193   -0.045548
+5   0.71   0.17493   0.69719   0.63193   -0.045548
+5   0.71   0.69719   0.67493   0.63193   -0.045548
+5   0.71   0.30281   0.67493   0.63193   -0.045548
+5   0.71   0.69719   0.32507   0.63193   -0.045548
+5   0.71   0.30281   0.32507   0.63193   -0.045548
+5   0.71   0.82507   0.30281   0.63193   -0.045548
+5   0.71   0.17493   0.30281   0.63193   -0.045548
+5   0.71   0.67493   0.19719   0.63193   -0.045548
+5   0.71   0.32507   0.19719   0.63193   -0.045548
+5   0.71   0.80281   0.17493   0.63193   -0.045548
+5   0.71   0.19719   0.17493   0.63193   -0.045548
+5   0.71   0.80281   0.82507   0.36807   -0.045548
+5   0.71   0.19719   0.82507   0.36807   -0.045548
+5   0.71   0.67493   0.80281   0.36807   -0.045548
+5   0.71   0.32507   0.80281   0.36807   -0.045548
+5   0.71   0.82507   0.69719   0.36807   -0.045548
+5   0.71   0.17493   0.69719   0.36807   -0.045548
+5   0.71   0.69719   0.67493   0.36807   -0.045548
+5   0.71   0.30281   0.67493   0.36807   -0.045548
+5   0.71   0.69719   0.32507   0.36807   -0.045548
+5   0.71   0.30281   0.32507   0.36807   -0.045548
+5   0.71   0.82507   0.30281   0.36807   -0.045548
+5   0.71   0.17493   0.30281   0.36807   -0.045548
+5   0.71   0.67493   0.19719   0.36807   -0.045548
+5   0.71   0.32507   0.19719   0.36807   -0.045548
+5   0.71   0.80281   0.17493   0.36807   -0.045548
+5   0.71   0.19719   0.17493   0.36807   -0.045548
+5   0.71   0.69719   0.86807   0.32507   -0.045548
+5   0.71   0.30281   0.86807   0.32507   -0.045548
+5   0.71   0.86807   0.80281   0.32507   -0.045548
+5   0.71   0.13193   0.80281   0.32507   -0.045548
+5   0.71   0.63193   0.69719   0.32507   -0.045548
+5   0.71   0.36807   0.69719   0.32507   -0.045548
+5   0.71   0.80281   0.63193   0.32507   -0.045548
+5   0.71   0.19719   0.63193   0.32507   -0.045548
+5   0.71   0.80281   0.36807   0.32507   -0.045548
+5   0.71   0.19719   0.36807   0.32507   -0.045548
+5   0.71   0.63193   0.30281   0.32507   -0.045548
+5   0.71   0.36807   0.30281   0.32507   -0.045548
+5   0.71   0.86807   0.19719   0.32507   -0.045548
+5   0.71   0.13193   0.19719   0.32507   -0.045548
+5   0.71   0.69719   0.13193   0.32507   -0.045548
+5   0.71   0.30281   0.13193   0.32507   -0.045548
+5   0.71   0.82507   0.86807   0.30281   -0.045548
+5   0.71   0.17493   0.86807   0.30281   -0.045548
+5   0.71   0.63193   0.82507   0.30281   -0.045548
+5   0.71   0.36807   0.82507   0.30281   -0.045548
+5   0.71   0.86807   0.67493   0.30281   -0.045548
+5   0.71   0.13193   0.67493   0.30281   -0.045548
+5   0.71   0.67493   0.63193   0.30281   -0.045548
+5   0.71   0.32507   0.63193   0.30281   -0.045548
+5   0.71   0.67493   0.36807   0.30281   -0.045548
+5   0.71   0.32507   0.36807   0.30281   -0.045548
+5   0.71   0.86807   0.32507   0.30281   -0.045548
+5   0.71   0.13193   0.32507   0.30281   -0.045548
+5   0.71   0.63193   0.17493   0.30281   -0.045548
+5   0.71   0.36807   0.17493   0.30281   -0.045548
+5   0.71   0.82507   0.13193   0.30281   -0.045548
+5   0.71   0.17493   0.13193   0.30281   -0.045548
+5   0.71   0.67493   0.86807   0.19719   -0.045548
+5   0.71   0.32507   0.86807   0.19719   -0.045548
+5   0.71   0.86807   0.82507   0.19719   -0.045548
+5   0.71   0.13193   0.82507   0.19719   -0.045548
+5   0.71   0.63193   0.67493   0.19719   -0.045548
+5   0.71   0.36807   0.67493   0.19719   -0.045548
+5   0.71   0.82507   0.63193   0.19719   -0.045548
+5   0.71   0.17493   0.63193   0.19719   -0.045548
+5   0.71   0.82507   0.36807   0.19719   -0.045548
+5   0.71   0.17493   0.36807   0.19719   -0.045548
+5   0.71   0.63193   0.32507   0.19719   -0.045548
+5   0.71   0.36807   0.32507   0.19719   -0.045548
+5   0.71   0.86807   0.17493   0.19719   -0.045548
+5   0.71   0.13193   0.17493   0.19719   -0.045548
+5   0.71   0.67493   0.13193   0.19719   -0.045548
+5   0.71   0.32507   0.13193   0.19719   -0.045548
+5   0.71   0.80281   0.86807   0.17493   -0.045548
+5   0.71   0.19719   0.86807   0.17493   -0.045548
+5   0.71   0.63193   0.80281   0.17493   -0.045548
+5   0.71   0.36807   0.80281   0.17493   -0.045548
+5   0.71   0.86807   0.69719   0.17493   -0.045548
+5   0.71   0.13193   0.69719   0.17493   -0.045548
+5   0.71   0.69719   0.63193   0.17493   -0.045548
+5   0.71   0.30281   0.63193   0.17493   -0.045548
+5   0.71   0.69719   0.36807   0.17493   -0.045548
+5   0.71   0.30281   0.36807   0.17493   -0.045548
+5   0.71   0.86807   0.30281   0.17493   -0.045548
+5   0.71   0.13193   0.30281   0.17493   -0.045548
+5   0.71   0.63193   0.19719   0.17493   -0.045548
+5   0.71   0.36807   0.19719   0.17493   -0.045548
+5   0.71   0.80281   0.13193   0.17493   -0.045548
+5   0.71   0.19719   0.13193   0.17493   -0.045548
+5   0.71   0.69719   0.82507   0.13193   -0.045548
+5   0.71   0.30281   0.82507   0.13193   -0.045548
+5   0.71   0.82507   0.80281   0.13193   -0.045548
+5   0.71   0.17493   0.80281   0.13193   -0.045548
+5   0.71   0.67493   0.69719   0.13193   -0.045548
+5   0.71   0.32507   0.69719   0.13193   -0.045548
+5   0.71   0.80281   0.67493   0.13193   -0.045548
+5   0.71   0.19719   0.67493   0.13193   -0.045548
+5   0.71   0.80281   0.32507   0.13193   -0.045548
+5   0.71   0.19719   0.32507   0.13193   -0.045548
+5   0.71   0.67493   0.30281   0.13193   -0.045548
+5   0.71   0.32507   0.30281   0.13193   -0.045548
+5   0.71   0.82507   0.19719   0.13193   -0.045548
+5   0.71   0.17493   0.19719   0.13193   -0.045548
+5   0.71   0.69719   0.17493   0.13193   -0.045548
+5   0.71   0.30281   0.17493   0.13193   -0.045548
+5   0.65   0.7658   0.8008   0.84134   -0.045548
+5   0.65   0.2342   0.8008   0.84134   -0.045548
+5   0.65   0.6992   0.7658   0.84134   -0.045548
+5   0.65   0.3008   0.7658   0.84134   -0.045548
+5   0.65   0.8008   0.7342   0.84134   -0.045548
+5   0.65   0.1992   0.7342   0.84134   -0.045548
+5   0.65   0.7342   0.6992   0.84134   -0.045548
+5   0.65   0.2658   0.6992   0.84134   -0.045548
+5   0.65   0.7342   0.3008   0.84134   -0.045548
+5   0.65   0.2658   0.3008   0.84134   -0.045548
+5   0.65   0.8008   0.2658   0.84134   -0.045548
+5   0.65   0.1992   0.2658   0.84134   -0.045548
+5   0.65   0.6992   0.2342   0.84134   -0.045548
+5   0.65   0.3008   0.2342   0.84134   -0.045548
+5   0.65   0.7658   0.1992   0.84134   -0.045548
+5   0.65   0.2342   0.1992   0.84134   -0.045548
+5   0.65   0.7342   0.84134   0.8008   -0.045548
+5   0.65   0.2658   0.84134   0.8008   -0.045548
+5   0.65   0.84134   0.7658   0.8008   -0.045548
+5   0.65   0.15866   0.7658   0.8008   -0.045548
+5   0.65   0.65866   0.7342   0.8008   -0.045548
+5   0.65   0.34134   0.7342   0.8008   -0.045548
+5   0.65   0.7658   0.65866   0.8008   -0.045548
+5   0.65   0.2342   0.65866   0.8008   -0.045548
+5   0.65   0.7658   0.34134   0.8008   -0.045548
+5   0.65   0.2342   0.34134   0.8008   -0.045548
+5   0.65   0.65866   0.2658   0.8008   -0.045548
+5   0.65   0.34134   0.2658   0.8008   -0.045548
+5   0.65   0.84134   0.2342   0.8008   -0.045548
+5   0.65   0.15866   0.2342   0.8008   -0.045548
+5   0.65   0.7342   0.15866   0.8008   -0.045548
+5   0.65   0.2658   0.15866   0.8008   -0.045548
+5   0.65   0.8008   0.84134   0.7658   -0.045548
+5   0.65   0.1992   0.84134   0.7658   -0.045548
+5   0.65   0.65866   0.8008   0.7658   -0.045548
+5   0.65   0.34134   0.8008   0.7658   -0.045548
+5   0.65   0.84134   0.6992   0.7658   -0.045548
+5   0.65   0.15866   0.6992   0.7658   -0.045548
+5   0.65   0.6992   0.65866   0.7658   -0.045548
+5   0.65   0.3008   0.65866   0.7658   -0.045548
+5   0.65   0.6992   0.34134   0.7658   -0.045548
+5   0.65   0.3008   0.34134   0.7658   -0.045548
+5   0.65   0.84134   0.3008   0.7658   -0.045548
+5   0.65   0.15866   0.3008   0.7658   -0.045548
+5   0.65   0.65866   0.1992   0.7658   -0.045548
+5   0.65   0.34134   0.1992   0.7658   -0.045548
+5   0.65   0.8008   0.15866   0.7658   -0.045548
+5   0.65   0.1992   0.15866   0.7658   -0.045548
+5   0.65   0.6992   0.84134   0.7342   -0.045548
+5   0.65   0.3008   0.84134   0.7342   -0.045548
+5   0.65   0.84134   0.8008   0.7342   -0.045548
+5   0.65   0.15866   0.8008   0.7342   -0.045548
+5   0.65   0.65866   0.6992   0.7342   -0.045548
+5   0.65   0.34134   0.6992   0.7342   -0.045548
+5   0.65   0.8008   0.65866   0.7342   -0.045548
+5   0.65   0.1992   0.65866   0.7342   -0.045548
+5   0.65   0.8008   0.34134   0.7342   -0.045548
+5   0.65   0.1992   0.34134   0.7342   -0.045548
+5   0.65   0.65866   0.3008   0.7342   -0.045548
+5   0.65   0.34134   0.3008   0.7342   -0.045548
+5   0.65   0.84134   0.1992   0.7342   -0.045548
+5   0.65   0.15866   0.1992   0.7342   -0.045548
+5   0.65   0.6992   0.15866   0.7342   -0.045548
+5   0.65   0.3008   0.15866   0.7342   -0.045548
+5   0.65   0.7658   0.84134   0.6992   -0.045548
+5   0.65   0.2342   0.84134   0.6992   -0.045548
+5   0.65   0.65866   0.7658   0.6992   -0.045548
+5   0.65   0.34134   0.7658   0.6992   -0.045548
+5   0.65   0.84134   0.7342   0.6992   -0.045548
+5   0.65   0.15866   0.7342   0.6992   -0.045548
+5   0.65   0.7342   0.65866   0.6992   -0.045548
+5   0.65   0.2658   0.65866   0.6992   -0.045548
+5   0.65   0.7342   0.34134   0.6992   -0.045548
+5   0.65   0.2658   0.34134   0.6992   -0.045548
+5   0.65   0.84134   0.2658   0.6992   -0.045548
+5   0.65   0.15866   0.2658   0.6992   -0.045548
+5   0.65   0.65866   0.2342   0.6992   -0.045548
+5   0.65   0.34134   0.2342   0.6992   -0.045548
+5   0.65   0.7658   0.15866   0.6992   -0.045548
+5   0.65   0.2342   0.15866   0.6992   -0.045548
+5   0.65   0.7342   0.8008   0.65866   -0.045548
+5   0.65   0.2658   0.8008   0.65866   -0.045548
+5   0.65   0.8008   0.7658   0.65866   -0.045548
+5   0.65   0.1992   0.7658   0.65866   -0.045548
+5   0.65   0.6992   0.7342   0.65866   -0.045548
+5   0.65   0.3008   0.7342   0.65866   -0.045548
+5   0.65   0.7658   0.6992   0.65866   -0.045548
+5   0.65   0.2342   0.6992   0.65866   -0.045548
+5   0.65   0.7658   0.3008   0.65866   -0.045548
+5   0.65   0.2342   0.3008   0.65866   -0.045548
+5   0.65   0.6992   0.2658   0.65866   -0.045548
+5   0.65   0.3008   0.2658   0.65866   -0.045548
+5   0.65   0.8008   0.2342   0.65866   -0.045548
+5   0.65   0.1992   0.2342   0.65866   -0.045548
+5   0.65   0.7342   0.1992   0.65866   -0.045548
+5   0.65   0.2658   0.1992   0.65866   -0.045548
+5   0.65   0.7342   0.8008   0.34134   -0.045548
+5   0.65   0.2658   0.8008   0.34134   -0.045548
+5   0.65   0.8008   0.7658   0.34134   -0.045548
+5   0.65   0.1992   0.7658   0.34134   -0.045548
+5   0.65   0.6992   0.7342   0.34134   -0.045548
+5   0.65   0.3008   0.7342   0.34134   -0.045548
+5   0.65   0.7658   0.6992   0.34134   -0.045548
+5   0.65   0.2342   0.6992   0.34134   -0.045548
+5   0.65   0.7658   0.3008   0.34134   -0.045548
+5   0.65   0.2342   0.3008   0.34134   -0.045548
+5   0.65   0.6992   0.2658   0.34134   -0.045548
+5   0.65   0.3008   0.2658   0.34134   -0.045548
+5   0.65   0.8008   0.2342   0.34134   -0.045548
+5   0.65   0.1992   0.2342   0.34134   -0.045548
+5   0.65   0.7342   0.1992   0.34134   -0.045548
+5   0.65   0.2658   0.1992   0.34134   -0.045548
+5   0.65   0.7658   0.84134   0.3008   -0.045548
+5   0.65   0.2342   0.84134   0.3008   -0.045548
+5   0.65   0.65866   0.7658   0.3008   -0.045548
+5   0.65   0.34134   0.7658   0.3008   -0.045548
+5   0.65   0.84134   0.7342   0.3008   -0.045548
+5   0.65   0.15866   0.7342   0.3008   -0.045548
+5   0.65   0.7342   0.65866   0.3008   -0.045548
+5   0.65   0.2658   0.65866   0.3008   -0.045548
+5   0.65   0.7342   0.34134   0.3008   -0.045548
+5   0.65   0.2658   0.34134   0.3008   -0.045548
+5   0.65   0.84134   0.2658   0.3008   -0.045548
+5   0.65   0.15866   0.2658   0.3008   -0.045548
+5   0.65   0.65866   0.2342   0.3008   -0.045548
+5   0.65   0.34134   0.2342   0.3008   -0.045548
+5   0.65   0.7658   0.15866   0.3008   -0.045548
+5   0.65   0.2342   0.15866   0.3008   -0.045548
+5   0.65   0.6992   0.84134   0.2658   -0.045548
+5   0.65   0.3008   0.84134   0.2658   -0.045548
+5   0.65   0.84134   0.8008   0.2658   -0.045548
+5   0.65   0.15866   0.8008   0.2658   -0.045548
+5   0.65   0.65866   0.6992   0.2658   -0.045548
+5   0.65   0.34134   0.6992   0.2658   -0.045548
+5   0.65   0.8008   0.65866   0.2658   -0.045548
+5   0.65   0.1992   0.65866   0.2658   -0.045548
+5   0.65   0.8008   0.34134   0.2658   -0.045548
+5   0.65   0.1992   0.34134   0.2658   -0.045548
+5   0.65   0.65866   0.3008   0.2658   -0.045548
+5   0.65   0.34134   0.3008   0.2658   -0.045548
+5   0.65   0.84134   0.1992   0.2658   -0.045548
+5   0.65   0.15866   0.1992   0.2658   -0.045548
+5   0.65   0.6992   0.15866   0.2658   -0.045548
+5   0.65   0.3008   0.15866   0.2658   -0.045548
+5   0.65   0.8008   0.84134   0.2342   -0.045548
+5   0.65   0.1992   0.84134   0.2342   -0.045548
+5   0.65   0.65866   0.8008   0.2342   -0.045548
+5   0.65   0.34134   0.8008   0.2342   -0.045548
+5   0.65   0.84134   0.6992   0.2342   -0.045548
+5   0.65   0.15866   0.6992   0.2342   -0.045548
+5   0.65   0.6992   0.65866   0.2342   -0.045548
+5   0.65   0.3008   0.65866   0.2342   -0.045548
+5   0.65   0.6992   0.34134   0.2342   -0.045548
+5   0.65   0.3008   0.34134   0.2342   -0.045548
+5   0.65   0.84134   0.3008   0.2342   -0.045548
+5   0.65   0.15866   0.3008   0.2342   -0.045548
+5   0.65   0.65866   0.1992   0.2342   -0.045548
+5   0.65   0.34134   0.1992   0.2342   -0.045548
+5   0.65   0.8008   0.15866   0.2342   -0.045548
+5   0.65   0.1992   0.15866   0.2342   -0.045548
+5   0.65   0.7342   0.84134   0.1992   -0.045548
+5   0.65   0.2658   0.84134   0.1992   -0.045548
+5   0.65   0.84134   0.7658   0.1992   -0.045548
+5   0.65   0.15866   0.7658   0.1992   -0.045548
+5   0.65   0.65866   0.7342   0.1992   -0.045548
+5   0.65   0.34134   0.7342   0.1992   -0.045548
+5   0.65   0.7658   0.65866   0.1992   -0.045548
+5   0.65   0.2342   0.65866   0.1992   -0.045548
+5   0.65   0.7658   0.34134   0.1992   -0.045548
+5   0.65   0.2342   0.34134   0.1992   -0.045548
+5   0.65   0.65866   0.2658   0.1992   -0.045548
+5   0.65   0.34134   0.2658   0.1992   -0.045548
+5   0.65   0.84134   0.2342   0.1992   -0.045548
+5   0.65   0.15866   0.2342   0.1992   -0.045548
+5   0.65   0.7342   0.15866   0.1992   -0.045548
+5   0.65   0.2658   0.15866   0.1992   -0.045548
+5   0.65   0.7658   0.8008   0.15866   -0.045548
+5   0.65   0.2342   0.8008   0.15866   -0.045548
+5   0.65   0.6992   0.7658   0.15866   -0.045548
+5   0.65   0.3008   0.7658   0.15866   -0.045548
+5   0.65   0.8008   0.7342   0.15866   -0.045548
+5   0.65   0.1992   0.7342   0.15866   -0.045548
+5   0.65   0.7342   0.6992   0.15866   -0.045548
+5   0.65   0.2658   0.6992   0.15866   -0.045548
+5   0.65   0.7342   0.3008   0.15866   -0.045548
+5   0.65   0.2658   0.3008   0.15866   -0.045548
+5   0.65   0.8008   0.2658   0.15866   -0.045548
+5   0.65   0.1992   0.2658   0.15866   -0.045548
+5   0.65   0.6992   0.2342   0.15866   -0.045548
+5   0.65   0.3008   0.2342   0.15866   -0.045548
+5   0.65   0.7658   0.1992   0.15866   -0.045548
+5   0.65   0.2342   0.1992   0.15866   -0.045548
+5   0.28   0.74272   0.82657   0.87224   -0.045548
+5   0.28   0.25728   0.82657   0.87224   -0.045548
+5   0.28   0.82657   0.75728   0.87224   -0.045548
+5   0.28   0.17343   0.75728   0.87224   -0.045548
+5   0.28   0.67343   0.74272   0.87224   -0.045548
+5   0.28   0.32657   0.74272   0.87224   -0.045548
+5   0.28   0.75728   0.67343   0.87224   -0.045548
+5   0.28   0.24272   0.67343   0.87224   -0.045548
+5   0.28   0.75728   0.32657   0.87224   -0.045548
+5   0.28   0.24272   0.32657   0.87224   -0.045548
+5   0.28   0.67343   0.25728   0.87224   -0.045548
+5   0.28   0.32657   0.25728   0.87224   -0.045548
+5   0.28   0.82657   0.24272   0.87224   -0.045548
+5   0.28   0.17343   0.24272   0.87224   -0.045548
+5   0.28   0.74272   0.17343   0.87224   -0.045548
+5   0.28   0.25728   0.17343   0.87224   -0.045548
+5   0.28   0.75728   0.87224   0.82657   -0.045548
+5   0.28   0.24272   0.87224   0.82657   -0.045548
+5   0.28   0.62776   0.75728   0.82657   -0.045548
+5   0.28   0.37224   0.75728   0.82657   -0.045548
+5   0.28   0.87224   0.74272   0.82657   -0.045548
+5   0.28   0.12776   0.74272   0.82657   -0.045548
+5   0.28   0.74272   0.62776   0.82657   -0.045548
+5   0.28   0.25728   0.62776   0.82657   -0.045548
+5   0.28   0.74272   0.37224   0.82657   -0.045548
+5   0.28   0.25728   0.37224   0.82657   -0.045548
+5   0.28   0.87224   0.25728   0.82657   -0.045548
+5   0.28   0.12776   0.25728   0.82657   -0.045548
+5   0.28   0.62776   0.24272   0.82657   -0.045548
+5   0.28   0.37224   0.24272   0.82657   -0.045548
+5   0.28   0.75728   0.12776   0.82657   -0.045548
+5   0.28   0.24272   0.12776   0.82657   -0.045548
+5   0.28   0.67343   0.87224   0.75728   -0.045548
+5   0.28   0.32657   0.87224   0.75728   -0.045548
+5   0.28   0.87224   0.82657   0.75728   -0.045548
+5   0.28   0.12776   0.82657   0.75728   -0.045548
+5   0.28   0.62776   0.67343   0.75728   -0.045548
+5   0.28   0.37224   0.67343   0.75728   -0.045548
+5   0.28   0.82657   0.62776   0.75728   -0.045548
+5   0.28   0.17343   0.62776   0.75728   -0.045548
+5   0.28   0.82657   0.37224   0.75728   -0.045548
+5   0.28   0.17343   0.37224   0.75728   -0.045548
+5   0.28   0.62776   0.32657   0.75728   -0.045548
+5   0.28   0.37224   0.32657   0.75728   -0.045548
+5   0.28   0.87224   0.17343   0.75728   -0.045548
+5   0.28   0.12776   0.17343   0.75728   -0.045548
+5   0.28   0.67343   0.12776   0.75728   -0.045548
+5   0.28   0.32657   0.12776   0.75728   -0.045548
+5   0.28   0.82657   0.87224   0.74272   -0.045548
+5   0.28   0.17343   0.87224   0.74272   -0.045548
+5   0.28   0.62776   0.82657   0.74272   -0.045548
+5   0.28   0.37224   0.82657   0.74272   -0.045548
+5   0.28   0.87224   0.67343   0.74272   -0.045548
+5   0.28   0.12776   0.67343   0.74272   -0.045548
+5   0.28   0.67343   0.62776   0.74272   -0.045548
+5   0.28   0.32657   0.62776   0.74272   -0.045548
+5   0.28   0.67343   0.37224   0.74272   -0.045548
+5   0.28   0.32657   0.37224   0.74272   -0.045548
+5   0.28   0.87224   0.32657   0.74272   -0.045548
+5   0.28   0.12776   0.32657   0.74272   -0.045548
+5   0.28   0.62776   0.17343   0.74272   -0.045548
+5   0.28   0.37224   0.17343   0.74272   -0.045548
+5   0.28   0.82657   0.12776   0.74272   -0.045548
+5   0.28   0.17343   0.12776   0.74272   -0.045548
+5   0.28   0.74272   0.87224   0.67343   -0.045548
+5   0.28   0.25728   0.87224   0.67343   -0.045548
+5   0.28   0.87224   0.75728   0.67343   -0.045548
+5   0.28   0.12776   0.75728   0.67343   -0.045548
+5   0.28   0.62776   0.74272   0.67343   -0.045548
+5   0.28   0.37224   0.74272   0.67343   -0.045548
+5   0.28   0.75728   0.62776   0.67343   -0.045548
+5   0.28   0.24272   0.62776   0.67343   -0.045548
+5   0.28   0.75728   0.37224   0.67343   -0.045548
+5   0.28   0.24272   0.37224   0.67343   -0.045548
+5   0.28   0.62776   0.25728   0.67343   -0.045548
+5   0.28   0.37224   0.25728   0.67343   -0.045548
+5   0.28   0.87224   0.24272   0.67343   -0.045548
+5   0.28   0.12776   0.24272   0.67343   -0.045548
+5   0.28   0.74272   0.12776   0.67343   -0.045548
+5   0.28   0.25728   0.12776   0.67343   -0.045548
+5   0.28   0.75728   0.82657   0.62776   -0.045548
+5   0.28   0.24272   0.82657   0.62776   -0.045548
+5   0.28   0.67343   0.75728   0.62776   -0.045548
+5   0.28   0.32657   0.75728   0.62776   -0.045548
+5   0.28   0.82657   0.74272   0.62776   -0.045548
+5   0.28   0.17343   0.74272   0.62776   -0.045548
+5   0.28   0.74272   0.67343   0.62776   -0.045548
+5   0.28   0.25728   0.67343   0.62776   -0.045548
+5   0.28   0.74272   0.32657   0.62776   -0.045548
+5   0.28   0.25728   0.32657   0.62776   -0.045548
+5   0.28   0.82657   0.25728   0.62776   -0.045548
+5   0.28   0.17343   0.25728   0.62776   -0.045548
+5   0.28   0.67343   0.24272   0.62776   -0.045548
+5   0.28   0.32657   0.24272   0.62776   -0.045548
+5   0.28   0.75728   0.17343   0.62776   -0.045548
+5   0.28   0.24272   0.17343   0.62776   -0.045548
+5   0.28   0.75728   0.82657   0.37224   -0.045548
+5   0.28   0.24272   0.82657   0.37224   -0.045548
+5   0.28   0.67343   0.75728   0.37224   -0.045548
+5   0.28   0.32657   0.75728   0.37224   -0.045548
+5   0.28   0.82657   0.74272   0.37224   -0.045548
+5   0.28   0.17343   0.74272   0.37224   -0.045548
+5   0.28   0.74272   0.67343   0.37224   -0.045548
+5   0.28   0.25728   0.67343   0.37224   -0.045548
+5   0.28   0.74272   0.32657   0.37224   -0.045548
+5   0.28   0.25728   0.32657   0.37224   -0.045548
+5   0.28   0.82657   0.25728   0.37224   -0.045548
+5   0.28   0.17343   0.25728   0.37224   -0.045548
+5   0.28   0.67343   0.24272   0.37224   -0.045548
+5   0.28   0.32657   0.24272   0.37224   -0.045548
+5   0.28   0.75728   0.17343   0.37224   -0.045548
+5   0.28   0.24272   0.17343   0.37224   -0.045548
+5   0.28   0.74272   0.87224   0.32657   -0.045548
+5   0.28   0.25728   0.87224   0.32657   -0.045548
+5   0.28   0.87224   0.75728   0.32657   -0.045548
+5   0.28   0.12776   0.75728   0.32657   -0.045548
+5   0.28   0.62776   0.74272   0.32657   -0.045548
+5   0.28   0.37224   0.74272   0.32657   -0.045548
+5   0.28   0.75728   0.62776   0.32657   -0.045548
+5   0.28   0.24272   0.62776   0.32657   -0.045548
+5   0.28   0.75728   0.37224   0.32657   -0.045548
+5   0.28   0.24272   0.37224   0.32657   -0.045548
+5   0.28   0.62776   0.25728   0.32657   -0.045548
+5   0.28   0.37224   0.25728   0.32657   -0.045548
+5   0.28   0.87224   0.24272   0.32657   -0.045548
+5   0.28   0.12776   0.24272   0.32657   -0.045548
+5   0.28   0.74272   0.12776   0.32657   -0.045548
+5   0.28   0.25728   0.12776   0.32657   -0.045548
+5   0.28   0.82657   0.87224   0.25728   -0.045548
+5   0.28   0.17343   0.87224   0.25728   -0.045548
+5   0.28   0.62776   0.82657   0.25728   -0.045548
+5   0.28   0.37224   0.82657   0.25728   -0.045548
+5   0.28   0.87224   0.67343   0.25728   -0.045548
+5   0.28   0.12776   0.67343   0.25728   -0.045548
+5   0.28   0.67343   0.62776   0.25728   -0.045548
+5   0.28   0.32657   0.62776   0.25728   -0.045548
+5   0.28   0.67343   0.37224   0.25728   -0.045548
+5   0.28   0.32657   0.37224   0.25728   -0.045548
+5   0.28   0.87224   0.32657   0.25728   -0.045548
+5   0.28   0.12776   0.32657   0.25728   -0.045548
+5   0.28   0.62776   0.17343   0.25728   -0.045548
+5   0.28   0.37224   0.17343   0.25728   -0.045548
+5   0.28   0.82657   0.12776   0.25728   -0.045548
+5   0.28   0.17343   0.12776   0.25728   -0.045548
+5   0.28   0.67343   0.87224   0.24272   -0.045548
+5   0.28   0.32657   0.87224   0.24272   -0.045548
+5   0.28   0.87224   0.82657   0.24272   -0.045548
+5   0.28   0.12776   0.82657   0.24272   -0.045548
+5   0.28   0.62776   0.67343   0.24272   -0.045548
+5   0.28   0.37224   0.67343   0.24272   -0.045548
+5   0.28   0.82657   0.62776   0.24272   -0.045548
+5   0.28   0.17343   0.62776   0.24272   -0.045548
+5   0.28   0.82657   0.37224   0.24272   -0.045548
+5   0.28   0.17343   0.37224   0.24272   -0.045548
+5   0.28   0.62776   0.32657   0.24272   -0.045548
+5   0.28   0.37224   0.32657   0.24272   -0.045548
+5   0.28   0.87224   0.17343   0.24272   -0.045548
+5   0.28   0.12776   0.17343   0.24272   -0.045548
+5   0.28   0.67343   0.12776   0.24272   -0.045548
+5   0.28   0.32657   0.12776   0.24272   -0.045548
+5   0.28   0.75728   0.87224   0.17343   -0.045548
+5   0.28   0.24272   0.87224   0.17343   -0.045548
+5   0.28   0.62776   0.75728   0.17343   -0.045548
+5   0.28   0.37224   0.75728   0.17343   -0.045548
+5   0.28   0.87224   0.74272   0.17343   -0.045548
+5   0.28   0.12776   0.74272   0.17343   -0.045548
+5   0.28   0.74272   0.62776   0.17343   -0.045548
+5   0.28   0.25728   0.62776   0.17343   -0.045548
+5   0.28   0.74272   0.37224   0.17343   -0.045548
+5   0.28   0.25728   0.37224   0.17343   -0.045548
+5   0.28   0.87224   0.25728   0.17343   -0.045548
+5   0.28   0.12776   0.25728   0.17343   -0.045548
+5   0.28   0.62776   0.24272   0.17343   -0.045548
+5   0.28   0.37224   0.24272   0.17343   -0.045548
+5   0.28   0.75728   0.12776   0.17343   -0.045548
+5   0.28   0.24272   0.12776   0.17343   -0.045548
+5   0.28   0.74272   0.82657   0.12776   -0.045548
+5   0.28   0.25728   0.82657   0.12776   -0.045548
+5   0.28   0.82657   0.75728   0.12776   -0.045548
+5   0.28   0.17343   0.75728   0.12776   -0.045548
+5   0.28   0.67343   0.74272   0.12776   -0.045548
+5   0.28   0.32657   0.74272   0.12776   -0.045548
+5   0.28   0.75728   0.67343   0.12776   -0.045548
+5   0.28   0.24272   0.67343   0.12776   -0.045548
+5   0.28   0.75728   0.32657   0.12776   -0.045548
+5   0.28   0.24272   0.32657   0.12776   -0.045548
+5   0.28   0.67343   0.25728   0.12776   -0.045548
+5   0.28   0.32657   0.25728   0.12776   -0.045548
+5   0.28   0.82657   0.24272   0.12776   -0.045548
+5   0.28   0.17343   0.24272   0.12776   -0.045548
+5   0.28   0.74272   0.17343   0.12776   -0.045548
+5   0.28   0.25728   0.17343   0.12776   -0.045548
+5   0.279   0.76593   0.76593   0.76593   -0.045548
+5   0.279   0.73407   0.76593   0.76593   -0.045548
+5   0.279   0.26593   0.76593   0.76593   -0.045548
+5   0.279   0.23407   0.76593   0.76593   -0.045548
+5   0.279   0.76593   0.73407   0.76593   -0.045548
+5   0.279   0.73407   0.73407   0.76593   -0.045548
+5   0.279   0.26593   0.73407   0.76593   -0.045548
+5   0.279   0.23407   0.73407   0.76593   -0.045548
+5   0.279   0.76593   0.26593   0.76593   -0.045548
+5   0.279   0.73407   0.26593   0.76593   -0.045548
+5   0.279   0.26593   0.26593   0.76593   -0.045548
+5   0.279   0.23407   0.26593   0.76593   -0.045548
+5   0.279   0.76593   0.23407   0.76593   -0.045548
+5   0.279   0.73407   0.23407   0.76593   -0.045548
+5   0.279   0.26593   0.23407   0.76593   -0.045548
+5   0.279   0.23407   0.23407   0.76593   -0.045548
+5   0.279   0.76593   0.76593   0.73407   -0.045548
+5   0.279   0.73407   0.76593   0.73407   -0.045548
+5   0.279   0.26593   0.76593   0.73407   -0.045548
+5   0.279   0.23407   0.76593   0.73407   -0.045548
+5   0.279   0.76593   0.73407   0.73407   -0.045548
+5   0.279   0.73407   0.73407   0.73407   -0.045548
+5   0.279   0.26593   0.73407   0.73407   -0.045548
+5   0.279   0.23407   0.73407   0.73407   -0.045548
+5   0.279   0.76593   0.26593   0.73407   -0.045548
+5   0.279   0.73407   0.26593   0.73407   -0.045548
+5   0.279   0.26593   0.26593   0.73407   -0.045548
+5   0.279   0.23407   0.26593   0.73407   -0.045548
+5   0.279   0.76593   0.23407   0.73407   -0.045548
+5   0.279   0.73407   0.23407   0.73407   -0.045548
+5   0.279   0.26593   0.23407   0.73407   -0.045548
+5   0.279   0.23407   0.23407   0.73407   -0.045548
+5   0.279   0.76593   0.76593   0.26593   -0.045548
+5   0.279   0.73407   0.76593   0.26593   -0.045548
+5   0.279   0.26593   0.76593   0.26593   -0.045548
+5   0.279   0.23407   0.76593   0.26593   -0.045548
+5   0.279   0.76593   0.73407   0.26593   -0.045548
+5   0.279   0.73407   0.73407   0.26593   -0.045548
+5   0.279   0.26593   0.73407   0.26593   -0.045548
+5   0.279   0.23407   0.73407   0.26593   -0.045548
+5   0.279   0.76593   0.26593   0.26593   -0.045548
+5   0.279   0.73407   0.26593   0.26593   -0.045548
+5   0.279   0.26593   0.26593   0.26593   -0.045548
+5   0.279   0.23407   0.26593   0.26593   -0.045548
+5   0.279   0.76593   0.23407   0.26593   -0.045548
+5   0.279   0.73407   0.23407   0.26593   -0.045548
+5   0.279   0.26593   0.23407   0.26593   -0.045548
+5   0.279   0.23407   0.23407   0.26593   -0.045548
+5   0.279   0.76593   0.76593   0.23407   -0.045548
+5   0.279   0.73407   0.76593   0.23407   -0.045548
+5   0.279   0.26593   0.76593   0.23407   -0.045548
+5   0.279   0.23407   0.76593   0.23407   -0.045548
+5   0.279   0.76593   0.73407   0.23407   -0.045548
+5   0.279   0.73407   0.73407   0.23407   -0.045548
+5   0.279   0.26593   0.73407   0.23407   -0.045548
+5   0.279   0.23407   0.73407   0.23407   -0.045548
+5   0.279   0.76593   0.26593   0.23407   -0.045548
+5   0.279   0.73407   0.26593   0.23407   -0.045548
+5   0.279   0.26593   0.26593   0.23407   -0.045548
+5   0.279   0.23407   0.26593   0.23407   -0.045548
+5   0.279   0.76593   0.23407   0.23407   -0.045548
+5   0.279   0.73407   0.23407   0.23407   -0.045548
+5   0.279   0.26593   0.23407   0.23407   -0.045548
+5   0.279   0.23407   0.23407   0.23407   -0.045548
+39   0.5   0.75   0.75   0.94552   3
+39   0.5   0.25   0.75   0.94552   3
+39   0.5   0.75   0.25   0.94552   3
+39   0.5   0.25   0.25   0.94552   3
+39   0.5   0.75   0.94552   0.75   3
+39   0.5   0.25   0.94552   0.75   3
+39   0.5   0.94552   0.75   0.75   3
+39   0.5   0.55448   0.75   0.75   3
+39   0.5   0.44552   0.75   0.75   3
+39   0.5   0.05448   0.75   0.75   3
+39   0.5   0.75   0.55448   0.75   3
+39   0.5   0.25   0.55448   0.75   3
+39   0.5   0.75   0.44552   0.75   3
+39   0.5   0.25   0.44552   0.75   3
+39   0.5   0.94552   0.25   0.75   3
+39   0.5   0.55448   0.25   0.75   3
+39   0.5   0.44552   0.25   0.75   3
+39   0.5   0.05448   0.25   0.75   3
+39   0.5   0.75   0.05448   0.75   3
+39   0.5   0.25   0.05448   0.75   3
+39   0.5   0.75   0.75   0.55448   3
+39   0.5   0.25   0.75   0.55448   3
+39   0.5   0.75   0.25   0.55448   3
+39   0.5   0.25   0.25   0.55448   3
+39   0.5   0.75   0.75   0.44552   3
+39   0.5   0.25   0.75   0.44552   3
+39   0.5   0.75   0.25   0.44552   3
+39   0.5   0.25   0.25   0.44552   3
+39   0.5   0.75   0.94552   0.25   3
+39   0.5   0.25   0.94552   0.25   3
+39   0.5   0.94552   0.75   0.25   3
+39   0.5   0.55448   0.75   0.25   3
+39   0.5   0.44552   0.75   0.25   3
+39   0.5   0.05448   0.75   0.25   3
+39   0.5   0.75   0.55448   0.25   3
+39   0.5   0.25   0.55448   0.25   3
+39   0.5   0.75   0.44552   0.25   3
+39   0.5   0.25   0.44552   0.25   3
+39   0.5   0.94552   0.25   0.25   3
+39   0.5   0.55448   0.25   0.25   3
+39   0.5   0.44552   0.25   0.25   3
+39   0.5   0.05448   0.25   0.25   3
+39   0.5   0.75   0.05448   0.25   3
+39   0.5   0.25   0.05448   0.25   3
+39   0.5   0.75   0.75   0.05448   3
+39   0.5   0.25   0.75   0.05448   3
+39   0.5   0.75   0.25   0.05448   3
+39   0.5   0.25   0.25   0.05448   3
+
+#S 6 Tripalmitin
+#UCELL   5.4514000  11.9450000  40.4820000  84.6620000  86.9700000  79.7700000
+#USYSTEM Triclinic
+#ULATTICE P
+#USTRUCTURE Tripalmitin
+#UREF https://www.ccdc.cam.ac.uk/structures/Search?Compound=tripalmitin&DatabaseToSearch=Published
+#UTEMP 300
+#UCOMMENT
+#N  5
+#L  AtomicNumber  Fraction  X  Y  Z
+06   1.0  0.3061000   0.4096000   0.9814500
+06   1.0  0.6939000   0.5904000   0.0185500
+06   1.0  0.4352000   0.3173000   0.0054900
+06   1.0  0.5648000   0.6827000   0.9945100
+06   1.0  0.5551000   0.2092000   0.9896500
+06   1.0  0.4449000   0.7908000   0.0103500
+08   1.0  0.4871000   0.4338000   0.9560200
+08   1.0  0.5129000   0.5662000   0.0439800
+06   1.0  0.4069000   0.4690000   0.9254100
+06   1.0  0.5931000   0.5310000   0.0745900
+08   1.0  0.1876000   0.4891000   0.9201500
+08   1.0  0.8124000   0.5109000   0.0798500
+06   1.0  0.6137000   0.4812000   0.9006300
+06   1.0  0.3863000   0.5188000   0.0993700
+06   1.0  0.5318000   0.5633000   0.8705200
+06   1.0  0.4682000   0.4367000   0.1294800
+06   1.0  0.7422000   0.5716000   0.8447400
+06   1.0  0.2578000   0.4284000   0.1552600
+06   1.0  0.6671000   0.6600000   0.8160500
+06   1.0  0.3329000   0.3400000   0.1839500
+06   1.0  0.8705000   0.6706000   0.7895200
+06   1.0  0.1295000   0.3294000   0.2104800
+06   1.0  0.7941000   0.7610000   0.7614100
+06   1.0  0.2059000   0.2390000   0.2385900
+06   1.0  0.9929000   0.7715000   0.7345900
+06   1.0  0.0071000   0.2285000   0.2654100
+06   1.0  0.9174000   0.8628000   0.7064900
+06   1.0  0.0826000   0.1372000   0.2935100
+06   1.0  0.1160000   0.8726000   0.6793000
+06   1.0  0.8840000   0.1274000   0.3207000
+06   1.0  0.0402000   0.9628000   0.6513200
+06   1.0  0.9598000   0.0372000   0.3486800
+06   1.0  0.2390000   0.9721000   0.6239400
+06   1.0  0.7610000   0.0279000   0.3760600
+06   1.0  0.1600000   0.0608000   0.5955600
+06   1.0  0.8400000   0.9392000   0.4044400
+06   1.0  0.3620000   0.0706000   0.5688500
+06   1.0  0.6380000   0.9294000   0.4311500
+06   1.0  0.2852000   0.1569000   0.5401000
+06   1.0  0.7148000   0.8431000   0.4599000
+06   1.0  0.4900000   0.1688000   0.5141000
+06   1.0  0.5100000   0.8312000   0.4859000
+08   1.0  0.2413000   0.2916000   0.0290700
+08   1.0  0.7587000   0.7084000   0.9709300
+06   1.0  0.3136000   0.2504000   0.0600000
+06   1.0  0.6864000   0.7496000   0.9400000
+08   1.0  0.5276000   0.2365000   0.0674300
+08   1.0  0.4724000   0.7635000   0.9325700
+06   1.0  0.1009000   0.2246000   0.0818400
+06   1.0  0.8991000   0.7754000   0.9181600
+06   1.0  0.1762000   0.1417000   0.1116900
+06   1.0  0.8238000   0.8583000   0.8883100
+06   1.0  0.9641000   0.1299000   0.1369800
+06   1.0  0.0359000   0.8701000   0.8630200
+06   1.0  0.0389000   0.0403000   0.1655100
+06   1.0  0.9611000   0.9597000   0.8344900
+06   1.0  0.8342000   0.0295000   0.1920700
+06   1.0  0.1658000   0.9705000   0.8079300
+06   1.0  0.9108000   0.9386000   0.2201400
+06   1.0  0.0892000   0.0614000   0.7798600
+06   1.0  0.7114000   0.9283000   0.2470100
+06   1.0  0.2886000   0.0717000   0.7529900
+06   1.0  0.7886000   0.8380000   0.2750100
+06   1.0  0.2114000   0.1620000   0.7249900
+06   1.0  0.5898000   0.8283000   0.3022600
+06   1.0  0.4102000   0.1717000   0.6977400
+06   1.0  0.6680000   0.7379000   0.3305000
+06   1.0  0.3320000   0.2621000   0.6695000
+06   1.0  0.4705000   0.7275000   0.3574600
+06   1.0  0.5295000   0.2725000   0.6425400
+06   1.0  0.5507000   0.6373000   0.3854600
+06   1.0  0.4493000   0.3627000   0.6145400
+06   1.0  0.3535000   0.6254000   0.4126500
+06   1.0  0.6465000   0.3746000   0.5873500
+06   1.0  0.4341000   0.5359000   0.4406100
+06   1.0  0.5659000   0.4641000   0.5593900
+06   1.0  0.2339000   0.5255000   0.4676000
+06   1.0  0.7661000   0.4745000   0.5324000
+08   1.0  0.3667000   0.1792000   0.9693500
+08   1.0  0.6333000   0.8208000   0.0306500
+06   1.0  0.4272000   0.0787000   0.9559200
+06   1.0  0.5728000   0.9213000   0.0440800
+08   1.0  0.6228000   0.0151000   0.9590900
+08   1.0  0.3772000   0.9849000   0.0409100
+06   1.0  0.2141000   0.0561000   0.9360000
+06   1.0  0.7859000   0.9439000   0.0640000
+06   1.0  0.1296000   0.1529000   0.9096300
+06   1.0  0.8704000   0.8471000   0.0903700
+06   1.0  0.3290000   0.1690000   0.8832100
+06   1.0  0.6710000   0.8310000   0.1167900
+06   1.0  0.2475000   0.2598000   0.8552400
+06   1.0  0.7525000   0.7402000   0.1447600
+06   1.0  0.4468000   0.2721000   0.8284000
+06   1.0  0.5532000   0.7279000   0.1716000
+06   1.0  0.3709000   0.3606000   0.7998700
+06   1.0  0.6291000   0.6394000   0.2001300
+06   1.0  0.5707000   0.3698000   0.7730200
+06   1.0  0.4293000   0.6302000   0.2269800
+06   1.0  0.4951000   0.4590000   0.7444500
+06   1.0  0.5049000   0.5410000   0.2555500
+06   1.0  0.6933000   0.4689000   0.7174800
+06   1.0  0.3067000   0.5311000   0.2825200
+06   1.0  0.6192000   0.5591000   0.6892500
+06   1.0  0.3808000   0.4409000   0.3107500
+06   1.0  0.8152000   0.5696000   0.6621800
+06   1.0  0.1848000   0.4304000   0.3378200
+06   1.0  0.7376000   0.6612000   0.6343400
+06   1.0  0.2624000   0.3388000   0.3656600
+06   1.0  0.9330000   0.6718000   0.6070900
+06   1.0  0.0670000   0.3282000   0.3929100
+06   1.0  0.8544000   0.7639000   0.5796000
+06   1.0  0.1456000   0.2361000   0.4204000
+06   1.0  0.0492000   0.7754000   0.5521000
+06   1.0  0.9508000   0.2246000   0.4479000
+01   1.0  0.2410000   0.4740000   0.9940000
+01   1.0  0.7590000   0.5260000   0.0060000
+01   1.0  0.1750000   0.3930000   0.9688000
+01   1.0  0.8250000   0.6070000   0.0312000
+01   1.0  0.5660000   0.3330000   0.0185000
+01   1.0  0.4340000   0.6670000   0.9815000
+01   1.0  0.5760000   0.1510000   0.0080000
+01   1.0  0.4240000   0.8490000   0.9920000
+01   1.0  0.6940000   0.2200000   0.9747000
+01   1.0  0.3060000   0.7800000   0.0253000
+01   1.0  0.7250000   0.5070000   0.9147000
+01   1.0  0.2750000   0.4930000   0.0853000
+01   1.0  0.6680000   0.4060000   0.8932000
+01   1.0  0.3320000   0.5940000   0.1068000
+01   1.0  0.4620000   0.6350000   0.8792000
+01   1.0  0.5380000   0.3650000   0.1208000
+01   1.0  0.3990000   0.5400000   0.8596000
+01   1.0  0.6010000   0.4600000   0.1404000
+01   1.0  0.8650000   0.5970000   0.8571000
+01   1.0  0.1350000   0.4030000   0.1429000
+01   1.0  0.8100000   0.5010000   0.8355000
+01   1.0  0.1900000   0.4990000   0.1645000
+01   1.0  0.5280000   0.6460000   0.8045000
+01   1.0  0.4720000   0.3540000   0.1955000
+01   1.0  0.6050000   0.7290000   0.8263000
+01   1.0  0.3950000   0.2710000   0.1737000
+01   1.0  0.9310000   0.6000000   0.7796000
+01   1.0  0.0690000   0.4000000   0.2204000
+01   1.0  0.0050000   0.6920000   0.8004000
+01   1.0  0.9950000   0.3080000   0.1996000
+01   1.0  0.7330000   0.8310000   0.7714000
+01   1.0  0.2670000   0.1690000   0.2286000
+01   1.0  0.6490000   0.7490000   0.7507000
+01   1.0  0.3510000   0.2510000   0.2493000
+01   1.0  0.7790000   0.8460000   0.6952000
+01   1.0  0.2210000   0.1540000   0.3048000
+01   1.0  0.8640000   0.9320000   0.7173000
+01   1.0  0.1360000   0.0680000   0.2827000
+01   1.0  0.0480000   0.7020000   0.7239000
+01   1.0  0.9520000   0.2980000   0.2761000
+01   1.0  0.1370000   0.7900000   0.7440000
+01   1.0  0.8630000   0.2100000   0.2560000
+01   1.0  0.2580000   0.8860000   0.6904000
+01   1.0  0.7420000   0.1140000   0.3096000
+01   1.0  0.1770000   0.8040000   0.6685000
+01   1.0  0.8230000   0.1960000   0.3315000
+01   1.0  0.8860000   0.9550000   0.6422000
+01   1.0  0.1140000   0.0450000   0.3578000
+01   1.0  0.9800000   0.0320000   0.6618000
+01   1.0  0.0200000   0.9680000   0.3382000
+01   1.0  0.3720000   0.9940000   0.6352000
+01   1.0  0.6280000   0.0060000   0.3648000
+01   1.0  0.2940000   0.9000000   0.6148000
+01   1.0  0.7060000   0.1000000   0.3852000
+01   1.0  0.1030000   0.1300000   0.6063000
+01   1.0  0.8970000   0.8700000   0.3937000
+01   1.0  0.0270000   0.0400000   0.5842000
+01   1.0  0.9730000   0.9600000   0.4158000
+01   1.0  0.4920000   0.0940000   0.5800000
+01   1.0  0.5080000   0.9060000   0.4200000
+01   1.0  0.4240000   0.0010000   0.5589000
+01   1.0  0.5760000   0.9990000   0.4411000
+01   1.0  0.1670000   0.1270000   0.5280000
+01   1.0  0.8330000   0.8730000   0.4720000
+01   1.0  0.1950000   0.2190000   0.5520000
+01   1.0  0.8050000   0.7810000   0.4480000
+01   1.0  0.4370000   0.2160000   0.4943000
+01   1.0  0.5630000   0.7840000   0.5057000
+01   1.0  0.6140000   0.1970000   0.5260000
+01   1.0  0.3860000   0.8030000   0.4740000
+01   1.0  0.5690000   0.1040000   0.5030000
+01   1.0  0.4310000   0.8960000   0.4970000
+01   1.0  0.0160000   0.2940000   0.0906000
+01   1.0  0.9840000   0.7060000   0.9094000
+01   1.0  0.0000000   0.1940000   0.0673000
+01   1.0  0.0000000   0.8060000   0.9327000
+01   1.0  0.2530000   0.0710000   0.1029000
+01   1.0  0.7470000   0.9290000   0.8971000
+01   1.0  0.3040000   0.1680000   0.1228000
+01   1.0  0.6960000   0.8320000   0.8772000
+01   1.0  0.8370000   0.1090000   0.1245000
+01   1.0  0.1630000   0.8910000   0.8755000
+01   1.0  0.8970000   0.2000000   0.1468000
+01   1.0  0.1030000   0.8000000   0.8532000
+01   1.0  0.1080000   0.9720000   0.1552000
+01   1.0  0.8920000   0.0280000   0.8448000
+01   1.0  0.1760000   0.0570000   0.1770000
+01   1.0  0.8240000   0.9430000   0.8230000
+01   1.0  0.7740000   0.0990000   0.2023000
+01   1.0  0.2260000   0.9010000   0.7977000
+01   1.0  0.7100000   0.0040000   0.1802000
+01   1.0  0.2900000   0.9960000   0.8198000
+01   1.0  0.9680000   0.8690000   0.2100000
+01   1.0  0.0320000   0.1310000   0.7900000
+01   1.0  0.0590000   0.9520000   0.2298000
+01   1.0  0.9410000   0.0480000   0.7702000
+01   1.0  0.6490000   0.9970000   0.2574000
+01   1.0  0.3510000   0.0030000   0.7426000
+01   1.0  0.5720000   0.9120000   0.2359000
+01   1.0  0.4280000   0.0880000   0.7641000
+01   1.0  0.8460000   0.7700000   0.2640000
+01   1.0  0.1540000   0.2300000   0.7360000
+01   1.0  0.9390000   0.8500000   0.2844000
+01   1.0  0.0610000   0.1500000   0.7156000
+01   1.0  0.5340000   0.8970000   0.3129000
+01   1.0  0.4660000   0.1030000   0.6871000
+01   1.0  0.4560000   0.8060000   0.2910000
+01   1.0  0.5440000   0.1940000   0.7090000
+01   1.0  0.8110000   0.7550000   0.3405000
+01   1.0  0.1890000   0.2450000   0.6595000
+01   1.0  0.7240000   0.6710000   0.3188000
+01   1.0  0.2760000   0.3290000   0.6812000
+01   1.0  0.4040000   0.7950000   0.3683000
+01   1.0  0.5960000   0.2050000   0.6317000
+01   1.0  0.3380000   0.7060000   0.3461000
+01   1.0  0.6620000   0.2940000   0.6539000
+01   1.0  0.6080000   0.5680000   0.3751000
+01   1.0  0.3920000   0.4320000   0.6249000
+01   1.0  0.6870000   0.6530000   0.3972000
+01   1.0  0.3130000   0.3470000   0.6028000
+01   1.0  0.2160000   0.6060000   0.4019000
+01   1.0  0.7840000   0.3940000   0.5981000
+01   1.0  0.2970000   0.6930000   0.4240000
+01   1.0  0.7030000   0.3070000   0.5760000
+01   1.0  0.4840000   0.4700000   0.4285000
+01   1.0  0.5160000   0.5300000   0.5715000
+01   1.0  0.5610000   0.5540000   0.4538000
+01   1.0  0.4390000   0.4460000   0.5462000
+01   1.0  0.1770000   0.5950000   0.4780000
+01   1.0  0.8230000   0.4050000   0.5220000
+01   1.0  0.0900000   0.5030000   0.4590000
+01   1.0  0.9100000   0.4970000   0.5410000
+01   1.0  0.2910000   0.4670000   0.4848000
+01   1.0  0.7090000   0.5330000   0.5152000
+01   1.0  0.0820000   0.0460000   0.9521000
+01   1.0  0.9180000   0.9540000   0.0479000
+01   1.0  0.2960000   0.9960000   0.9227000
+01   1.0  0.7040000   0.0040000   0.0773000
+01   1.0  0.0630000   0.2210000   0.9205000
+01   1.0  0.9370000   0.7790000   0.0795000
+01   1.0  0.0000000   0.1330000   0.8974000
+01   1.0  0.0000000   0.8670000   0.1026000
+01   1.0  0.4650000   0.1870000   0.8948000
+01   1.0  0.5350000   0.8130000   0.1052000
+01   1.0  0.4030000   0.1000000   0.8732000
+01   1.0  0.5970000   0.9000000   0.1268000
+01   1.0  0.1020000   0.2490000   0.8445000
+01   1.0  0.8980000   0.7510000   0.1555000
+01   1.0  0.1920000   0.3280000   0.8664000
+01   1.0  0.8080000   0.6720000   0.1336000
+01   1.0  0.5140000   0.2020000   0.8189000
+01   1.0  0.4860000   0.7980000   0.1811000
+01   1.0  0.5790000   0.2930000   0.8400000
+01   1.0  0.4210000   0.7070000   0.1600000
+01   1.0  0.3070000   0.4280000   0.8108000
+01   1.0  0.6930000   0.5720000   0.1892000
+01   1.0  0.2250000   0.3490000   0.7893000
+01   1.0  0.7750000   0.6510000   0.2107000
+01   1.0  0.7130000   0.3860000   0.7834000
+01   1.0  0.2870000   0.6140000   0.2166000
+01   1.0  0.6300000   0.2990000   0.7635000
+01   1.0  0.3700000   0.7010000   0.2365000
+01   1.0  0.4390000   0.5290000   0.7549000
+01   1.0  0.5610000   0.4710000   0.2451000
+01   1.0  0.3410000   0.4500000   0.7355000
+01   1.0  0.6590000   0.5500000   0.2645000
+01   1.0  0.8380000   0.4840000   0.7278000
+01   1.0  0.1620000   0.5160000   0.2722000
+01   1.0  0.7570000   0.4000000   0.7070000
+01   1.0  0.2430000   0.6000000   0.2930000
+01   1.0  0.5700000   0.6270000   0.7007000
+01   1.0  0.4300000   0.3730000   0.2993000
+01   1.0  0.4690000   0.5470000   0.6800000
+01   1.0  0.5310000   0.4530000   0.3200000
+01   1.0  0.9580000   0.5850000   0.6727000
+01   1.0  0.0420000   0.4150000   0.3273000
+01   1.0  0.8780000   0.5000000   0.6522000
+01   1.0  0.1220000   0.5000000   0.3478000
+01   1.0  0.6050000   0.6420000   0.6224000
+01   1.0  0.3950000   0.3580000   0.3776000
+01   1.0  0.6820000   0.7290000   0.6456000
+01   1.0  0.3180000   0.2710000   0.3544000
+01   1.0  0.9980000   0.6030000   0.5967000
+01   1.0  0.0020000   0.3970000   0.4033000
+01   1.0  0.0720000   0.6880000   0.6183000
+01   1.0  0.9280000   0.3120000   0.3817000
+01   1.0  0.7090000   0.7510000   0.5692000
+01   1.0  0.2910000   0.2490000   0.4308000
+01   1.0  0.7910000   0.8290000   0.5915000
+01   1.0  0.2090000   0.1710000   0.4085000
+01   1.0  0.9880000   0.8330000   0.5348000
+01   1.0  0.0120000   0.1670000   0.4652000
+01   1.0  0.1970000   0.7870000   0.5622000
+01   1.0  0.8030000   0.2130000   0.4378000
+01   1.0  0.1010000   0.7130000   0.5384000
+01   1.0  0.8990000   0.2870000   0.4616000

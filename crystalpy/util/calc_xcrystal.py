@@ -19,6 +19,7 @@ def get_diffraction_setup(
         miller_l=1,
         geometry_type_index=0,
         asymmetry_angle=0.0,
+        dabax=None, # only used if material_constants_library_flag > 0
         ):
 
     # Create a diffraction setup.
@@ -50,7 +51,9 @@ def get_diffraction_setup(
                                                    miller_k               = miller_k,           # int
                                                    miller_l               = miller_l,           # int
                                                    asymmetry_angle        = asymmetry_angle,    # radians
-                                                   azimuthal_angle        = 0.0)                # radians
+                                                   azimuthal_angle        = 0.0,                # radians
+                                                   dabax                  = dabax,
+                                                   )
 
     return diffraction_setup
 
@@ -73,6 +76,7 @@ def calc_xcrystal_angular_scan(
         use_transfer_matrix=0,
         do_plot=0,
         calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
+        dabax=None, # only used if material_constants_library_flag > 0
         ):
 
     print("material_constants_library_flag    = ", material_constants_library_flag)
@@ -91,6 +95,10 @@ def calc_xcrystal_angular_scan(
     print("is_thick                           = ", is_thick)
     print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
+    if dabax is None:
+        print("dabax                              = ", dabax)
+    else:
+        print("dabax                              = \n", dabax.info())
 
     # Create a diffraction setup.
     diffraction_setup = get_diffraction_setup(
@@ -102,6 +110,7 @@ def calc_xcrystal_angular_scan(
         asymmetry_angle=asymmetry_angle,
         geometry_type_index=geometry_type_index,
         material_constants_library_flag=material_constants_library_flag,
+        dabax=dabax,
         )
 
 
@@ -166,6 +175,7 @@ def calc_xcrystal_alphazachariasen_scan(
         use_transfer_matrix=0,
         do_plot=0,
         calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
+        dabax=None, # only used if material_constants_library_flag > 0
         ):
 
     print("material_constants_library_flag    = ", material_constants_library_flag)
@@ -183,6 +193,10 @@ def calc_xcrystal_alphazachariasen_scan(
     print("is_thick                           = ", is_thick)
     print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
+    if dabax is None:
+        print("dabax                              = ", dabax)
+    else:
+        print("dabax                              = \n", dabax.info())
 
     # Create a diffraction setup.
     diffraction_setup = get_diffraction_setup(
@@ -194,6 +208,7 @@ def calc_xcrystal_alphazachariasen_scan(
         asymmetry_angle=asymmetry_angle,
         geometry_type_index=geometry_type_index,
         material_constants_library_flag=material_constants_library_flag,
+        dabax=dabax,
         )
 
 
@@ -262,6 +277,7 @@ def calc_xcrystal_energy_scan(
         use_transfer_matrix=0,
         do_plot=0,
         calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
+        dabax=None, # only used if material_constants_library_flag > 0
         ):
 
     print("material_constants_library_flag    = ", material_constants_library_flag)
@@ -279,6 +295,10 @@ def calc_xcrystal_energy_scan(
     print("is_thick                           = ", is_thick)
     print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
+    if dabax is None:
+        print("dabax                              = ", dabax)
+    else:
+        print("dabax                              = \n", dabax.info())
 
     # Create a diffraction setup.
     diffraction_setup = get_diffraction_setup(
@@ -290,6 +310,7 @@ def calc_xcrystal_energy_scan(
         asymmetry_angle=asymmetry_angle,
         geometry_type_index=geometry_type_index,
         material_constants_library_flag=material_constants_library_flag,
+        dabax=dabax,
         )
 
     if theta is None:
@@ -354,6 +375,7 @@ def calc_xcrystal_double_scan(
         geometry_type_index=0,
         do_plot=0,
         calculation_strategy_flag=0,  # 0=mpmath 1=numpy 2=numpy-truncated
+        dabax=None,  # only used if material_constants_library_flag > 0
 ):
 
 
@@ -375,7 +397,10 @@ def calc_xcrystal_double_scan(
     print("is_thick                           = ", is_thick)
     print("use_transfer_matrix                = ", use_transfer_matrix)
     print("geometry_type_index                = ", geometry_type_index)
-
+    if dabax is None:
+        print("dabax                              = ", dabax)
+    else:
+        print("dabax                              = \n", dabax.info())
 
     # Create a diffraction setup.
     diffraction_setup = get_diffraction_setup(
@@ -387,6 +412,7 @@ def calc_xcrystal_double_scan(
         asymmetry_angle=asymmetry_angle,
         geometry_type_index=geometry_type_index,
         material_constants_library_flag=material_constants_library_flag,
+        dabax=dabax,
         )
 
     if energy_points == 1:
