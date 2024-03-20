@@ -27,7 +27,7 @@ from crystalpy.util.Photon import Photon
 
 #
 def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angle=numpy.radians(65), thickness=10e-6,
-                                 calculation_method=1, plot_phase=0, calculation_strategy_flag=0):
+                                 calculation_method=1, plot_phase=0, calculation_strategy_flag=0, is_thick=0):
 
     # Create a diffraction setup.
 
@@ -85,6 +85,7 @@ def calculate_simple_diffraction(geometry_type=LaueDiffraction(), asymmetry_angl
 
         # perform the calculation
         coeffs = diffraction.calculateDiffractedComplexAmplitudes(diffraction_setup, photon,
+                                                                  is_thick=is_thick,
                                                                   calculation_method=calculation_method,
                                                                   calculation_strategy_flag=calculation_strategy_flag)
         # print(">>>> ", coeffs["transfer_matrix_s"])
@@ -138,3 +139,4 @@ if __name__ == "__main__":
     calculate_simple_diffraction(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians( 0), thickness=10e-6, calculation_method=calculation_method, plot_phase=1, calculation_strategy_flag=calculation_strategy_flag)
     calculate_simple_diffraction(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians( 0), thickness=10e-6, calculation_method=calculation_method, plot_phase=1, calculation_strategy_flag=calculation_strategy_flag)
 
+    calculate_simple_diffraction(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians( 0), thickness=10e-6, calculation_method=calculation_method, plot_phase=1, calculation_strategy_flag=calculation_strategy_flag, is_thick=1)

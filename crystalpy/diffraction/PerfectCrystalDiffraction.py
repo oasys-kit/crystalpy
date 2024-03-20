@@ -344,7 +344,7 @@ class PerfectCrystalDiffraction(object):
         """
         return photon.unitDirectionVector().scalarProduct(self.surfaceNormalInwards())
 
-    def _calculatePhotonOut(self, photon_in,
+    def calculatePhotonOut(self, photon_in,
                             method=1,
                             apply_reflectivity=False,
                             calculation_method=0,  # 0=Zachariasen, 1=Guigay
@@ -380,6 +380,22 @@ class PerfectCrystalDiffraction(object):
             Outgoing photon or photon bunch
 
         """
+
+        return self._calculatePhotonOut(photon_in,
+                            method=method,
+                            apply_reflectivity=apply_reflectivity,
+                            calculation_method=calculation_method,
+                            is_thick=is_thick,
+                            use_transfer_matrix=use_transfer_matrix,
+                            )
+
+    def _calculatePhotonOut(self, photon_in,
+                            method=1,
+                            apply_reflectivity=False,
+                            calculation_method=0,  # 0=Zachariasen, 1=Guigay
+                            is_thick=0,            # for Guigay only
+                            use_transfer_matrix=0, # for Guigay only
+                            ):
         # GENERAL VERSION:
         # Solves the Laue equation for the parallel components of the vectors and
         # uses the conservation of the wavevector modulus to calculate the outgoing wavevector
