@@ -500,6 +500,23 @@ class Vector(object):
         K_OUT = K_OUT_par.addVector(K_OUT_perp)
         return K_OUT
 
+    def scatteringOnSurfaceG(self, NORMAL, H, use_sign_of=+1):
+
+        Kh = self.addVector(H)
+        kh = Kh.norm()
+        k = Kin.norm()
+        h = H.norm()
+        alpha = (k**2 - kh**2) / k**2
+        # print("alpha: ", alpha)
+        gammah = (Kh.getNormalizedVector()).scalarProduct(NORMAL)
+        # print("gammah: ", gammah)
+
+        beta = - k * gammah * numpy.sqrt(1 - alpha) + use_sign_of * k * numpy.sqrt(  + gammah**2 * (1 - alpha))
+        # print("beta: ", beta)
+
+        return Kh.addVector(NORMAL.scalarMultiplication(beta))
+
+
     def getVectorH(self,
                    surface_normal,
                    d_spacingSI,
@@ -671,3 +688,17 @@ if __name__ == "__main__":
     v1.append(v2)
     print(">>>>>v3", v3.components()[0], v3.components()[1], v3.components()[2])
     print(">>>>>v1", v1.components()[0], v1.components()[1], v1.components()[2])
+
+    k = 2 * numpy.pi / 1e-10
+    theta_B = numpy.radians(14)
+    Kin = Vector(0, k * numpy.cos(theta_B), -k * numpy.sin(theta_B))
+    N = Vector(0,0,1)
+    dspacing = 5.43 / numpy.sqrt(3)
+    asymm = 0.0
+    H = Vector(0, numpy.sin(numpy.radians(asymm)), 2 * numpy.pi / dspacing * numpy.cos(numpy.radians(asymm)))
+
+    Kout  = Kin.scatteringOnSurface (N, H, +1)
+    KoutG = Kin.scatteringOnSurfaceG(N, H, +1)
+    print(">>>>Kin", Kin.components()[0], Kin.components()[1], Kin.components()[2])
+    print(">>>>Kout ", Kout.components()[0], Kout.components()[1], Kout.components()[2])
+    print(">>>>KoutG", KoutG.components()[0], KoutG.components()[1], KoutG.components()[2])

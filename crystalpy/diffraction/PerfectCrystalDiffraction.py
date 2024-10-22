@@ -1000,19 +1000,19 @@ class PerfectCrystalDiffraction(object):
             result["s22_p"] = s22_p
 
             if self.geometryType() == BraggDiffraction():
-                # guigay, sanchez del rio,  eq 31a
+                # guigay, sanchez del rio,  eq 42a
                 complex_amplitude_s = s21_s
                 complex_amplitude_p = s21_p
             elif self.geometryType() == BraggTransmission():
-                # guigay, sanchez del rio,  eq 31b
+                # guigay, sanchez del rio,  eq 42b
                 complex_amplitude_s = s11_s
                 complex_amplitude_p = s11_p
             elif self.geometryType() == LaueDiffraction():
-                # guigay, sanchez del rio,  eq 27a
+                # guigay, sanchez del rio,  eq 31c
                 complex_amplitude_s = m21_s
                 complex_amplitude_p = m21_p
             elif self.geometryType() == LaueTransmission():
-                # guigay, sanchez del rio,  eq 27b
+                # guigay, sanchez del rio,  eq 31a
                 complex_amplitude_s = m11_s
                 complex_amplitude_p = m11_p
             else:
@@ -1029,7 +1029,6 @@ class PerfectCrystalDiffraction(object):
 
             w = guigay_b * (alpha / 2) + effective_psi_0 * (guigay_b - 1) / 2
             omega = numpy.pi / photon_in.wavelength() * w
-
             if self.geometryType() == BraggDiffraction():
                 if s_ratio is None:
                     s = 0.0
@@ -1049,6 +1048,13 @@ class PerfectCrystalDiffraction(object):
                     complex_amplitude_s = 1j * guigay_b * uh * self._sin(a * s - a * T) / \
                                         (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
                                         self._exponentiate(1j * s * (omega + u0))
+
+                    result["a"] = a
+                    result["s"] = s
+                    result["T"] = T
+                    result["u0"] = u0
+                    result["s_ratio"] = s_ratio
+
                     # print(">>>> self._sin(a * s - a * T): ", self._sin(a * s - a * T))
                     # print(">>>> self._cos(a * T): ", self._cos(a * T))
                     # print(">>>> self._sin(a * T): ", self._sin(a * T))
@@ -1062,6 +1068,7 @@ class PerfectCrystalDiffraction(object):
                     aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
                                                1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
 
+                    #TODO chech sign Im aa
                     complex_amplitude_s = (aa + omega) / uh_bar
 
                 # pi polarization
@@ -1102,6 +1109,16 @@ class PerfectCrystalDiffraction(object):
                 if is_thick == 0:
                     SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
                     a = numpy.pi / photon_in.wavelength() * SQ
+                    # print(">>>>>>>>>>>>>>>>> |Im(a)|, 1/|Im(a)|, s, s_ratio", numpy.abs(a.imag), 1.0/numpy.abs(a.imag), s, s_ratio)
+                    # print(">>>>>>>>>>>>>>>>> 2 Im u0, |Im(a)|", 2 * u0.imag, numpy.abs(a.imag))
+                    # print(">>>>>>>>>>>>>>>>> sin(aT-as)", numpy.sin(a*T-a*s))
+                    # print(">>>>>>>>>>>>>>>>> sin(aT-as)", numpy.abs( (numpy.exp(1j*a*(T-s)) - numpy.exp(-1j*a*(T-s)))/2j ))
+                    # print(">>>>>>>>>>>>>>>>> approx    ", numpy.exp((T - s) * numpy.abs(a.imag)))
+                    result["a"] = a
+                    result["s"] = s
+                    result["T"] = T
+                    result["u0"] = u0
+                    result["s_ratio"] = s_ratio
 
                     complex_amplitude_s = (a * self._cos(a * s - a * T) - 1j * omega * self._sin(a * s - a * T)) / \
                                           (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
@@ -1111,7 +1128,6 @@ class PerfectCrystalDiffraction(object):
                     asquared = (numpy.pi / photon_in.wavelength())**2 * (guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
                     aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
                                                1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
-
                     complex_amplitude_s = 2 * aa / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
 
                 # pi polarization

@@ -398,3 +398,88 @@ if __name__ == "__main__":
      #    VOUT_BRAGG_UNCORR (Uncorrected): (  0.00000000,    0.968979,    0.247145)
      #    VOUT_BRAGG          (Corrected): (  0.00000000,    0.968971,    0.247176)
      #    VOUT_BRAGG_ENERGY              : (  0.00000000,    0.968971,    0.247176)
+
+    if True:
+        import numpy
+        from crystalpy.diffraction.GeometryType import BraggDiffraction
+        from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
+
+        try:
+            from xoppylib.crystals.create_bragg_preprocessor_file_v1 import create_bragg_preprocessor_file_v1
+            import xraylib
+
+            tmp = create_bragg_preprocessor_file_v1(interactive=False,
+                                                    DESCRIPTOR="Si", H_MILLER_INDEX=1, K_MILLER_INDEX=1,
+                                                    L_MILLER_INDEX=1,
+                                                    TEMPERATURE_FACTOR=1.0,
+                                                    E_MIN=5000.0, E_MAX=15000.0, E_STEP=100.0,
+                                                    SHADOW_FILE="bragg.dat",
+                                                    material_constants_library=xraylib)
+        except:
+            raise Exception("xoppylib must be installed to create shadow preprocessor files.")
+
+        a = DiffractionSetupShadowPreprocessorV1(
+            geometry_type=BraggDiffraction,
+            crystal_name="Si", thickness=1e-5,
+            miller_h=1, miller_k=1, miller_l=1,
+            asymmetry_angle=0.0,
+            azimuthal_angle=0.0,
+            preprocessor_file="bragg.dat")
+
+        b = DiffractionSetupXraylib(geometry_type=BraggDiffraction,
+                                    crystal_name="Si", thickness=1e-5,
+                                    miller_h=1, miller_k=1, miller_l=1,
+                                    asymmetry_angle=0.0,
+                                    azimuthal_angle=0.0)
+
+        energy = 8000.0
+        energies = numpy.linspace(energy, energy + 100, 2)
+
+        print("============ SHADOW / XRAYLIB  ==============")
+        print("Photon energy: %g eV " % (energy))
+        print("d_spacing: %g %g A " % (a.dSpacing(),
+                                       b.dSpacing(),
+                                       ))
+        print("unitCellVolumw: %g %g A**3 " % (a.unitcellVolume(),
+                                               b.unitcellVolume()))
+        print("Bragg angle: %g %g deg " % (a.angleBragg(energy) * 180 / numpy.pi,
+                                           b.angleBragg(energy) * 180 / numpy.pi))
+        print("Bragg angle Corrected: %g %g deg " % (a.angleBraggCorrected(energy) * 180 / numpy.pi,
+                                           b.angleBraggCorrected(energy) * 180 / numpy.pi))
+        print("Asymmetry factor b: ", a.asymmetryFactor(energy),
+              b.asymmetryFactor(energy))
+
+        print("F0 ", a.F0(energy), b.F0(energy))
+        print("F0 [array] ", a.F0(energies), b.F0(energies))
+        print("FH ", a.FH(energy), b.FH(energy))
+        print("FH [array] ", a.FH(energies), b.FH(energies))
+        print("FH_bar ", a.FH_bar(energy), b.FH_bar(energy))
+        print("FH_bar [array] ", a.FH_bar(energies), b.FH_bar(energies))
+
+        print("PSI0 ", a.psi0(energy), b.psi0(energy))
+        print("PSI0  [array] ", a.psi0(energies), b.psi0(energies))
+        print("PSIH ", a.psiH(energy), b.psiH(energy))
+        print("PSIH  [array] ", a.psiH(energies), b.psiH(energies))
+        print("PSIH_bar ", a.psiH_bar(energy), b.psiH_bar(energy))
+        print("PSIH_bar  [array] ", a.psiH_bar(energies), b.psiH_bar(energies))
+
+        print("DarwinHalfWidths:  ", a.darwinHalfwidth(energy),
+              b.darwinHalfwidth(energy))
+
+        print("\n\n====================== Warning =========================")
+        print("Please note a small difference in FH ratio (preprocessor/xraylib): ",
+              a.FH(energy).real / b.FH(energy).real)
+        print("which corresponds to a difference in f0: ")
+        print("shadow preprocessor file uses f0_xop() for the coefficients and this is different")
+        print("than xraylib.FF_Rayl() by a factor: ")
+        ratio = 0.15946847244512372
+        try:
+            import xraylib
+        except:
+            print("xraylib not available")
+        from dabax.dabax_xraylib import DabaxXraylib
+
+        print(DabaxXraylib(file_f0='f0_xop.dat').FF_Rayl(14, 0.15946847244512372) / \
+              xraylib.FF_Rayl(14, 0.15946847244512372))
+        print("========================================================\n\n")
+

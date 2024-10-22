@@ -231,7 +231,7 @@ def crystal_fh(input_dictionary, phot_in, theta=None, forceratio=0):
     fpp       = numpy.array(input_dictionary["f2"])
     fraction  = numpy.array(input_dictionary["fraction"])
 
-
+    phot_in_backup = phot_in
     phot_in = numpy.array(phot_in, dtype=float).reshape(-1)
     theta   = numpy.array(theta,   dtype=float).reshape(-1)
 
@@ -416,10 +416,45 @@ def crystal_fh(input_dictionary, phot_in, theta=None, forceratio=0):
     txt += '\n Darwin width for symmetric s-pol [microrad] = ' + repr(2.0e6*ssr[0])
     txt += '\n Darwin width for symmetric p-pol [microrad] = ' + repr(2.0e6*spr[0])
 
-    return {"PHOT":phot_in, "WAVELENGTH":r_lam0*1e-2 ,"THETA":itheta, "F_0":F_0, "FH":FH, "FH_BAR":FH_BAR,
-	        "STRUCT":STRUCT, "psi_0":psi_0, "psi_h":psi_h, "psi_hbar":psi_hbar,
-        	"DELTA_REF":DELTA_REF, "REFRAC":REFRAC, "ABSORP":ABSORP, "RATIO":ratio,
-        	"ssr":ssr, "spr":spr, "psi_over_f":psi_over_f, "info":txt}
+    if isinstance(phot_in_backup, float):
+        out = {"PHOT": phot_in,
+               "WAVELENGTH": r_lam0 * 1e-2,
+               "THETA": itheta,
+               "F_0": F_0[0],
+               "FH": FH[0],
+               "FH_BAR": FH_BAR[0],
+               "STRUCT": STRUCT[0],
+               "psi_0": psi_0[0],
+               "psi_h": psi_h[0],
+               "psi_hbar": psi_hbar[0],
+               "DELTA_REF": DELTA_REF[0],
+               "REFRAC": REFRAC[0],
+               "ABSORP": ABSORP[0],
+               "RATIO": ratio[0],
+               "ssr": ssr[0],
+               "spr": spr[0],
+               "psi_over_f": psi_over_f[0],
+               "info": txt}
+    else:
+        out = {"PHOT": phot_in,
+               "WAVELENGTH": r_lam0 * 1e-2,
+               "THETA": itheta,
+               "F_0": F_0,
+               "FH": FH,
+               "FH_BAR": FH_BAR,
+               "STRUCT": STRUCT,
+               "psi_0": psi_0,
+               "psi_h": psi_h,
+               "psi_hbar": psi_hbar,
+               "DELTA_REF": DELTA_REF,
+               "REFRAC": REFRAC,
+               "ABSORP": ABSORP,
+               "RATIO": ratio,
+               "ssr": ssr,
+               "spr": spr,
+               "psi_over_f": psi_over_f,
+               "info": txt}
+    return out
 
 if __name__ == "__main__":
     if 1:
@@ -466,6 +501,8 @@ if __name__ == "__main__":
                                                b.unitcellVolume()))
         print("Bragg angle: %g %g deg " %  (a.angleBragg(energy) * 180 / numpy.pi,
                                             b.angleBragg(energy) * 180 / numpy.pi))
+        print("Bragg angle Corrected: %g %g deg " % (a.angleBraggCorrected(energy) * 180 / numpy.pi,
+                                           b.angleBraggCorrected(energy) * 180 / numpy.pi))
         print("Asymmetry factor b: ", a.asymmetryFactor(energy),
                                       b.asymmetryFactor(energy))
 
@@ -476,12 +513,17 @@ if __name__ == "__main__":
         print("FH_bar ",         a.FH_bar(energy),   b.FH_bar(energy))
         print("FH_bar [array] ", a.FH_bar(energies), b.FH_bar(energies))
 
-        print("PSI0 ",     a.psi0(energy),     b.psi0(energy))
-        print("PSIH ",     a.psiH(energy),     b.psiH(energy))
+        print("PSI0 ", a.psi0(energy), b.psi0(energy))
+        print("PSI0  [array] ", a.psi0(energies), b.psi0(energies))
+        print("PSIH ", a.psiH(energy), b.psiH(energy))
+        print("PSIH  [array] ", a.psiH(energies), b.psiH(energies))
         print("PSIH_bar ", a.psiH_bar(energy), b.psiH_bar(energy))
+        print("PSIH_bar  [array] ", a.psiH_bar(energies), b.psiH_bar(energies))
 
         print("DarwinHalfWidths:  ", a.darwinHalfwidth(energy),
                                      b.darwinHalfwidth(energy))
+        print("DarwinHalfWidths [array] :  ", a.darwinHalfwidth(energies),
+                                     b.darwinHalfwidth(energies))
 
 
         print("\n\n====================== Warning =========================")

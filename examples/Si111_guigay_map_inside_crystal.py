@@ -96,19 +96,27 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),
 
 
     if geometry_type == LaueDiffraction():
-        title = "Reflectance"
+        title = r"Laue $|D_H|^2$"
         iii = 0
+        filename='Laue_DH.png'
     elif geometry_type == LaueTransmission():
-        title = "Transmittance"
+        title = r"Laue $|D_0|^2$"
         iii = 0
+        filename='Laue_D0.png'
     elif geometry_type == BraggDiffraction():
-        title = r"$|D_H|^2$; t=%d $\mu$m" % (thickness*1e6)
+        title = r"Bragg $|D_H|^2$"
         iii = -1
+        filename='Bragg_DH.png'
     elif geometry_type == BraggTransmission():
-        title = r"$|D_0|^2$; t=%d $\mu$m" % (thickness*1e6)
+        title = r"Bragg $|D_0|^2$"
         iii = 0
+        filename='Bragg_D0.png'
 
-    plot_image(intensityS, deviations*1e6, s_ratios, xtitle=r"$\theta-\theta_B$ [$\mu$m]", ytitle="-s/T", title=title, aspect='auto', show=0)
+    import matplotlib
+    import matplotlib.pylab as plt
+    matplotlib.rcParams.update({'font.size': 26})
+    plot_image(intensityS, deviations*1e6, s_ratios, xtitle=r"$\theta-\theta_B$ [$\mu$rad]", ytitle=r"-$s$/$T$=-$t$/$t_c$", title=title, aspect='auto', figsize=(12, 10), show=0)
+    plt.savefig(filename)
     plot(deviations*1e-6, intensityS[:,iii], title=iii)
 
 #
@@ -119,6 +127,6 @@ if __name__ == "__main__":
 
     calculate_diffraction_map_inside_crystal(geometry_type=BraggDiffraction(),  asymmetry_angle=numpy.radians(0), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)
     calculate_diffraction_map_inside_crystal(geometry_type=BraggTransmission(), asymmetry_angle=numpy.radians(0), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)
-    #TODO: Laue case
+    #Laue case
     calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),  asymmetry_angle=numpy.radians(90), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)
     calculate_diffraction_map_inside_crystal(geometry_type=LaueTransmission(), asymmetry_angle=numpy.radians(90), thickness=50e-6, calculation_strategy_flag=calculation_strategy_flag)

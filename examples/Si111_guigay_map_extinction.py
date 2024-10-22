@@ -135,12 +135,15 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),
     t3 = time.time()
     print('>> vector loop: ', t3 - t2, t3 - t1 )
 
-    print(Coeffs['S'].shape)
+    print(Coeffs['S'].shape, Coeffs['S'][0])
 
     INTENSITIES =  numpy.abs(numpy.array(Coeffs['S'], dtype=complex)) ** 2
     INTENSITIES =  numpy.reshape(INTENSITIES, (angle_deviation_points, s_ratio_deviation_points))
+    # s_ext = 0.5 / (numpy.abs(Coeffs['a'].imag - 2 * Coeffs['u0'].imag))
+    s_ext = 0.5 / (numpy.abs(Coeffs['a'].imag ))
+    S_EXT = numpy.reshape(s_ext, (angle_deviation_points, s_ratio_deviation_points))
     #
-    return INTENSITIES, deviations, s_ratios
+    return INTENSITIES, deviations, s_ratios, S_EXT
 
 
 #
@@ -148,42 +151,68 @@ def calculate_diffraction_map_inside_crystal(geometry_type=LaueDiffraction(),
 #
 if __name__ == "__main__":
     calculation_strategy_flag = 0  # 0=mpmath 1=numpy 2=numpy-truncated
-    geometry_type = BraggTransmission()
+    geometry_type = BraggTransmission() # BraggDiffraction()
     thickness = 50e-6
-    intensityS, deviations, s_ratios = calculate_diffraction_map_inside_crystal(geometry_type=geometry_type, asymmetry_angle=numpy.radians(0), thickness=thickness, calculation_strategy_flag=calculation_strategy_flag)
+    intensityS, deviations, s_ratios, S_EXT = calculate_diffraction_map_inside_crystal(geometry_type=geometry_type, asymmetry_angle=numpy.radians(0), thickness=thickness, calculation_strategy_flag=calculation_strategy_flag)
 
 
     if geometry_type == LaueDiffraction():
-        title = "Reflectance"
+        title = r"Laue $|D_H|^2$"
         iii = 0
+        filename='Laue_DH.png'
     elif geometry_type == LaueTransmission():
-        title = "Transmittance"
+        title = r"Laue $|D_0|^2$"
         iii = 0
+        filename='Laue_D0.png'
     elif geometry_type == BraggDiffraction():
-        title = r"$|D_H|^2$; t=%d $\mu$m" % (thickness*1e6)
+        title = r"Bragg $|D_H|^2$"
         iii = -1
+        filename='Bragg_DH.png'
     elif geometry_type == BraggTransmission():
-        title = r"$|D_0|^2$; t=%d $\mu$m" % (thickness*1e6)
+        title = r"Bragg $|D_0|^2$"
         iii = 0
+        filename='Bragg_D0.png'
 
-    plot_image(intensityS, deviations*1e6, s_ratios, xtitle=r"$\theta-\theta_B$ [$\mu$m]", ytitle="-s/T", title=title, aspect='auto', show=0)
+    plot_image(intensityS, deviations*1e6, s_ratios, xtitle=r"$\theta-\theta_B$ [$\mu$rad]", ytitle="-s/T", title=title, aspect='auto', show=0)
 
     plot_image(intensityS, deviations * 1e6, -s_ratios * thickness * 1e6, xtitle=r"$\theta-\theta_B$ [$\mu$m]", ytitle="depth [um]", title=title,
                aspect='auto', show=0)
 
-    plot(deviations*1e6, intensityS[:,iii], title=iii, xtitle=r"$\theta-\theta_B$ [$\mu$m]", ytitle="I_0 at back surface", show=0)
+    plot(deviations*1e6, intensityS[:,iii], title=iii, xtitle=r"$\theta-\theta_B$ [$\mu$rad]", ytitle="I_0 at back surface", show=0)
 
 
     nMU = deviations.size
     EXT = numpy.zeros(nMU)
+    EXT_THEORY = numpy.zeros(nMU)
 
     depth_in_um = -s_ratios * thickness * 1e6
 
+    print(">>>> S_EXT", S_EXT.shape )
     for i in range(nMU):
+        # plot(depth_in_um, intensityS[i, :])
         ylog = numpy.log( intensityS[i, :] )
+        # P = numpy.polyfit(depth_in_um, numpy.log(intensityS[i, :]), 1 )
         P = numpy.polyfit(depth_in_um, numpy.log(intensityS[i, :]), 1 )
         EXT[i] = -1.0 / P[0]
+        EXT_THEORY[i] = S_EXT[i, 0] * 1e6 * numpy.sin(numpy.radians(14.308608)) # intensity
+        print(">>>>", i, S_EXT[i, :])
+        # plot(depth_in_um, intensityS[i, :],
+        #      depth_in_um, numpy.exp(-depth_in_um/ (EXT[i])),
+        #      legend=['data','fit %d' % i])
 
 
-    plot(deviations*1e6, EXT, xtitle=r"$\theta-\theta_B$ [$\mu$m]", ytitle="Extinction depth 1/mu [um]",
-         title="Extinction (fitted)")
+    import matplotlib
+    import matplotlib.pylab as plt
+    matplotlib.rcParams.update({'font.size': 14})
+    plot(
+         deviations * 1e6, EXT,
+        deviations * 1e6, EXT_THEORY,
+         xtitle=r"$\theta-\theta_B$ [$\mu$rad]", ytitle=r"Extinction depth [$\mu$m]",
+         legend=['Fitted', 'Calculated', ],
+         marker  =['+',None,],
+         linestyle=['', None,],
+         title="",
+         show=0)
+
+    plt.savefig('penetration.pdf')
+    plt.show()
