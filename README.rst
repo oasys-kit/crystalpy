@@ -31,16 +31,14 @@ Crystalpy can be installed with Python 3.x:
 Reference
 ---------
 
-J-P Guigay and M Sanchez del Rio "Diffracted amplitudes for perfect crystals derived from solutions of Takagi-Taupin equations and numerical implementation in the crystalpy library."
-(In preparation).
+Jean-Pierre Guigay, Manuel Sanchez del Rio Formulation of perfect-crystal diffraction from Takagi–Taupin equations: numerical implementation in the crystalpy library
 
-Other Documents
----------------
+Journal of Synchrotron Radiation  (2024) 31:  6.  1469-1480
 
-The Ms Thesis related to this project is https://github.com/oasys-kit/documents/blob/master/cappelli-tesi.pdf
+http://dx.doi.org/10.1107/S160057752400924X
 
 
 Graphical user interface
 ------------------------
 
-A graphical interface is available under Oasys:  https://github.com/oasys-kit/OASYS-CRYSTALPY
+A graphical interface (under development) is available under Oasys:  https://github.com/oasys-kit/OASYS-CRYSTALPY
