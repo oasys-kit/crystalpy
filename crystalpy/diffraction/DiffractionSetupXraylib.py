@@ -42,6 +42,10 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         The angle between the projection of the Bragg normal on the crystal surface plane and the Y axis (radians).
         It can also be called inclination angle.
 
+    crystal_data: None or dict
+        If None, the crystal data is loaded from xraylib (entry: crystal_name).
+        Alternatively, we can force using a user-structure entered here as a dictionary with the xraylib format.
+
     debye_waller: float
         The Debye-Waller factor exp(-M).
 
@@ -55,7 +59,8 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
                  miller_k=1,
                  miller_l=1,
                  asymmetry_angle=0.0,
-                 azimuthal_angle=0.0,):
+                 azimuthal_angle=0.0,
+                 crystal_data=None):
 
         super().__init__(geometry_type=geometry_type,
                          crystal_name=crystal_name,
@@ -66,9 +71,11 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
                          asymmetry_angle=asymmetry_angle,
                          azimuthal_angle=azimuthal_angle)
 
-        # Load crystal from xraylib.
-        self._crystal = xraylib.Crystal_GetCrystal(self.crystalName())
-
+        # Load crystal from xraylib (if not defined in crystal_data).
+        if crystal_data is None:
+            self._crystal = xraylib.Crystal_GetCrystal(self.crystalName())
+        else:
+            self._crystal = crystal_data
 
     def angleBragg(self, energy):
         """Returns the Bragg angle for a given energy in radians.
