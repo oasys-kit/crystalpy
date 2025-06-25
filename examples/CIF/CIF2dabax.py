@@ -1,9 +1,9 @@
 #
-# from a CIF file, generate
-# i) a dictionary (xraylib format)
-# ii) text for a new entry for DABAX Crystals.dat
+# from a CIF file:
+# i) CIF_GetCrystal(cif_filename) generatesa dictionary (xraylib format)
+# ii) get_dabax_text(CIF_GetCrystal(cif_filename)) generates text for a new entry for DABAX Crystals.dat
 #
-# It uses the libray dans_diffraction
+# It uses the library dans_diffraction https://github.com/DanPorter/Dans_Diffraction
 #
 
 import Dans_Diffraction as dif
@@ -96,19 +96,21 @@ def CIF_GetCrystal(entry_name='YB66'):
     cryst['atom'] = atom
     cryst['cpointer'] = None
 
-    ANISO_KEY = "UANISO_COFF"  # prefix for a line with anisotropic coefficients
 
-    AnisoItem = {'Name': '       ',
-                 'start': 0,
-                 'end': 0,
-                 'beta11': 0.0,
-                 'beta22': 0.0,
-                 'beta33': 0.0,
-                 'beta12': 0.0,
-                 'beta13': 0.0,
-                 'beta23': 0.0}
 
     if 0:  # found Anisotropic coefficients in the header, process it
+        ANISO_KEY = "UANISO_COFF"  # prefix for a line with anisotropic coefficients
+
+        AnisoItem = {'Name': '       ',
+                     'start': 0,
+                     'end': 0,
+                     'beta11': 0.0,
+                     'beta22': 0.0,
+                     'beta33': 0.0,
+                     'beta12': 0.0,
+                     'beta13': 0.0,
+                     'beta23': 0.0}
+
         a = sorted(a, key=lambda x: int(x[1][0]),
                    reverse=False)  # sort 'Start' ascendant, avoid order changed by the SpecFile
         n = 0
@@ -142,52 +144,7 @@ def CIF_GetCrystal(entry_name='YB66'):
 
     return cryst
 
-def example1():
-    """
-    Dans_Diffraction Examples
-    Build your very own crystal structure,
-    using lattice parameters and atomic coordinates
-    """
-    import matplotlib.pyplot as plt  # Plotting
-    import sys, os
-
-    cf = os.path.dirname(__file__)
-    sys.path.insert(0, os.path.join(cf, '..'))
-
-    xtl = dif.Crystal()
-
-    xtl.name = 'Oh! What a Lovely Crystal'
-    xtl.new_cell([2.8,2.8,6.0,90,90,90])
-    #xtl.new_atoms(u=[0,0.5], v=[0,0.5], w=[0,0.25], type=['Na','O'], label=['Na1','O1'], occupancy=None, uiso=None, mxmymz=None)
-    xtl.Atoms.changeatom(0,u=0,   v=0,   w=0,    type='Na',label='Na1',occupancy=None, uiso=None, mxmymz=None) # there is an Fe ion added by default
-    xtl.Atoms.addatom(u=0.5, v=0.5, w=0.25, type='O', label='O1', occupancy=None, uiso=None, mxmymz=None)
-    #xtl.Symmetry.addsym('x,y,z+1/2')
-    xtl.Symmetry.load_spacegroup(7)
-    xtl.generate_structure() # apply symmetry to atomic positions.
-
-    print(xtl.info())
-    xtl.Plot.plot_crystal()
-    plt.show()
-
-if __name__ == "__main__":
-
-    # # example1()
-    #
-    cif_filename = 'BiFeO3.cif'
-
-    xx = CIF_GetCrystal(cif_filename)
-
-    import matplotlib.pylab as plt
-    xtl = dif.Crystal(cif_filename)
-    xtl.Plot.plot_crystal()
-    plt.show()
-    # Plot Powder pattern:
-    xtl.Plot.simulate_powder(energy_kev=17)
-    plt.show()
-
-
-    for key in xx.keys():
-        print(key, xx[key])
+def get_dabax_text(xx):
 
     txt = "\n"
     txt += "#S %d %s\n" % (200, cif_filename)
@@ -207,9 +164,55 @@ if __name__ == "__main__":
     for at in xx["atom"]:
         txt += "%d %f %f %f %f\n" % (at["Zatom"], at["fraction"], at["x"], at["y"], at["z"])
     txt += "\n"
-
-    print("------------------------%s----------------------------------"  % txt)
-
+    return txt
 
 
-    # print(txt)
+def Dans_Diffraction_example1(cif_filename=""):
+    """
+    Dans_Diffraction Examples
+    Build your very own crystal structure,
+    using lattice parameters and atomic coordinates
+    """
+    import matplotlib.pyplot as plt  # Plotting
+    import sys, os
+
+    cf = os.path.dirname(__file__)
+    sys.path.insert(0, os.path.join(cf, '..'))
+
+    if cif_filename == "":
+        xtl = dif.Crystal()
+
+        xtl.name = 'Oh! What a Lovely Crystal'
+        xtl.new_cell([2.8,2.8,6.0,90,90,90])
+        #xtl.new_atoms(u=[0,0.5], v=[0,0.5], w=[0,0.25], type=['Na','O'], label=['Na1','O1'], occupancy=None, uiso=None, mxmymz=None)
+        xtl.Atoms.changeatom(0,u=0,   v=0,   w=0,    type='Na',label='Na1',occupancy=None, uiso=None, mxmymz=None) # there is an Fe ion added by default
+        xtl.Atoms.addatom(u=0.5, v=0.5, w=0.25, type='O', label='O1', occupancy=None, uiso=None, mxmymz=None)
+        #xtl.Symmetry.addsym('x,y,z+1/2')
+        xtl.Symmetry.load_spacegroup(7)
+        xtl.generate_structure() # apply symmetry to atomic positions.
+    else:
+        xtl = dif.Crystal(cif_filename)
+
+    print(xtl.info())
+    xtl.Plot.plot_crystal()
+    plt.show()
+
+    # Plot Powder pattern:
+    xtl.Plot.simulate_powder(energy_kev=17)
+    plt.show()
+
+if __name__ == "__main__":
+
+    cif_filename = 'BiFeO3.cif'
+
+    # plot structure and powder pattern
+    # Dans_Diffraction_example1(cif_filename)
+
+    # get the dict in xraylib format
+    xx = CIF_GetCrystal(cif_filename)
+    for key in xx.keys():
+        print(key, xx[key])
+
+    # print text for DABAX Crystals.dat
+    print("------------------------%s----------------------------------"  % get_dabax_text(xx))
+
