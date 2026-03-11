@@ -1,5 +1,9 @@
 import numpy
+import numpy as np
 import time
+import copy
+from scipy.signal import fftconvolve
+
 # used in get_diffraction_setup
 from crystalpy.diffraction.GeometryType import BraggDiffraction, LaueTransmission, LaueDiffraction, BraggTransmission
 from crystalpy.diffraction.DiffractionSetupXraylib import DiffractionSetupXraylib
@@ -70,7 +74,9 @@ def calc_xcrystal_angular_scan(
         angle_deviation_min=-100e-6,
         angle_deviation_max=100e-6,
         angle_deviation_points=200,
-        angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
+        angle_center_flag=2,     # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
+        chi_deg=45.0,            # **new** linear polarization angle with respect to sigma direction (use 45deg for Es=Ep=1)
+        flag_calculate_stokes=0, # **new** 0=No Stokes calculation, 1=Yes
         calculation_method=0,
         is_thick=0,
         use_transfer_matrix=0,
@@ -91,6 +97,8 @@ def calc_xcrystal_angular_scan(
     print("angle_deviation_max                = ", angle_deviation_max)
     print("angle_deviation_points             = ", angle_deviation_points)
     print("angle_center_flag                  = ", angle_center_flag)
+    print("chi_deg                            = ", chi_deg)
+    print("flag_calculate_stokes              = ", flag_calculate_stokes)
     print("calculation_method                 = ", calculation_method)
     print("is_thick                           = ", is_thick)
     print("use_transfer_matrix                = ", use_transfer_matrix)
@@ -122,8 +130,17 @@ def calc_xcrystal_angular_scan(
 
 
     deviations = numpy.linspace(angle_deviation_min, angle_deviation_max, angle_deviation_points)
-
     bunch_in = ComplexAmplitudePhotonBunch()
+
+    (Esigma, Epi) = (1, 0)
+    chi = numpy.radians(chi_deg)
+
+    sa = numpy.sin(chi)
+    ca = numpy.cos(chi)
+    (EsigmaRot, EpiRot) = (ca * Esigma + Epi * (-sa), sa * Esigma + ca * Epi)
+    print("J, intens: ", Esigma, Epi, numpy.abs(Esigma)**2 + numpy.abs(Epi)**2)
+    print("Jrot, intens: ", EsigmaRot, EpiRot, numpy.abs(EsigmaRot)**2 + numpy.abs(EpiRot)**2)
+
     for ia, deviation in enumerate(deviations):
 
         photon = ComplexAmplitudePhoton(energy_in_ev=energy,
@@ -131,8 +148,8 @@ def calc_xcrystal_angular_scan(
                                             energy,deviation,
                                             angle_center_flag=angle_center_flag,
                                         ),
-                                        Esigma=1,
-                                        Epi=1)
+                                        Esigma=EsigmaRot,
+                                        Epi=EpiRot)
 
         bunch_in.addPhoton(photon)
 
@@ -145,6 +162,13 @@ def calc_xcrystal_angular_scan(
                                                                            )
 
     bunch_out_dict = bunch_out.toDictionary()
+
+    if flag_calculate_stokes:
+        P0_in, P1_in, P2_in, P3_in = _calculate_stokes(bunch_out_dict)
+        bunch_out_dict["P0"] = P0_in
+        bunch_out_dict["P1"] = P1_in
+        bunch_out_dict["P2"] = P2_in
+        bunch_out_dict["P3"] = P3_in
 
     if do_plot:
         from srxraylib.plot.gol import plot
@@ -603,3 +627,67 @@ if __name__ == "__main__":
             do_plot=1,
             calculation_strategy_flag=calculation_strategy_flag,
             )
+
+def apply_convolution_with_gaussian(x, y, sigma=7.0):
+
+    dx = x[1] - x[0]
+    n = len(x)
+
+    # symmetric kernel grid centered at zero
+    xk = (np.arange(n) - n//2) * dx
+
+    # Gaussian kernel
+    gaussian = np.exp(-(xk**2) / (2 * sigma**2))
+
+    # normalize kernel so ∫g dx = 1
+    gaussian /= gaussian.sum() * dx
+
+    # convolution (FFT version is faster and avoids indexing artifacts)
+    y_conv = fftconvolve(y, gaussian, mode="same") * dx
+
+    # diagnostics
+    imax1 = np.argmax(y)
+    imax2 = np.argmax(y_conv)
+
+    print("max input curve:", x[imax1])
+    print("max convoluted curve:", x[imax2])
+
+    return y_conv
+
+def _calculate_stokes(bunch_out_dict, phase_diff_sign=1.0):
+    phase_diff = phase_diff_sign * (bunch_out_dict["phaseS"] - bunch_out_dict["phaseP"])
+
+    P0_in = bunch_out_dict["intensityS"] + bunch_out_dict["intensityP"]
+    P1_in = bunch_out_dict["intensityS"] - bunch_out_dict["intensityP"]
+    P2_in = 2 * np.sqrt(bunch_out_dict["intensityS"] * bunch_out_dict["intensityP"]) * np.cos(phase_diff)
+    P3_in = 2 * np.sqrt(bunch_out_dict["intensityS"] * bunch_out_dict["intensityP"]) * np.sin(phase_diff)
+    P1_in /= P0_in
+    P2_in /= P0_in
+    P3_in /= P0_in
+
+    return P0_in, P1_in, P2_in, P3_in
+
+def apply_convolution_on_bunch_out_dict(bunch_out_dict,
+                                         flag_convolve_with_gaussian=0,
+                                         sigma=0.1):
+    if flag_convolve_with_gaussian == 0:
+        return bunch_out_dict
+    else:
+        bunch_out_dict_conv = copy.deepcopy(bunch_out_dict)
+        deviations = bunch_out_dict["deviations"]
+        P0_in = bunch_out_dict["P0"]
+        P1_in = bunch_out_dict["P1"]
+        P2_in = bunch_out_dict["P2"]
+        P3_in = bunch_out_dict["P3"]
+
+        P0_conv = apply_convolution_with_gaussian(deviations, P0_in, sigma=sigma)
+        P1_conv = apply_convolution_with_gaussian(deviations, P1_in, sigma=sigma)
+        P2_conv = apply_convolution_with_gaussian(deviations, P2_in, sigma=sigma)
+        P3_conv = apply_convolution_with_gaussian(deviations, P3_in, sigma=sigma)
+
+        bunch_out_dict_conv["P0"] = P0_conv
+        bunch_out_dict_conv["P1"] = P1_conv
+        bunch_out_dict_conv["P2"] = P2_conv
+        bunch_out_dict_conv["P3"] = P3_conv
+
+        return bunch_out_dict_conv
