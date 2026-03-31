@@ -563,7 +563,8 @@ class DiffractionSetupAbstract(object):
             The KH vector or vector stack
 
         """
-        return Vector.addVector(self.vectorK0(energy), self.vectorH())
+        #return Vector.addVector(self.vectorK0(energy), self.vectorH())      
+        return self.vectorH()      #SSLS:YXJ
 
     def vectorKhdirection(self, energy):
         """returns an unitary vector along the KH direction (that that verifies Laue equation with K0).
@@ -793,13 +794,13 @@ class DiffractionSetupAbstract(object):
         float or numpy array
 
         """
-        if vector_k_in is None:
+        if vector_k_in is None: 
             vector_k_in = self.vectorK0(energy)
-
-        v2 = vector_k_in.addVector(self.vectorKh(energy)).subtractVector(self.vectorK0(energy))
-
-        numerator = Vector.scalarProduct(self.vectorNormalSurfaceInwards(),vector_k_in)
-        denominator = Vector.scalarProduct(self.vectorNormalSurfaceInwards(),v2)
+        #v2 = vector_k_in.addVector(self.vectorKh(energy)).subtractVector(self.vectorK0(energy))
+        v2 = vector_k_in + self.vectorKh(energy)        #SSLS:YXJ
+        sNorm = self.vectorNormalSurfaceInwards()
+        numerator = Vector.scalarProduct(sNorm,vector_k_in)
+        denominator = Vector.scalarProduct(sNorm,v2)
 
         return numerator / denominator
 
@@ -819,17 +820,18 @@ class DiffractionSetupAbstract(object):
             Bragg angle(s) corrected.
 
         """
-
+        acc_fac = self.asymmetryFactor(energy)
+        a_bragg = self.angleBragg(energy)
         if use_exact_equation:
-            numerator = (1 - self.asymmetryFactor(energy)) * self.psi0(energy).real
-            denominator = 4 * self.asymmetryFactor(energy) * numpy.sin(self.angleBragg(energy))
+            numerator = (1 - acc_fac) * self.psi0(energy).real
+            denominator = 4 * acc_fac * numpy.sin(a_bragg)
             # equation 21 in G&SR
-            return numpy.arcsin( numpy.sin(self.angleBragg(energy)) + numerator / denominator)
+            return numpy.arcsin( numpy.sin(a_bragg) + numerator / denominator)
         else:
-            numerator = (1 - self.asymmetryFactor(energy)) * self.psi0(energy).real
-            denominator = 2 * self.asymmetryFactor(energy) * numpy.sin(2 * self.angleBragg(energy))
+            numerator = (1 - acc_fac) * self.psi0(energy).real
+            denominator = 2 * acc_fac * numpy.sin(2 * a_bragg)
             # equation 3.145a in Zachariasen's book
-            return self.angleBragg(energy) + numerator / denominator
+            return a_bragg + numerator / denominator
 
     #
     # Darwin width

@@ -55,7 +55,7 @@ class PerfectCrystalDiffraction(object):
 
     def __init__(self, geometry_type, bragg_normal, surface_normal, bragg_angle,
                  psi_0, psi_H, psi_H_bar, thickness, d_spacing,
-                 calculation_strategy_flag):
+                 calculation_strategy_flag,photon_in):  #SSLS:YXJ
 
         self._geometryType = geometry_type
         self._bragg_normal = bragg_normal
@@ -66,7 +66,10 @@ class PerfectCrystalDiffraction(object):
         self._psi_H_bar = psi_H_bar
         self._thickness = thickness
         self._d_spacing = d_spacing
-
+        self._gamma_0 = None             #SSLS:YXJ
+        if photon_in is not None:
+            self.photon_out = photon_in.duplicate()     #SSLS:YXJ
+            self.photon_out.setUnitDirectionVector(photon_in.wavevector() + bragg_normal)  #SSLS:YXJ
         # global use_mpmath
         if calculation_strategy_flag == 0:
             self._calculation_strategy = CalculationStrategyMPMath()
@@ -89,6 +92,7 @@ class PerfectCrystalDiffraction(object):
                                  thickness=None,
                                  d_spacing=None,
                                  calculation_strategy_flag=0,
+                                 photon_in = None,
                                  ):
         """
         Creates a PerfectCrystalDiffraction instance from parameters in a DiffractionSetupAbstract instance and a
@@ -131,7 +135,6 @@ class PerfectCrystalDiffraction(object):
 
         # Retrieve bragg angle.
         bragg_angle = diffraction_setup.angleBragg(energy)
-
         psi_0, psi_H, psi_H_bar = diffraction_setup.psiAll(energy)
 
         geometry_type = geometry_type if not geometry_type is None else diffraction_setup.geometryType()
@@ -150,7 +153,8 @@ class PerfectCrystalDiffraction(object):
             psi_H_bar,
             thickness,
             d_spacing,
-            calculation_strategy_flag)
+            calculation_strategy_flag,
+            photon_in)  #SSLS:YXJ
 
 
     #
@@ -342,7 +346,10 @@ class PerfectCrystalDiffraction(object):
             Projection cosine gamma.
 
         """
-        return photon.unitDirectionVector().scalarProduct(self.surfaceNormalInwards())
+        if self._gamma_0 is None:   #SSLS:YXJ
+            return photon.unitDirectionVector().scalarProduct(self.surfaceNormalInwards())
+        else:
+            return self._gamma_0
 
     def calculatePhotonOut(self, photon_in,
                             method=1,
@@ -400,56 +407,57 @@ class PerfectCrystalDiffraction(object):
         # Solves the Laue equation for the parallel components of the vectors and
         # uses the conservation of the wavevector modulus to calculate the outgoing wavevector
         # even for diffraction not at the Bragg angle.
+        photon_out = self.photon_out.duplicate()    #SSLS:YXJ
+        if False:   #SSLS:YXJ skipped
+            # Retrieve k_0.
+            k_in = photon_in.wavevector()
+            # Retrieve the B_H vector.
+            B_H = self.braggNormal()
 
-        # Retrieve k_0.
-        k_in = photon_in.wavevector()
-        # Retrieve the B_H vector.
-        B_H = self.braggNormal()
+            if method == 0: # old method, todo: delete
 
-        if method == 0: # old method, todo: delete
-
-            # Decompose the vector into a component parallel to the surface normal and
-            # a component parallel to the surface: (k_in * n) n.
-            k_in_normal = self.surfaceNormal().scalarMultiplication(k_in.scalarProduct(self.surfaceNormal()))
-            k_in_parallel = k_in.subtractVector(k_in_normal)
-
-
-            # Decompose the vector into a component parallel to the surface normal and
-            # a component parallel to the surface: (B_H * n) n.
-            B_H_normal = self.surfaceNormal().scalarMultiplication(B_H.scalarProduct(self.surfaceNormal()))
-            B_H_parallel = B_H.subtractVector(B_H_normal)
-
-            # Apply the Laue formula for the parallel components.
-            k_out_parallel = k_in_parallel.addVector(B_H_parallel)
-
-            # Calculate K_out normal.
-            k_out_normal_modulus = numpy.sqrt(k_in.norm() ** 2 - k_out_parallel.norm() ** 2)
-            k_out_normal = self.surfaceNormal().scalarMultiplication(k_out_normal_modulus)
-
-            if self.geometryType() == BraggDiffraction():
-                k_out = k_out_parallel.addVector(k_out_normal)
-            elif self.geometryType() == LaueDiffraction():
-                k_out = k_out_parallel.addVector(k_out_normal.scalarMultiplication(-1.0))
-            elif self.geometryType() == BraggTransmission():
-                k_out = k_out_parallel.addVector(k_out_normal)
-            elif self.geometryType() == LaueTransmission():
-                k_out = k_out_parallel.addVector(k_out_normal.scalarMultiplication(-1.0))
-            else:
-                raise Exception
-
-        elif method == 1: # new method
-            if self.geometryType() == BraggDiffraction():
-                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=+1)
-            elif self.geometryType() == LaueDiffraction():
-                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=-1)
-            elif self.geometryType() == BraggTransmission():
-                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=+1) # todo: fix
-            elif self.geometryType() == LaueTransmission():
-                k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=-1) # todo: fix
+                # Decompose the vector into a component parallel to the surface normal and
+                # a component parallel to the surface: (k_in * n) n.
+                k_in_normal = self.surfaceNormal().scalarMultiplication(k_in.scalarProduct(self.surfaceNormal()))
+                k_in_parallel = k_in.subtractVector(k_in_normal)
 
 
-        photon_out = photon_in.duplicate()
-        photon_out.setUnitDirectionVector(k_out)
+                # Decompose the vector into a component parallel to the surface normal and
+                # a component parallel to the surface: (B_H * n) n.
+                B_H_normal = self.surfaceNormal().scalarMultiplication(B_H.scalarProduct(self.surfaceNormal()))
+                B_H_parallel = B_H.subtractVector(B_H_normal)
+
+                # Apply the Laue formula for the parallel components.
+                k_out_parallel = k_in_parallel.addVector(B_H_parallel)
+
+                # Calculate K_out normal.
+                k_out_normal_modulus = numpy.sqrt(k_in.norm() ** 2 - k_out_parallel.norm() ** 2)
+                k_out_normal = self.surfaceNormal().scalarMultiplication(k_out_normal_modulus)
+
+                if self.geometryType() == BraggDiffraction():
+                    k_out = k_out_parallel.addVector(k_out_normal)
+                elif self.geometryType() == LaueDiffraction():
+                    k_out = k_out_parallel.addVector(k_out_normal.scalarMultiplication(-1.0))
+                elif self.geometryType() == BraggTransmission():
+                    k_out = k_out_parallel.addVector(k_out_normal)
+                elif self.geometryType() == LaueTransmission():
+                    k_out = k_out_parallel.addVector(k_out_normal.scalarMultiplication(-1.0))
+                else:
+                    raise Exception
+
+            elif method == 1: # new method
+                if self.geometryType() == BraggDiffraction():
+                    k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=+1)
+                elif self.geometryType() == LaueDiffraction():
+                    k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=-1)
+                elif self.geometryType() == BraggTransmission():
+                    k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=+1) # todo: fix
+                elif self.geometryType() == LaueTransmission():
+                    k_out = k_in.scatteringOnSurface(self.surfaceNormal(), B_H, use_sign_of=-1) # todo: fix
+
+
+            photon_out = photon_in.duplicate()
+            photon_out.setUnitDirectionVector(k_out)
 
         if self.isDebug:
             self.logDebug("surface normal" + str(self.surfaceNormal().components()))
@@ -500,7 +508,10 @@ class PerfectCrystalDiffraction(object):
         wavenumber = photon_in.wavenumber()
 
         # Calculate alpha.
-        zac_alpha = (wavenumber ** -2) * (self.braggNormal().norm() ** 2 + 2 * k_0_times_B_h)
+        #SSLS:YXJ
+        b_norm2 =  numpy.sum(self.braggNormal().components()**2,axis=0)
+        #zac_alpha = (wavenumber ** -2) * (self.braggNormal().norm() ** 2 + 2 * k_0_times_B_h)
+        zac_alpha = (wavenumber ** -2) * (b_norm2 + 2 * k_0_times_B_h)
 
         # Return alpha.
         return zac_alpha
@@ -543,9 +554,14 @@ class PerfectCrystalDiffraction(object):
             Asymmetry ratio b.
 
         """
-        numerator   = self.surfaceNormalInwards().scalarProduct(self.braggNormal())
-        denominator = self.surfaceNormalInwards().scalarProduct(photon_in.wavevector())
-        zac_b = 1.0 / (numerator / denominator + 1)
+        # numerator   = self.surfaceNormalInwards().scalarProduct(self.braggNormal())
+        # denominator = self.surfaceNormalInwards().scalarProduct(photon_in.wavevector())
+        # zac_b = 1.0 / (numerator / denominator + 1)
+        #SSLS:YXJ
+        if self._gamma_0 is None:  #SSLS:YXJ
+            self._gamma_0   = self.surfaceNormalInwards().scalarProduct(photon_in. unitDirectionVector())
+        denominator = self.surfaceNormalInwards().scalarProduct(photon_out.unitDirectionVector())
+        zac_b = self._gamma_0/denominator       #SSLS:YXJ
         return zac_b
 
 
@@ -723,8 +739,9 @@ class PerfectCrystalDiffraction(object):
         zac_x2 = (-1.0 * zac_z - tmp_root) / effective_psi_h_bar
         zac_delta1 = 0.5 * (self.Psi0() - zac_z + tmp_root)
         zac_delta2 = 0.5 * (self.Psi0() - zac_z - tmp_root)
-        zac_phi1 = 2 * numpy.pi / gamma_0 / photon_in.wavelength() * zac_delta1
-        zac_phi2 = 2 * numpy.pi / gamma_0 / photon_in.wavelength() * zac_delta2
+        wavelength = photon_in.wavelength()         #SSLS:YXJ
+        zac_phi1 = 2 * numpy.pi / gamma_0 / wavelength * zac_delta1
+        zac_phi2 = 2 * numpy.pi / gamma_0 / wavelength * zac_delta2
        
         zac_c1 = -1j * self.thickness() * zac_phi1
         zac_c2 = -1j * self.thickness() * zac_phi2
@@ -881,7 +898,8 @@ class PerfectCrystalDiffraction(object):
                   "P": None}
 
         # Calculate photon out.
-        photon_out = self._calculatePhotonOut(photon_in)
+        #photon_out = self._calculatePhotonOut(photon_in)
+        photon_out = self.photon_out        #SSLS:YXJ
 
         # Calculate crystal field refraction index difference.
         zac_alpha = self._calculateAlphaZac(photon_in)
@@ -1000,19 +1018,19 @@ class PerfectCrystalDiffraction(object):
             result["s22_p"] = s22_p
 
             if self.geometryType() == BraggDiffraction():
-                # guigay, sanchez del rio,  eq 42a
+                # guigay, sanchez del rio,  eq 31a
                 complex_amplitude_s = s21_s
                 complex_amplitude_p = s21_p
             elif self.geometryType() == BraggTransmission():
-                # guigay, sanchez del rio,  eq 42b
+                # guigay, sanchez del rio,  eq 31b
                 complex_amplitude_s = s11_s
                 complex_amplitude_p = s11_p
             elif self.geometryType() == LaueDiffraction():
-                # guigay, sanchez del rio,  eq 31c
+                # guigay, sanchez del rio,  eq 27a
                 complex_amplitude_s = m21_s
                 complex_amplitude_p = m21_p
             elif self.geometryType() == LaueTransmission():
-                # guigay, sanchez del rio,  eq 31a
+                # guigay, sanchez del rio,  eq 27b
                 complex_amplitude_s = m11_s
                 complex_amplitude_p = m11_p
             else:
@@ -1029,6 +1047,7 @@ class PerfectCrystalDiffraction(object):
 
             w = guigay_b * (alpha / 2) + effective_psi_0 * (guigay_b - 1) / 2
             omega = numpy.pi / photon_in.wavelength() * w
+
             if self.geometryType() == BraggDiffraction():
                 if s_ratio is None:
                     s = 0.0
@@ -1048,13 +1067,6 @@ class PerfectCrystalDiffraction(object):
                     complex_amplitude_s = 1j * guigay_b * uh * self._sin(a * s - a * T) / \
                                         (a * self._cos(a * T) + 1j * omega * self._sin(a * T)) * \
                                         self._exponentiate(1j * s * (omega + u0))
-
-                    result["a"] = a
-                    result["s"] = s
-                    result["T"] = T
-                    result["u0"] = u0
-                    result["s_ratio"] = s_ratio
-
                     # print(">>>> self._sin(a * s - a * T): ", self._sin(a * s - a * T))
                     # print(">>>> self._cos(a * T): ", self._cos(a * T))
                     # print(">>>> self._sin(a * T): ", self._sin(a * T))
@@ -1068,7 +1080,6 @@ class PerfectCrystalDiffraction(object):
                     aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
                                                1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
 
-                    #TODO chech sign Im aa
                     complex_amplitude_s = (aa + omega) / uh_bar
 
                 # pi polarization
@@ -1109,16 +1120,6 @@ class PerfectCrystalDiffraction(object):
                 if is_thick == 0:
                     SQ = numpy.sqrt(guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
                     a = numpy.pi / photon_in.wavelength() * SQ
-                    # print(">>>>>>>>>>>>>>>>> |Im(a)|, 1/|Im(a)|, s, s_ratio", numpy.abs(a.imag), 1.0/numpy.abs(a.imag), s, s_ratio)
-                    # print(">>>>>>>>>>>>>>>>> 2 Im u0, |Im(a)|", 2 * u0.imag, numpy.abs(a.imag))
-                    # print(">>>>>>>>>>>>>>>>> sin(aT-as)", numpy.sin(a*T-a*s))
-                    # print(">>>>>>>>>>>>>>>>> sin(aT-as)", numpy.abs( (numpy.exp(1j*a*(T-s)) - numpy.exp(-1j*a*(T-s)))/2j ))
-                    # print(">>>>>>>>>>>>>>>>> approx    ", numpy.exp((T - s) * numpy.abs(a.imag)))
-                    result["a"] = a
-                    result["s"] = s
-                    result["T"] = T
-                    result["u0"] = u0
-                    result["s_ratio"] = s_ratio
 
                     complex_amplitude_s = (a * self._cos(a * s - a * T) - 1j * omega * self._sin(a * s - a * T)) / \
                                           (a * self._cos(a * T) + 1j * omega * self._sin(a * T))
@@ -1128,6 +1129,7 @@ class PerfectCrystalDiffraction(object):
                     asquared = (numpy.pi / photon_in.wavelength())**2 * (guigay_b * effective_psi_h * effective_psi_h_bar + w ** 2)
                     aa = 1 / numpy.sqrt(2) * ( (asquared).imag / numpy.sqrt(numpy.abs(asquared)-(asquared).real) + \
                                                1j * numpy.sqrt(numpy.abs(asquared) - (asquared).real))
+
                     complex_amplitude_s = 2 * aa / (aa - omega) * numpy.exp(1j * T * (u0 + omega + aa))
 
                 # pi polarization
