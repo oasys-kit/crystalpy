@@ -57,3 +57,5 @@ util
    util.ComplexAmplitudePhotonBunch
    util.CalculationStrategy
    util.bragg_preprocessor_file_io
+   util.calc_xcrystal
+   util.PlotData1D

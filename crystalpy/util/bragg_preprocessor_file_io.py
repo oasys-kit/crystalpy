@@ -1,10 +1,9 @@
-#
-# Utilities to deal with information in the Bragg preprocessor files and dictionaries.
-#
-# This file has been copied from https://github.com/oasys-kit/xoppylib/tree/main/xoppylib/crystals with the idea
-# that crystalpy does not depend on xoppylib.
-#
-#
+"""
+Utilities to read and write Bragg preprocessor files and dictionaries.
+
+Copied from xoppylib (https://github.com/oasys-kit/xoppylib) so that
+crystalpy does not depend on xoppylib.
+"""
 import numpy
 
 def bragg_preprocessor_file_v1_write(out_dict, fileout=""):

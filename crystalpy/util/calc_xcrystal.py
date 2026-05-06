@@ -1,3 +1,6 @@
+"""
+Utility functions for crystal diffraction calculations (xcrystal tools).
+"""
 import numpy
 import numpy as np
 import time

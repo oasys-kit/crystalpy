@@ -38,6 +38,8 @@ extensions = ['sphinx.ext.autodoc',
               'nbsphinx'
 ]
 
+autosummary_generate = True
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -57,13 +59,13 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['sphinx_rtd_theme']
+html_static_path = ['_static']
 
 # replace "view page source" with "edit on github" in Read The Docs theme
 #  * https://github.com/readthedocs/sphinx_rtd_theme/issues/529
-# html_context = {
-# 	'display_github': True,
-#   'github_user': 'oasys-kit',
-#   'github_repo': 'crystalpy',
-#   'github_version': 'master/docs/',
-# }
+html_context = {
+    'display_github': True,
+    'github_user': 'oasys-kit',
+    'github_repo': 'crystalpy',
+    'github_version': 'master/docs/',
+}
