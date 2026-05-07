@@ -84,13 +84,14 @@ def make_kernel_manager(python_path):
     return KernelManager(kernel_name="custom_kernel", kernel_spec_manager=ksm)
 
 
-def py_to_executed_notebook(py_path, ipynb_path, timeout=300):
+def py_to_executed_notebook(py_path, ipynb_path, title, timeout=300):
     """Read a Python script, wrap it in a notebook, execute it, save to disk."""
     with open(py_path) as f:
         source = f.read()
 
     nb = nbformat.v4.new_notebook()
     nb.cells = [
+        nbformat.v4.new_markdown_cell(f"# {title}"),   # required by nbsphinx for toctree title
         nbformat.v4.new_code_cell(SETUP_CELL),
         nbformat.v4.new_code_cell(source),
     ]
@@ -132,7 +133,7 @@ if __name__ == "__main__":
         ipynb_name = os.path.splitext(py_name)[0] + ".ipynb"
         ipynb_path = os.path.join(DOCS_DIR, ipynb_name)
         print(f"  {py_name} -> docs/{ipynb_name} ... ", end="", flush=True)
-        py_to_executed_notebook(py_path, ipynb_path)
+        py_to_executed_notebook(py_path, ipynb_path, title)
         print("done")
 
     print("Updating docs/examples.rst:")
