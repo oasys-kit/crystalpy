@@ -42,10 +42,6 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         The angle between the projection of the Bragg normal on the crystal surface plane and the Y axis (radians).
         It can also be called inclination angle.
 
-    crystal_data: None or dict
-        If None, the crystal data is loaded from xraylib (entry: crystal_name).
-        Alternatively, we can force using a user-structure entered here as a dictionary with the xraylib format.
-
     debye_waller: float
         The Debye-Waller factor exp(-M).
 
@@ -59,8 +55,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
                  miller_k=1,
                  miller_l=1,
                  asymmetry_angle=0.0,
-                 azimuthal_angle=0.0,
-                 crystal_data=None):
+                 azimuthal_angle=0.0,):
 
         super().__init__(geometry_type=geometry_type,
                          crystal_name=crystal_name,
@@ -71,11 +66,9 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
                          asymmetry_angle=asymmetry_angle,
                          azimuthal_angle=azimuthal_angle)
 
-        # Load crystal from xraylib (if not defined in crystal_data).
-        if crystal_data is None:
-            self._crystal = xraylib.Crystal_GetCrystal(self.crystalName())
-        else:
-            self._crystal = crystal_data
+        # Load crystal from xraylib.
+        self._crystal = xraylib.Crystal_GetCrystal(self.crystalName())
+
 
     def angleBragg(self, energy):
         """Returns the Bragg angle for a given energy in radians.
@@ -94,7 +87,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         energy_in_kev = numpy.array(energy*1e-3)
 
         # Retrieve bragg angle from xraylib.
-        if energy_in_kev.size == 1:
+        if energy_in_kev.shape == ():    #SSLS:YXJ
             return xraylib.Bragg_angle(self._crystal,
                                                  energy*1e-3,
                                                  self.millerH(),
@@ -127,7 +120,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         """
         energy_in_kev = numpy.array(energy*1e-3)
 
-        if energy_in_kev.size == 1:
+        if energy_in_kev.shape == ():    #SSLS:yXJ if energy_in_kev.size == 1:
             return xraylib.Crystal_F_H_StructureFactor(self._crystal,
                                                       energy*1e-3,
                                                       0, 0, 0,
@@ -159,7 +152,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
 
         """
         energy_in_kev = numpy.array(energy*1e-3)
-        if energy_in_kev.size == 1:
+        if energy_in_kev.shape == ():    #SSLS:YXJ if energy_in_kev.size == 1:
             return xraylib.Crystal_F_H_StructureFactor(self._crystal,
                                                       energy*1e-3,
                                                       self.millerH(),
@@ -195,7 +188,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
 
         """
         energy_in_kev = numpy.array(energy*1e-3)
-        if energy_in_kev.size == 1:
+        if energy_in_kev.shape == ():    #SSLS:YXJ if energy_in_kev.size == 1:
             F_H_bar = xraylib.Crystal_F_H_StructureFactor(self._crystal,
                                                           energy*1e-3,
                                                           -self.millerH(),

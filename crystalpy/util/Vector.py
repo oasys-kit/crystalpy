@@ -22,6 +22,7 @@ class Vector(object):
     def __init__(self, x, y, z):
         self.setComponents(x, y, z)
 
+   
     @staticmethod
     def initializeFromComponents(components):
         """Creates a vector from a list/array of at least three elements.
@@ -227,11 +228,12 @@ class Vector(object):
             The sum as a new vector.
 
         """
-
-        wX = self.getX() + summand.getX()
-        wY = self.getY() + summand.getY()
-        wZ = self.getZ() + summand.getZ()
-        return Vector.initializeFromComponents([wX, wY, wZ])
+        #SSLS:YXJ
+        # wX = self.getX() + summand.getX()
+        # wY = self.getY() + summand.getY()
+        # wZ = self.getZ() + summand.getZ()
+        # return Vector.initializeFromComponents([wX, wY, wZ])
+        return self + summand
 
 
     def scalarMultiplication(self, k):
@@ -269,7 +271,7 @@ class Vector(object):
         result = self.addVector(tosubstract.scalarMultiplication(-1.0))
         return result
 
-    def scalarProduct(self, factor):
+    def scalarProduct(self, factor: "Vector"):  #SSLS:YXJ
         """Calculates the scalar product of this vector with the given vector.
 
         Parameters
@@ -286,11 +288,12 @@ class Vector(object):
         # scalar_product = numpy.dot(self.components(), factor.components())
         # scalar_product = numpy.sum( self.components() * factor.components(), axis=0)
         # return scalar_product
-
-        wX = self.getX() * factor.getX()
-        wY = self.getY() * factor.getY()
-        wZ = self.getZ() * factor.getZ()
-        return wX + wY + wZ
+        #Skipped by SSLS:YXJ
+        # wX = self.getX() * factor.getX()  
+        # wY = self.getY() * factor.getY()
+        # wZ = self.getZ() * factor.getZ()
+        # return wX + wY + wZ
+        return numpy.sum(self.components()*factor.components(),axis=0)  #SSLS:YXJ
 
 
     def crossProduct(self, factor):
@@ -331,7 +334,8 @@ class Vector(object):
             The vector norm.
 
         """
-        norm = self.scalarProduct(self) ** 0.5
+        #norm = self.scalarProduct(self) ** 0.5
+        norm = numpy.sqrt(numpy.sum(self.components()**2,axis=0))
         return norm
 
     def getNormalizedVector(self):
@@ -344,7 +348,11 @@ class Vector(object):
             The Normalized vector as a new vector.
 
         """
-        return self.scalarMultiplication(self.norm() ** -1.0)
+        #SSLS:YXJ
+        c = self.components()
+        c=c/numpy.sqrt(numpy.sum(c**2,axis=0))
+        return Vector(c[0],c[1],c[2])
+        #return self.scalarMultiplication(self.norm() ** -1.0)  #SSLS:YXJ
 
     def rotateAroundAxis(self, rotation_axis, angle):
         """Rotates the vector around an axis. It uses the Rodrigues formula [rf]_
@@ -500,23 +508,6 @@ class Vector(object):
         K_OUT = K_OUT_par.addVector(K_OUT_perp)
         return K_OUT
 
-    def scatteringOnSurfaceG(self, NORMAL, H, use_sign_of=+1):
-
-        Kh = self.addVector(H)
-        kh = Kh.norm()
-        k = Kin.norm()
-        h = H.norm()
-        alpha = (k**2 - kh**2) / k**2
-        # print("alpha: ", alpha)
-        gammah = (Kh.getNormalizedVector()).scalarProduct(NORMAL)
-        # print("gammah: ", gammah)
-
-        beta = - k * gammah * numpy.sqrt(1 - alpha) + use_sign_of * k * numpy.sqrt(  + gammah**2 * (1 - alpha))
-        # print("beta: ", beta)
-
-        return Kh.addVector(NORMAL.scalarMultiplication(beta))
-
-
     def getVectorH(self,
                    surface_normal,
                    d_spacingSI,
@@ -618,8 +609,12 @@ class Vector(object):
     def __ne__(self, candidate):
         return not (self == candidate)
 
-    def __add__(self, o):
-        return self.addVector(o)
+    def __add__ (self, v: "Vector"):    #SSLS:YXJ
+        c = self._components + v._components
+        return Vector(c[0],c[1],c[2])
+
+    #def __add__(self, o):      #SSLS:YXJ, removed
+    #    return self.addVector(o)
 
     def __sub__(self, o):
         return self.subtractVector(o)
@@ -688,17 +683,3 @@ if __name__ == "__main__":
     v1.append(v2)
     print(">>>>>v3", v3.components()[0], v3.components()[1], v3.components()[2])
     print(">>>>>v1", v1.components()[0], v1.components()[1], v1.components()[2])
-
-    k = 2 * numpy.pi / 1e-10
-    theta_B = numpy.radians(14)
-    Kin = Vector(0, k * numpy.cos(theta_B), -k * numpy.sin(theta_B))
-    N = Vector(0,0,1)
-    dspacing = 5.43 / numpy.sqrt(3)
-    asymm = 0.0
-    H = Vector(0, numpy.sin(numpy.radians(asymm)), 2 * numpy.pi / dspacing * numpy.cos(numpy.radians(asymm)))
-
-    Kout  = Kin.scatteringOnSurface (N, H, +1)
-    KoutG = Kin.scatteringOnSurfaceG(N, H, +1)
-    print(">>>>Kin", Kin.components()[0], Kin.components()[1], Kin.components()[2])
-    print(">>>>Kout ", Kout.components()[0], Kout.components()[1], Kout.components()[2])
-    print(">>>>KoutG", KoutG.components()[0], KoutG.components()[1], KoutG.components()[2])

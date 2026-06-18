@@ -26,6 +26,7 @@ class Photon(object):
 
         if self._unit_direction_vector.nStack() != self._energy_in_ev.size:
             raise Exception("Energy array must be of the same dimension of the vector stack.")
+        self._wavevector = self.unitDirectionVector().scalarMultiplication(self.wavenumber())
 
     def duplicate(self):
         """Return a clone of the Photon instance.
@@ -93,7 +94,8 @@ class Photon(object):
             the photon wavevector
 
         """
-        return self.unitDirectionVector().scalarMultiplication(self.wavenumber())
+        return self._wavevector     #SSLS:YXJ
+        #return self.unitDirectionVector().scalarMultiplication(self.wavenumber())
 
     def unitDirectionVector(self):
         """Returns the photon direction vector.
