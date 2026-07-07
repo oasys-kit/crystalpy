@@ -504,8 +504,7 @@ class Vector(object):
 
         Kh = self.addVector(H)
         kh = Kh.norm()
-        k = Kin.norm()
-        h = H.norm()
+        k = self.norm()
         alpha = (k**2 - kh**2) / k**2
         # print("alpha: ", alpha)
         gammah = (Kh.getNormalizedVector()).scalarProduct(NORMAL)
