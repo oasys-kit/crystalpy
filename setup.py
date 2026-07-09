@@ -5,17 +5,28 @@ __date__ = "2016-2023"
 from setuptools import setup
 
 #
-# memorandum (for developer installation)
+# Memorandum:
 #
-# git clone https://github.com/oasys-kit/crystalpy
-# cd crystalpy
-# python -m pip install -e . --no-deps --no-binary :all:
+# Install from sources (developer / editable):
+#     git clone https://github.com/oasys-kit/crystalpy
+#     cd crystalpy
+#     python -m pip install -e . --no-deps --no-build-isolation
+#     # NOTE: use --no-build-isolation, NOT --no-binary :all:. The latter forces an
+#     # isolated source build that writes a setuptools wheel to the pip cache and
+#     # fails with "[Errno 13] Permission denied: ...\\pip\\cache\\wheels\\..." .
+#
+# Upload to pypi (when uploading, increment the version number):
+#     rm -rf dist
+#     python setup.py sdist
+#     python -m build # (needed in all OASYS libraries, nit needed in addons)
+#     python -m twine upload dist/*
+#          
+# Install from pypi:
+#     pip install crystalpy
+#
 
-#
-# memorandum (for updating pypi)
-#
-# python setup.py sdist
-# python -m twine upload dist/crystalpy....
+
+
 
 #
 # memorandum (for documentation with numpydoc style)

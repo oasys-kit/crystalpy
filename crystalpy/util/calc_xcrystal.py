@@ -5,6 +5,8 @@ import numpy
 import numpy as np
 import time
 import copy
+
+from orangecontrib.shadow4.util import materials_library
 from scipy.signal import fftconvolve
 
 # used in get_diffraction_setup
@@ -166,17 +168,24 @@ def calc_xcrystal_angular_scan(
         rs = bunch_out_dict["complexAmplitudeS"]
         rp = bunch_out_dict["complexAmplitudeP"]
 
-        # R = [[cos, -sin], [sin, cos]]
+        # Conventions of the paper (main10, Sec. 2.4):
+        #   R(chi) = [[cos, sin], [-sin, cos]]                      [eq (17)]
+        #   J(chi) = R(-chi) @ [[rs,0],[0,rp]] @ R(chi)             [eq (16)]
+        # Positive chi rotates the crystal sigma-axis from +x toward +y
+        # (same sense as the polarizer angle theta in Sec. 3).
+        # NOTE: the beamline's positive phase-plate rotation is opposite
+        # (main10, Sec. 5): to reproduce the experimental "+45 deg", use
+        # chi_deg = -45.
         sa = numpy.sin(chi)
         ca = numpy.cos(chi)
         cs = sa * ca
         c2 = ca ** 2
         s2 = sa ** 2
 
-        # [[r00, r01], [r10, r11]] = R(-chi) [[rs,0],[0,rp]] R[chi]
+        # [[r00, r01], [r10, r11]] = R(-chi) [[rs,0],[0,rp]] R(chi)  [eqs (72),(79),(80)]
         r00 = rs * c2 + rp * s2
-        r01 = cs * (-rs + rp)
-        r10 = cs * (-rs + rp)
+        r01 = cs * (rs - rp)
+        r10 = cs * (rs - rp)
         r11 = rs * s2 + rp * c2
         jones_out = (r00 * jones_in[0] + r01 * jones_in[1], r10 * jones_in[0] + r11 * jones_in[1])
 
@@ -189,10 +198,16 @@ def calc_xcrystal_angular_scan(
 
         # P0_in, P1_in, P2_in, P3_in = _calculate_stokes(bunch_out_dict)
 
+        # Stokes parameters, main10 eqs (4)-(7):
+        #   S3 = 2 Im(Es* Ep)   [NOT 2 Im(Es Ep*): this is the unique choice
+        #   consistent with Sk = Tr(sigma_k rho) and the standard sigma_3,
+        #   hence with all Mueller matrices of the paper.]
+        # Handedness anchors (paper Sec. 2.1, = Detlefs et al. 2012 fn. 1):
+        #   (1, +i)/sqrt2 -> P3 = +1 (LCP);  (1, -i)/sqrt2 -> P3 = -1 (RCP).
         P0_out = numpy.abs(jones_out[0]) ** 2 + numpy.abs(jones_out[1]) ** 2
         P1_out = numpy.abs(jones_out[0]) ** 2 - numpy.abs(jones_out[1]) ** 2
-        P2_out = 2 * numpy.real( jones_out[0] * numpy.conjugate(jones_out[1]) )
-        P3_out = 2 * numpy.imag( jones_out[0] * numpy.conjugate(jones_out[1]) )
+        P2_out = 2 * numpy.real( numpy.conjugate(jones_out[0]) * jones_out[1] )
+        P3_out = 2 * numpy.imag( numpy.conjugate(jones_out[0]) * jones_out[1] )
 
         if flag_calculate_stokes == 2:
             P1_out = P1_out / P0_out
@@ -550,122 +565,6 @@ def calc_xcrystal_double_scan(
             plot_image(image, energies, deviations*1e6, xtitle="photon energy [eV]", ytitle="angle deviation [urad]", aspect='auto')
     return bunch_out_dict, diffraction_setup, energies, deviations
 
-if __name__ == "__main__":
-    from srxraylib.plot.gol import set_qt
-    set_qt()
-
-    calculation_method = 1
-    is_thick = 0
-    use_transfer_matrix = 0
-    calculation_strategy_flag = 0  # 0=mpmath 1=numpy 2=numpy-truncated
-
-    if True:
-        calc_xcrystal_angular_scan(material_constants_library_flag=0,
-                                   do_plot=True,
-                                   calculation_method=calculation_method,
-                                   is_thick=is_thick,
-                                   use_transfer_matrix=use_transfer_matrix,
-                                   calculation_strategy_flag=calculation_strategy_flag, # 0=mpmath 1=numpy 2=numpy-truncated
-                                   )
-
-    if True:
-        calc_xcrystal_angular_scan(material_constants_library_flag=0,
-                                   geometry_type_index=1,
-                                   thickness=10e-6,
-                                   asymmetry_angle=numpy.radians(90),
-                                   do_plot=True,
-                                   calculation_method=calculation_method,
-                                   is_thick=is_thick,
-                                   use_transfer_matrix=use_transfer_matrix,
-                                   calculation_strategy_flag=calculation_strategy_flag,
-                                   )
-
-        calc_xcrystal_energy_scan(material_constants_library_flag=0,
-                                  do_plot=True,
-                                  calculation_method=calculation_method,
-                                  is_thick=is_thick,
-                                  use_transfer_matrix=use_transfer_matrix,
-                                  calculation_strategy_flag=calculation_strategy_flag,
-                                  )
-
-        calc_xcrystal_alphazachariasen_scan(do_plot=1,
-                                            calculation_method=calculation_method,
-                                            is_thick=is_thick,
-                                            use_transfer_matrix=use_transfer_matrix,
-                                            calculation_strategy_flag=calculation_strategy_flag,
-                                            )
-
-    if True:
-        calc_xcrystal_double_scan(
-            material_constants_library_flag=0,
-            crystal_name="Si",
-            thickness=1e-2,
-            miller_h=1,
-            miller_k=1,
-            miller_l=1,
-            asymmetry_angle=0.0,
-            energy_min=8000,
-            energy_max=8010,
-            energy_points=1,
-            angle_deviation_min=-100e-6,
-            angle_deviation_max=100e-6,
-            angle_deviation_points=200,
-            angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
-            calculation_method=calculation_method,
-            is_thick=is_thick,
-            use_transfer_matrix=use_transfer_matrix,
-            geometry_type_index=0,
-            do_plot=1,
-            calculation_strategy_flag=calculation_strategy_flag,
-        )
-
-        calc_xcrystal_double_scan(
-            material_constants_library_flag=0,
-            crystal_name="Si",
-            thickness=1e-2,
-            miller_h=1,
-            miller_k=1,
-            miller_l=1,
-            asymmetry_angle=0.0,
-            energy_min=7990,
-            energy_max=8010,
-            energy_points=100,
-            angle_deviation_min=0,
-            angle_deviation_max=100e-6,
-            angle_deviation_points=1,
-            angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
-            calculation_method=calculation_method,
-            is_thick=is_thick,
-            use_transfer_matrix=use_transfer_matrix,
-            geometry_type_index=0,
-            do_plot=1,
-            calculation_strategy_flag=calculation_strategy_flag,
-        )
-
-    if True:
-        calc_xcrystal_double_scan(
-            material_constants_library_flag=0,
-            crystal_name="Si",
-            thickness=0.010,
-            miller_h=1,
-            miller_k=1,
-            miller_l=1,
-            asymmetry_angle=0.0,
-            energy_min=7990,
-            energy_max=8010,
-            energy_points=150,
-            angle_deviation_min=-100e-6,
-            angle_deviation_max=100e-6,
-            angle_deviation_points=150,
-            angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
-            calculation_method=calculation_method,
-            is_thick=is_thick,
-            use_transfer_matrix=use_transfer_matrix,
-            geometry_type_index=0,
-            do_plot=1,
-            calculation_strategy_flag=calculation_strategy_flag,
-            )
-
 def apply_convolution_with_gaussian(x, y, sigma=7.0):
 
     dx = x[1] - x[0]
@@ -713,3 +612,134 @@ def apply_convolution_on_bunch_out_dict(bunch_out_dict, sigma=0.1):
     bunch_out_dict_conv["P3"] = P3_conv
 
     return bunch_out_dict_conv
+
+if __name__ == "__main__":
+    from srxraylib.plot.gol import set_qt
+    try:
+        import xraylib
+        material_constants_library_flag = 0
+        dabax=None
+    except:
+        material_constants_library_flag = 1
+        from dabax.dabax_xraylib import DabaxXraylib
+        dabax = DabaxXraylib()
+
+    calculation_method = 1
+    is_thick = 0
+    use_transfer_matrix = 0
+    calculation_strategy_flag = 0  # 0=mpmath 1=numpy 2=numpy-truncated
+
+    if True:
+        calc_xcrystal_angular_scan(do_plot=True,
+                                   calculation_method=calculation_method,
+                                   is_thick=is_thick,
+                                   use_transfer_matrix=use_transfer_matrix,
+                                   calculation_strategy_flag=calculation_strategy_flag, # 0=mpmath 1=numpy 2=numpy-truncated
+                                   material_constants_library_flag=material_constants_library_flag,
+                                   dabax=dabax,
+                                   )
+
+    if True:
+        calc_xcrystal_angular_scan(geometry_type_index=1,
+                                   thickness=10e-6,
+                                   asymmetry_angle=numpy.radians(90),
+                                   do_plot=True,
+                                   calculation_method=calculation_method,
+                                   is_thick=is_thick,
+                                   use_transfer_matrix=use_transfer_matrix,
+                                   calculation_strategy_flag=calculation_strategy_flag,
+                                   material_constants_library_flag=material_constants_library_flag,
+                                   dabax=dabax,
+                                   )
+
+        calc_xcrystal_energy_scan(do_plot=True,
+                                  calculation_method=calculation_method,
+                                  is_thick=is_thick,
+                                  use_transfer_matrix=use_transfer_matrix,
+                                  calculation_strategy_flag=calculation_strategy_flag,
+                                  material_constants_library_flag=material_constants_library_flag,
+                                  dabax=dabax,
+                                  )
+
+        calc_xcrystal_alphazachariasen_scan(do_plot=1,
+                                            calculation_method=calculation_method,
+                                            is_thick=is_thick,
+                                            use_transfer_matrix=use_transfer_matrix,
+                                            calculation_strategy_flag=calculation_strategy_flag,
+                                            material_constants_library_flag=material_constants_library_flag,
+                                            dabax=dabax,
+                                            )
+
+    if True:
+        calc_xcrystal_double_scan(
+            crystal_name="Si",
+            thickness=1e-2,
+            miller_h=1,
+            miller_k=1,
+            miller_l=1,
+            asymmetry_angle=0.0,
+            energy_min=8000,
+            energy_max=8010,
+            energy_points=1,
+            angle_deviation_min=-100e-6,
+            angle_deviation_max=100e-6,
+            angle_deviation_points=200,
+            angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
+            calculation_method=calculation_method,
+            is_thick=is_thick,
+            use_transfer_matrix=use_transfer_matrix,
+            geometry_type_index=0,
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+            material_constants_library_flag=material_constants_library_flag,
+            dabax=dabax,
+        )
+
+        calc_xcrystal_double_scan(
+            crystal_name="Si",
+            thickness=1e-2,
+            miller_h=1,
+            miller_k=1,
+            miller_l=1,
+            asymmetry_angle=0.0,
+            energy_min=7990,
+            energy_max=8010,
+            energy_points=100,
+            angle_deviation_min=0,
+            angle_deviation_max=100e-6,
+            angle_deviation_points=1,
+            angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
+            calculation_method=calculation_method,
+            is_thick=is_thick,
+            use_transfer_matrix=use_transfer_matrix,
+            geometry_type_index=0,
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+            material_constants_library_flag=material_constants_library_flag,
+            dabax=dabax,
+        )
+
+    if True:
+        calc_xcrystal_double_scan(
+            crystal_name="Si",
+            thickness=0.010,
+            miller_h=1,
+            miller_k=1,
+            miller_l=1,
+            asymmetry_angle=0.0,
+            energy_min=7990,
+            energy_max=8010,
+            energy_points=150,
+            angle_deviation_min=-100e-6,
+            angle_deviation_max=100e-6,
+            angle_deviation_points=150,
+            angle_center_flag=2, # 0=Absolute angle, 1=Theta Bragg Corrected, 2=Theta Bragg
+            calculation_method=calculation_method,
+            is_thick=is_thick,
+            use_transfer_matrix=use_transfer_matrix,
+            geometry_type_index=0,
+            do_plot=1,
+            calculation_strategy_flag=calculation_strategy_flag,
+            material_constants_library_flag=material_constants_library_flag,
+            dabax=dabax,
+            )
