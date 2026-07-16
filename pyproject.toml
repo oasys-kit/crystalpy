@@ -1,0 +1,68 @@
+# Memorandum:
+#
+# Install from sources (developer / editable):
+#     git clone https://github.com/oasys-kit/crystalpy
+#     cd crystalpy
+#     python -m pip install -e . --no-deps --no-build-isolation
+#     # NOTE: use --no-build-isolation, NOT --no-binary :all:. The latter forces an
+#     # isolated source build that writes a setuptools wheel to the pip cache and
+#     # fails with "[Errno 13] Permission denied: ...\pip\cache\wheels\..." .
+#
+# Upload to pypi (when uploading, increment the version number):
+#     rm -rf dist
+#     python -m build          # builds BOTH the sdist and the wheel
+#     python -m twine upload dist/*
+#
+# Install from pypi:
+#     pip install crystalpy
+#
+#
+# Memorandum (for documentation with numpydoc style)
+#
+# ** install sphinx:
+#     pip install sphinx sphinxcontrib-apidoc sphinx-rtd-theme nbsphinx
+#     pip install pyment  # https://stackoverflow.com/questions/24555327
+# ** create embedded doc
+#     pyment -o numpydoc Vector.py   # apply to all files, complete/edit by hand,
+#                                    # see https://numpydoc.readthedocs.io/en/latest/format.html
+#     patch Vector.py < Vector.py.patch
+# ** some initialization
+#     sphinx-quickstart              # needed only once...
+# ** iterate
+#     rm docs/crystalpy*.rst docs/modules.rst
+#     sphinx-apidoc -o docs crystalpy
+#     make clean html
+
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crystalpy"
+version = "0.0.27"
+description = "Python crystal polarization calculation"
+license = "MIT"
+# license-files = ["LICENSE"]   # <- uncomment if a LICENSE file exists in the repo
+# readme = "README.md"          # <- uncomment if a README exists (see chat notes)
+authors = [
+    { name = "Manuel Sanchez del Rio", email = "srio@esrf.eu" },
+    { name = "Edoardo Cappelli" },
+    { name = "Mark Glass" },
+]
+dependencies = [
+    "numpy",
+    "scipy",
+    "mpmath",
+    "dabax",
+]
+
+[project.urls]
+Homepage = "https://github.com/oasys-kit/crystalpy/"
+
+[tool.setuptools]
+packages = [
+    "crystalpy",
+    "crystalpy.util",
+    "crystalpy.diffraction",
+    "crystalpy.polarization",
+]
