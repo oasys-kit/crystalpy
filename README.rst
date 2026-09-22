@@ -41,4 +41,5 @@ http://dx.doi.org/10.1107/S160057752400924X
 Graphical user interface
 ------------------------
 
-A graphical interface (under development) is available under Oasys:  https://github.com/oasys-kit/OASYS-CRYSTALPY
+A graphical interface is available under Oasys2. You need to install the ESRF extensions https://github.com/oasys-esrf-kit/OASYS2-ESRF-EXTENSIONS.
+The CRYSTALPY widget is found in the ESRF extension of XOPPY.
