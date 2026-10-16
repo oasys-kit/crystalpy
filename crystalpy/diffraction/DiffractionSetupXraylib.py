@@ -12,6 +12,12 @@ import numpy
 from crystalpy.diffraction.DiffractionSetupAbstract import DiffractionSetupAbstract
 # from crystalpy.util.vector import Vector
 
+def _same_shape(value, energy_in_kev):
+    # xraylib needs a float; return the result with the shape of the input energy (scalar or one-element array)
+    if energy_in_kev.ndim == 0:
+        return value
+    return numpy.full(energy_in_kev.shape, value)
+
 class DiffractionSetupXraylib(DiffractionSetupAbstract):
     """
     Constructor.
@@ -95,11 +101,12 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
 
         # Retrieve bragg angle from xraylib.
         if energy_in_kev.size == 1:
-            return xraylib.Bragg_angle(self._crystal,
-                                                 energy*1e-3,
+            angle_bragg = xraylib.Bragg_angle(self._crystal,
+                                                 float(energy_in_kev.ravel()[0]),
                                                  self.millerH(),
                                                  self.millerK(),
                                                  self.millerL())
+            return _same_shape(angle_bragg, energy_in_kev)
 
         else:
             angle_bragg = numpy.zeros_like(energy_in_kev)
@@ -128,10 +135,11 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         energy_in_kev = numpy.array(energy*1e-3)
 
         if energy_in_kev.size == 1:
-            return xraylib.Crystal_F_H_StructureFactor(self._crystal,
-                                                      energy*1e-3,
+            F_0 = xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                      float(energy_in_kev.ravel()[0]),
                                                       0, 0, 0,
                                                       self._debyeWaller, rel_angle=0.0)
+            return _same_shape(F_0, energy_in_kev)
         else:
             F_0 = numpy.zeros_like(energy_in_kev, dtype=complex)
             for i, energy in enumerate(energy_in_kev):
@@ -160,12 +168,13 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         """
         energy_in_kev = numpy.array(energy*1e-3)
         if energy_in_kev.size == 1:
-            return xraylib.Crystal_F_H_StructureFactor(self._crystal,
-                                                      energy*1e-3,
+            F_H = xraylib.Crystal_F_H_StructureFactor(self._crystal,
+                                                      float(energy_in_kev.ravel()[0]),
                                                       self.millerH(),
                                                       self.millerK(),
                                                       self.millerL(),
-                                                      self._debyeWaller, rel_angle)
+                                                      self._debyeWaller, float(numpy.ravel(rel_angle)[0]))
+            return _same_shape(F_H, energy_in_kev)
         else:
             F_H = numpy.zeros_like(energy_in_kev, dtype=complex)
             for i in range(energy_in_kev.size):
@@ -197,11 +206,12 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
         energy_in_kev = numpy.array(energy*1e-3)
         if energy_in_kev.size == 1:
             F_H_bar = xraylib.Crystal_F_H_StructureFactor(self._crystal,
-                                                          energy*1e-3,
+                                                          float(energy_in_kev.ravel()[0]),
                                                           -self.millerH(),
                                                           -self.millerK(),
                                                           -self.millerL(),
-                                                          self._debyeWaller, rel_angle)
+                                                          self._debyeWaller, float(numpy.ravel(rel_angle)[0]))
+            F_H_bar = _same_shape(F_H_bar, energy_in_kev)
         else:
             F_H_bar = numpy.zeros_like(energy_in_kev, dtype=complex)
             for i in range(energy_in_kev.size):
