@@ -138,7 +138,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
             F_0 = xraylib.Crystal_F_H_StructureFactor(self._crystal,
                                                       float(energy_in_kev.ravel()[0]),
                                                       0, 0, 0,
-                                                      self._debyeWaller, rel_angle=0.0)
+                                                      1.0, rel_angle=0.0)  # no Debye-Waller factor at H=0
             return _same_shape(F_0, energy_in_kev)
         else:
             F_0 = numpy.zeros_like(energy_in_kev, dtype=complex)
@@ -146,7 +146,7 @@ class DiffractionSetupXraylib(DiffractionSetupAbstract):
                 F_0[i] = xraylib.Crystal_F_H_StructureFactor(self._crystal,
                                                            energy_in_kev[i],
                                                            0, 0, 0,
-                                                           self._debyeWaller, rel_angle=0.0)
+                                                           1.0, rel_angle=0.0)  # no Debye-Waller factor at H=0
             return F_0
 
     def FH(self, energy, rel_angle=1.0):
