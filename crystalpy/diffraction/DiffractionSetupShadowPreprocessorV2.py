@@ -212,6 +212,8 @@ def crystal_fh(input_dictionary, phot_in, theta=None, forceratio=0):
         "STRUCT":STRUCT, "psi_0":psi_0, "psi_h":psi_h, "psi_hbar":psi_hbar,
         "DELTA_REF":DELTA_REF, "REFRAC":REFRAC, "ABSORP":ABSORP, "RATIO":ratio,
         "ssr":ssr, "spr":spr, "psi_over_f":psi_over_f, "info":txt}.
+        psi_0, psi_h and psi_hbar are the susceptibilities chi = - r_e lambda^2 F / (pi V),
+        with Re psi_0 < 0 and Im psi_0 < 0.
     """
 
     # outfil    = input_dictionary["outfil"]
@@ -233,7 +235,6 @@ def crystal_fh(input_dictionary, phot_in, theta=None, forceratio=0):
 
     phot_in_backup = phot_in
     phot_in = numpy.array(phot_in, dtype=float).reshape(-1)
-    theta   = numpy.array(theta,   dtype=float).reshape(-1)
 
     toangstroms = codata.h * codata.c / codata.e * 1e10
 
@@ -245,7 +246,7 @@ def crystal_fh(input_dictionary, phot_in, theta=None, forceratio=0):
     if theta is None:
         itheta = numpy.arcsin(toangstroms * 1e-8 / phot_in / 2 / dspacing)
     else:
-        itheta = theta
+        itheta = numpy.array(theta, dtype=float).reshape(-1)
 
     if forceratio == 0:
         ratio = numpy.sin(itheta) / (toangstroms / phot_in)
@@ -334,17 +335,19 @@ def crystal_fh(input_dictionary, phot_in, theta=None, forceratio=0):
     # ;C   PSI_CONJ = F*( note: PSI_HBAR is PSI at -H position and is
     # ;C   proportional to fh_bar but PSI_CONJ is complex conjugate os PSI_H)
     # ;C
+    # note: psi = - r_e lambda^2 F / (pi V) = chi, the susceptibility (Re psi_0 < 0,
+    # Im psi_0 < 0), as in xoppylib crystal_fh and DiffractionSetupAbstract.psi0().
+    # (Until October 2026 psi was defined here with the opposite sign.)
 
-
-    psi_over_f = rn * r_lam0**2 / numpy.pi
-    psi_h      = rn * r_lam0**2 / numpy.pi * FH
-    psi_hr     = rn * r_lam0**2 / numpy.pi * FHr
-    psi_hi     = rn * r_lam0**2 / numpy.pi * FHi
-    psi_hbar   = rn * r_lam0**2 / numpy.pi * FH_BAR
-    psi_hbarr  = rn * r_lam0**2 / numpy.pi * FH_BARr
-    psi_hbari  = rn * r_lam0**2 / numpy.pi * FH_BARi
-    psi_0      = rn * r_lam0**2 / numpy.pi * F_0
-    psi_conj   = rn * r_lam0**2 / numpy.pi * FH.conjugate()
+    psi_over_f = -rn * r_lam0**2 / numpy.pi
+    psi_h      = psi_over_f * FH
+    psi_hr     = psi_over_f * FHr
+    psi_hi     = psi_over_f * FHi
+    psi_hbar   = psi_over_f * FH_BAR
+    psi_hbarr  = psi_over_f * FH_BARr
+    psi_hbari  = psi_over_f * FH_BARi
+    psi_0      = psi_over_f * F_0
+    psi_conj   = psi_over_f * FH.conjugate()
 
     # ;
     # ; Darwin width
@@ -406,7 +409,7 @@ def crystal_fh(input_dictionary, phot_in, theta=None, forceratio=0):
     txt += '\n Average Temperature factor = '             + repr(TEMPER_AVE)
     txt += '\n Refraction index = 1 - delta - i*beta'
     txt += '\n            delta = '                       + repr(DELTA_REF[0])
-    txt += '\n             beta = '                       + repr(1.0e0*REFRAC[0].imag)
+    txt += '\n             beta = '                       + repr(-1.0e0*REFRAC[0].imag)
     txt += '\n Absorption coeff = '                       + repr(ABSORP[0])+' cm^-1'
     txt += '\n  '
     txt += '\n e^2/(mc^2)/V = '                           + repr(rn)+' cm^-2'
