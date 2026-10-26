@@ -39,7 +39,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "crystalpy"
-version = "0.0.27"
+version = "0.0.28"
 description = "Python crystal polarization calculation"
 license = "MIT"
 # license-files = ["LICENSE"]   # <- uncomment if a LICENSE file exists in the repo
