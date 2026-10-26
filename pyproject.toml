@@ -42,8 +42,8 @@ name = "crystalpy"
 version = "0.0.28"
 description = "Python crystal polarization calculation"
 license = "MIT"
-# license-files = ["LICENSE"]   # <- uncomment if a LICENSE file exists in the repo
-# readme = "README.md"          # <- uncomment if a README exists (see chat notes)
+license-files = ["LICENSE"]
+readme = "README.rst"
 authors = [
     { name = "Manuel Sanchez del Rio", email = "srio@esrf.eu" },
     { name = "Edoardo Cappelli" },
